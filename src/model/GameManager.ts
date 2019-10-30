@@ -9,15 +9,9 @@ class GameManager {
 
 
     static map: Map;
-    static story: Story;
-    static containerBuilder: ContainerBuilder;
-    static battle: Battle;
-    static menu: PIXI.Container;
 
     static ressources: any;
-    static gameState: GameState;
 
-    static parallaxLayer:PIXI.Sprite[];
 
 
 

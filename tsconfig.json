@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
         "module": "es2015",
         "sourceMap": false,
         "outDir": "deliver"
     },
     "include": [
-        "scripts/*"
+        "src/model/*"
     ]
 }
