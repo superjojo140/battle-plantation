@@ -8,8 +8,9 @@
 
 	<title>Battle Plantation</title>
 
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
 	<script src="node_modules/pixi.js/dist/pixi.js"></script>
-	<script src="node_modules/pixi-sound/dist/pixi-sound.js"></script>
+	<!--<script src="node_modules/pixi-sound/dist/pixi-sound.js"></script>-->
 
 
 </head>
@@ -19,15 +20,15 @@
 	<canvas id="pixiCanvas"></canvas>
 	
 	<script src="deliver/KeyboardManager.js"></script>
-
-	<!--<script src="deliver/TiledMapParser.js"></script>
+	<script src="deliver/UpdateScheduler.js"></script>
 	<script src="deliver/TiledSpritesheet.js"></script>
-	<script src="deliver/Map.js"></script>
+	<script src="deliver/TiledMap.js"></script>
 	<script src="deliver/Player.js"></script>
-	<script src="deliver/MovingSprite.js"></script>
-	
+	<script src="deliver/MovingSprite.js"></script>	
 	<script src="deliver/GameManager.js"></script>
-	<script src="deliver/main.js"></script>-->
+
+
+	<script>GameManager.startGame()</script>
 </body>
 
 </html>

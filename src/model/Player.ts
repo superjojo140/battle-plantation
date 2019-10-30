@@ -17,13 +17,10 @@ class Player {
     vx: number;
     vy: number;
     animations: PIXI.Texture[][];
-    map: Map;
-    triggerInfoActive: boolean;
-    triggerInfoSprite: PIXI.Sprite;
+    map: TiledMap;
     lastKey: string;
 
-    constructor(x: number, y: number, map: Map) {
-        this.triggerInfoActive = false;
+    constructor(x: number, y: number, map: TiledMap) {
         this.map = map;
         this.animations = [];
         let baseTexture: PIXI.BaseTexture = PIXI.Texture.fromImage("data/assets/ranger_2.png").baseTexture;
@@ -46,8 +43,6 @@ class Player {
         this.sprite.loop = true;
         this.lastKey = "";
 
-        //Load attention sign
-        this.triggerInfoSprite = PIXI.Sprite.fromImage("data/assets/attention.png");
     }
 
     changeDirection(direction: number) {
@@ -80,8 +75,7 @@ class Player {
                     this.vx = 1 * Player.PLAYER_SPEED;
                     this.changeDirection(Player.RIGHT);
                     break;
-                case "x": this.checkTrigger();
-                    break;
+
             }
         }
     }
@@ -126,13 +120,14 @@ class Player {
 
         let blocked = false;
 
+        /*
         for (let x = xRange.from; x <= xRange.to; x++) {
             for (let y = yRange.from; y <= yRange.to; y++) {
                 if (this.map.collisionBitMap[y] == undefined || this.map.collisionBitMap[y][x] == undefined || this.map.collisionBitMap[y][x] == true) {
                     blocked = true;
                 }
             }
-        }
+        }*/
 
 
         if (blocked == false) {
@@ -150,38 +145,6 @@ class Player {
         let yTiles = originalY / this.map.finalTileHeight;
         yTiles = Math.round(yTiles);
 
-        let eventObject = this.map.eventTriggerMap[yTiles][xTiles];
-        if (eventObject && !this.triggerInfoActive && eventObject.event && eventObject.visible) {
-            //console.log("Heres a trigger");
-            this.triggerInfoSprite.x = xTiles * this.map.finalTileWidth + 10;
-            this.triggerInfoSprite.y = yTiles * this.map.finalTileHeight + 10 - this.triggerInfoSprite.height;
-            this.map.pixiContainer.addChild(this.triggerInfoSprite);
-            this.triggerInfoActive = true;
-        }
-        else if (this.triggerInfoActive && (!eventObject || !eventObject.event || !eventObject.visible)) {
-            //console.log("You leaved the trigger");
-            this.map.pixiContainer.removeChild(this.triggerInfoSprite);
-            this.triggerInfoActive = false;
-        }
     }
-
-    checkTrigger() {
-        //Get the nearest tile
-        let originalX = this.sprite.x;
-        let xTiles = originalX / this.map.finalTileWidth;
-        xTiles = Math.round(xTiles);
-
-        let originalY = this.sprite.y;
-        let yTiles = originalY / this.map.finalTileHeight;
-        yTiles = Math.round(yTiles);
-
-        let eventObject = this.map.eventTriggerMap[yTiles][xTiles];
-        if (eventObject && eventObject.event && eventObject.visible) {
-            this.map.pause();
-            let map = this.map;
-            GameManager.story.showEvent(eventObject.event, () => map.isPaused = false);
-        }
-    }
-
 
 }
