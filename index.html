@@ -4,15 +4,10 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="icon" type="image/png" href="data/assets/hero.png">
+	
 
-	<title>Tamo</title>
+	<title>Battle Plantation</title>
 
-	<link rel="stylesheet" href="deliver/tamo.css">
-	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-
-	<script src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="node_modules/pixi.js/dist/pixi.js"></script>
 	<script src="node_modules/pixi-sound/dist/pixi-sound.js"></script>
 
@@ -22,61 +17,17 @@
 <body style="background-color: #3a3d44">
 
 	<canvas id="pixiCanvas"></canvas>
-	<div id="messageContainer" style="display: none">
-	</div>
+	
+	<script src="deliver/KeyboardManager.js"></script>
 
-	<div id="customGameGui" style="display:none">
-		<h2 class="text-center">Load your custom Game</h2>
-		<br>
-
-		<div class="form-group">
-			<label>Save Game</label>
-			<div class="input-group mb-3">
-
-				<input type="text" class="form-control" placeholder="Save Game" aria-label="Save Game"
-					aria-describedby="basic-addon2" id="customGameSaveGame">
-				<div class="input-group-append">
-					<button class="btn btn-info" type="button" id="customGameLoadSaveGameButton">Load Map and Story</button>
-				</div>
-
-			</div>
-			<small class="form-text text-muted">loaded from data/saveName.json</small>
-		</div>
-
-		<div class="form-group">
-			<label>Map</label>
-			<input type="text" class="form-control" id="customGameMap" placeholder="Mapname">
-			<small class="form-text text-muted">loaded from data/maps/mapName.json</small>
-		</div>
-		<div class="form-group">
-			<label>Story</label>
-			<input type="text" class="form-control" id="customGameStory" placeholder="Storyname">
-			<small class="form-text text-muted">loaded from data/storyData/storyName.json</small>
-		</div>
-
-		<div class="form-group text-right">
-			<button class="btn btn-success pull-right" id="customGameStartButton">Start Game</button>
-		</div>
-
-
-	</div>
-
-
-
-
-
-	<script src="deliver/TiledMapParser.js"></script>
+	<!--<script src="deliver/TiledMapParser.js"></script>
 	<script src="deliver/TiledSpritesheet.js"></script>
 	<script src="deliver/Map.js"></script>
 	<script src="deliver/Player.js"></script>
-	<script src="deliver/Story.js"></script>
 	<script src="deliver/MovingSprite.js"></script>
-	<script src="deliver/TetrisContainer.js"></script>
-	<script src="deliver/TetrisTile.js"></script>
-	<script src="deliver/ContainerBuilder.js"></script>
-	<script src="deliver/Battle.js"></script>
+	
 	<script src="deliver/GameManager.js"></script>
-	<script src="deliver/tamo.js"></script>
+	<script src="deliver/main.js"></script>-->
 </body>
 
 </html>
