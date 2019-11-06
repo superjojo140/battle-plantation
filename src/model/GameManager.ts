@@ -15,11 +15,12 @@ class GameManager {
     static startGame() {
         //Create Pixi stuff
         //Create a Pixi Application
-        GameManager.pixiApp = new PIXI.Application({
-            width: APP_WIDTH,
-            height: APP_HEIGHT,
-            view: GameManager.myCanvas
-        });
+        class PixiOptions implements PIXI.ApplicationOptions{
+            constructor(public width,public height,public view){}
+        }
+        const pixiOptions = new PixiOptions(APP_WIDTH,APP_HEIGHT,GameManager.myCanvas);
+
+        GameManager.pixiApp = new PIXI.Application(pixiOptions);
 
         //Add the canvas that Pixi automatically created for you to the HTML document
         //Still neccesarry????
