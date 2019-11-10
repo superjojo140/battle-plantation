@@ -1,1 +1,3 @@
 node_modules
+deliver/*.js
+deliver/*.js.map
