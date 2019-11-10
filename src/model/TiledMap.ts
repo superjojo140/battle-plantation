@@ -4,11 +4,13 @@ import { Tile } from "./Tile";
 import { Tower } from "./Tower";
 import { Tree } from "./Tree";
 import { TileObject } from "./TileObject";
+import { Container, Point, Rectangle } from "pixi.js";
+import * as $ from "jquery";
 
-export class TiledMap extends PIXI.Container {
+export class TiledMap extends Container {
 
     static MAP_ZOOM = 4;
-    static SPRITE_SCALE: PIXI.Point = new PIXI.Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);
+    static SPRITE_SCALE: Point = new Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);
 
     players: Player[];
     spritesheet: TiledSpritesheet;
@@ -18,21 +20,21 @@ export class TiledMap extends PIXI.Container {
     tiles: Tile[][];
     gridWidth: number;
     gridHeight: number;
-    tileContainer: PIXI.Container;
-    playerContainer: PIXI.Container;
-    tileObjectContainer: PIXI.Container;
+    tileContainer: Container;
+    playerContainer: Container;
+    tileObjectContainer: Container;
 
 
     constructor() {
         super();
 
-        this.tileContainer = new PIXI.Container();
+        this.tileContainer = new Container();
         this.addChild(this.tileContainer);
 
-        this.tileObjectContainer = new PIXI.Container();
+        this.tileObjectContainer = new Container();
         this.addChild(this.tileObjectContainer);
 
-        this.playerContainer = new PIXI.Container();
+        this.playerContainer = new Container();
         this.addChild(this.playerContainer);
         
         this.players = [];
@@ -54,7 +56,7 @@ export class TiledMap extends PIXI.Container {
         const map = new TiledMap();
 
         //Load Spritesheet
-        let SPRITE_SCALE: PIXI.Point = new PIXI.Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);
+        let SPRITE_SCALE: Point = new Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);
         map.finalTileWidth = spritesheet.tileWidth * SPRITE_SCALE.x;
         map.finalTileHeight = spritesheet.tileHeight * SPRITE_SCALE.y;
         map.spritesheet = spritesheet;
@@ -206,7 +208,7 @@ export class TiledMap extends PIXI.Container {
         this.isPaused = false;
     }
 
-    getObjectCoordinates(mapObject: PIXI.Rectangle) {
+    getObjectCoordinates(mapObject: Rectangle) {
 
         //an Object can be placed "between" tiles in tiled map editor. But evnts can be triggered only from whole tiles. So the obejccts position is mapped to the nearest Tile
 
@@ -221,7 +223,7 @@ export class TiledMap extends PIXI.Container {
         return { gridX: xTiles, gridY: yTiles };
     }
 
-    getTileNearestTo(mapObject: PIXI.Rectangle): Tile {
+    getTileNearestTo(mapObject: Rectangle): Tile {
         const pos = this.getObjectCoordinates(mapObject);
         return this.tiles[pos.gridY][pos.gridX];
     }

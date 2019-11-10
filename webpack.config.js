@@ -5,6 +5,10 @@ module.exports = {
   devtool: 'inline-source-map',
   mode: "production",
   watch: true,
+  externals: {
+    "jquery": '$',
+    "pixi.js": "PIXI"
+  },
   module: {
     rules: [
       {

@@ -2,13 +2,14 @@ import { Tile } from "./Tile";
 import { HitEvent } from "./HitEvent";
 import { Plant } from "./Plant";
 import { Player } from "./Player";
+import { Sprite, Texture } from "pixi.js";
 
-export abstract class TileObject extends PIXI.Sprite {
+export abstract class TileObject extends Sprite {
 
     parent: Tile;
     solid: boolean;
 
-    constructor(texture: PIXI.Texture, parent: Tile) {
+    constructor(texture: Texture, parent: Tile) {
         super(texture);
         this.parent = parent;
         if (this.parent.isFree()) {

@@ -3,6 +3,7 @@ import { StatusBar } from "./StatusBar";
 import { Tile } from "./Tile";
 import { UpdateScheduler } from "./UpdateScheduler";
 import { Player } from "./Player";
+import { Texture } from "pixi.js";
 
 export abstract class Plant extends TileObject {
 
@@ -13,7 +14,7 @@ export abstract class Plant extends TileObject {
     crop: object;
     statusBar: StatusBar;
 
-    constructor(texture:PIXI.Texture, parent: Tile) {
+    constructor(texture:Texture, parent: Tile) {
         super(texture,parent);
         const id = "plant" + parent.gridX + "-" + parent.gridY;
         UpdateScheduler.register(id, this.grow, this);

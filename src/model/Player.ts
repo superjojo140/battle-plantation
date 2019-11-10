@@ -1,4 +1,5 @@
 import { TiledMap } from "./TiledMap";
+import { Point, extras, Texture, BaseTexture, Rectangle } from "pixi.js";
 
 export class Player {
 
@@ -11,14 +12,14 @@ export class Player {
 
     static SPRITE_WIDTH: number = 96 / 3;
     static SPRITE_HEIGHT: number = 144 / 4;
-    static SPRITE_SCALE: PIXI.Point = new PIXI.Point(1.5, 1.5);
+    static SPRITE_SCALE: Point = new Point(1.5, 1.5);
     static PLAYER_SPEED = 3;
 
 
-    sprite: PIXI.extras.AnimatedSprite;
+    sprite: extras.AnimatedSprite;
     vx: number;
     vy: number;
-    animations: PIXI.Texture[][];
+    animations: Texture[][];
     map: TiledMap;
     lastKey: string;
     playerId:number;
@@ -27,17 +28,17 @@ export class Player {
         this.map = map;
         this.playerId = playerId;
         this.animations = [];
-        let baseTexture: PIXI.BaseTexture = PIXI.Texture.fromImage(`data/assets/player_${playerId}.png`).baseTexture;
+        let baseTexture: BaseTexture = Texture.fromImage(`data/assets/player_${playerId}.png`).baseTexture;
         for (let row = 0; row < 4; row++) {
-            let textureArray: PIXI.Texture[] = [];
+            let textureArray: Texture[] = [];
             for (let column = 0; column < 3; column++) {
-                let t = new PIXI.Texture(baseTexture, new PIXI.Rectangle(column * Player.SPRITE_WIDTH, row * Player.SPRITE_HEIGHT, Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT));
+                let t = new Texture(baseTexture, new Rectangle(column * Player.SPRITE_WIDTH, row * Player.SPRITE_HEIGHT, Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT));
                 textureArray.push(t);
             }
             this.animations.push(textureArray);
         }
 
-        this.sprite = new PIXI.extras.AnimatedSprite(this.animations[Player.DOWN]);
+        this.sprite = new extras.AnimatedSprite(this.animations[Player.DOWN]);
         this.sprite.x = x;
         this.sprite.y = y;
         this.vx = 0;

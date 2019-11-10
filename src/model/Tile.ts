@@ -4,15 +4,16 @@ import { HitEvent } from "./HitEvent";
 import { Plant } from "./Plant";
 import { TntPumpkin } from "./TntPumpkin";
 import { Player } from "./Player";
+import { Sprite, Texture } from "pixi.js";
 
-export class Tile extends PIXI.Sprite {
+export class Tile extends Sprite {
 
     gridX: number;
     gridY: number;
     tileObject: TileObject;
     map: TiledMap;
 
-    constructor(texture: PIXI.Texture, gridX: number, gridY: number, map:TiledMap) {
+    constructor(texture: Texture, gridX: number, gridY: number, map:TiledMap) {
         super(texture);
         this.gridX = gridX;
         this.gridY = gridY;

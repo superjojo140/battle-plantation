@@ -3,13 +3,14 @@ import { StatusBar } from "./StatusBar";
 import { Player } from "./Player";
 import { Tile } from "./Tile";
 import { HitEvent } from "./HitEvent";
+import { Texture } from "pixi.js";
 
 export class Tower extends TileObject {
 
     owner: Player;
     statusBar: StatusBar;
 
-    constructor(texture: PIXI.Texture, parent: Tile, owner: Player) {
+    constructor(texture: Texture, parent: Tile, owner: Player) {
         super(texture, parent);
         this.owner = owner;
     }

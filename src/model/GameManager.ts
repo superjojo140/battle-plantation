@@ -2,6 +2,7 @@ import { TiledSpritesheet } from "./TiledSpritesheet";
 import { TiledMap } from "./TiledMap";
 import { KeyboardManager } from "./KeyboardManager";
 import { UpdateScheduler } from "./UpdateScheduler";
+import { Application, ApplicationOptions } from "pixi.js";
 
 const SPRITESHEET = new TiledSpritesheet("data/assets/spritesheet.png", 1, 16, 16, 31, 57) //Kenny Spritesheet see data/maps/Kenney RPG Tiles.tsx
 //TODO Parse this information automatixally from tsx file
@@ -14,18 +15,18 @@ export class GameManager {
     static map: TiledMap;
 
     static myCanvas = document.getElementById("#pixiCanvas");
-    static pixiApp : PIXI.Application;
+    static pixiApp : Application;
 
 
     static startGame() {
         //Create Pixi stuff
         //Create a Pixi Application
-        class PixiOptions implements PIXI.ApplicationOptions{
+        class PixiOptions implements ApplicationOptions{
             constructor(public width,public height,public view){}
         }
         const pixiOptions = new PixiOptions(APP_WIDTH,APP_HEIGHT,GameManager.myCanvas);
 
-        GameManager.pixiApp = new PIXI.Application(pixiOptions);
+        GameManager.pixiApp = new Application(pixiOptions);
 
         //Add the canvas that Pixi automatically created for you to the HTML document
         //Still neccesarry????

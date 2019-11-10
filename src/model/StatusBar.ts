@@ -1,9 +1,10 @@
 import { TileObject } from "./TileObject";
+import { Container, Graphics } from "pixi.js";
 
-export class StatusBar extends PIXI.Container{
+export class StatusBar extends Container{
 
-    frame : PIXI.Graphics;
-    progressShape : PIXI.Graphics;
+    frame : Graphics;
+    progressShape : Graphics;
     progress : number; //From 0 to 1
 
     constructor(parent:TileObject,progress:number){
