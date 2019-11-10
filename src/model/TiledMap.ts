@@ -9,6 +9,8 @@ class TiledMap extends PIXI.Container {
     finalTileWidth: number;
     finalTileHeight: number;
     tiles: Tile[][];
+    gridWidth: number;
+    gridHeight: number;
     tileContainer: PIXI.Container;
     playerContainer: PIXI.Container;
     tileObjectContainer: PIXI.Container;
@@ -16,21 +18,24 @@ class TiledMap extends PIXI.Container {
 
     constructor() {
         super();
-        this.playerContainer = new PIXI.Container();
-        this.addChild(this.playerContainer);
+
+        this.tileContainer = new PIXI.Container();
+        this.addChild(this.tileContainer);
 
         this.tileObjectContainer = new PIXI.Container();
         this.addChild(this.tileObjectContainer);
 
-        this.tileContainer = new PIXI.Container();
-        this.addChild(this.tileContainer);
+        this.playerContainer = new PIXI.Container();
+        this.addChild(this.playerContainer);
+        
+        this.players = [];
     }
 
 
-    static getMapObjectProperty(mapObject: any, name: string) {
+    getMapObjectProperty(mapObject: any, name: string) {
         for (const prop of mapObject.properties) {
             if (prop.name == name) {
-                return prop.value();
+                return prop.value;
             }
         }
 
@@ -38,8 +43,8 @@ class TiledMap extends PIXI.Container {
 
     //Loads the map with spritesheet. Last parameter is callback function which is called after parsing the map with the new parsed map as parameter
     static loadMap(mapPath: string, spritesheet: TiledSpritesheet, callback: Function) {
-        //Create new Map
-        let map: TiledMap = new TiledMap();
+
+        const map = new TiledMap();
 
         //Load Spritesheet
         let SPRITE_SCALE: PIXI.Point = new PIXI.Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);
@@ -50,15 +55,42 @@ class TiledMap extends PIXI.Container {
         //Load Map and Parse it
         $.getJSON(mapPath, {}, function (mapData) {
 
-            //Iterate thorugh Tile Layers
-            for (let layerIndex in mapData.layers) {
-                let tl = mapData.layers[layerIndex];
+            //Build all TileLayers first
+            for (const tl of mapData.layers) {
+                if (tl.type == "tilelayer") {
+
+                    map.gridWidth = tl.width;
+                    map.gridHeight = tl.height;
+
+                    //Init map's tiles array
+                    map.tiles = new Array(map.gridHeight);
+                    for(let i=0; i<map.tiles.length; i++){
+                        map.tiles[i] = new Array(map.gridWidth);
+                    }
+
+                    //Generate Tiles for each tile to the container
+                    for (let row = 0; row < tl.height; row++) {
+                        for (let column = 0; column < tl.width; column++) {
+                            let index = row * tl.width + column;
+                            if (tl.data[index] > 0) {
+                                let texture = spritesheet.getTexture(tl.data[index]);
+                                const newTile = new Tile(texture, row, column,map);
+                                map.addTile(newTile);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            //Iterate through Object Layers
+            for (const tl of mapData.layers) {
 
                 if (tl.type == "objectgroup") {
 
 
                     //Add all players first
-                    for (const co of tl.obejcts) {
+                    for (const co of tl.objects) {
                         /*
                         *      _____  _                       
                         *     |  __ \| |                      
@@ -73,9 +105,9 @@ class TiledMap extends PIXI.Container {
                         if (co.type == "player") {
                             let x = Math.round(co.x * SPRITE_SCALE.x);
                             let y = (Math.round(co.y) - co.height) * SPRITE_SCALE.y; // -co.height because tiled uses the bottom-left corner for coordinates and PIXI uses the top-left corner
-                            const playerId: number = TiledMap.getMapObjectProperty(co, "playerId");
-                            const newPlayer = new Player(x, y, map, playerId);
-                            this.addPlayer(newPlayer);
+                            const playerId: number = map.getMapObjectProperty(co, "playerId");
+                            const newPlayer = new Player(x, y, this, playerId);
+                            map.addPlayer(newPlayer);
                         }
                     }
 
@@ -98,7 +130,7 @@ class TiledMap extends PIXI.Container {
                         if (co.type == "tower") {
 
                             let texture = spritesheet.getTexture(co.gid);
-                            const ownerId = TiledMap.getMapObjectProperty(co, "owner");
+                            const ownerId = map.getMapObjectProperty(co, "owner");
                             const owner = map.players[ownerId];
                             const parent = map.getTileNearestTo(co);
                             let newTower = new Tower(texture, parent, owner);
@@ -129,24 +161,8 @@ class TiledMap extends PIXI.Container {
 
                     }
 
-                } else {
-                    if (tl.type == "tilelayer") {
-
-                        //Generate Tiles for each tile to the container
-                        for (let row = 0; row < tl.height; row++) {
-                            for (let column = 0; column < tl.width; column++) {
-                                let index = row * tl.width + column;
-                                if (tl.data[index] > 0) {
-                                    let texture = spritesheet.getTexture(tl.data[index]);
-                                    const newTile = new Tile(texture, row, column);
-                                    map.addTile(newTile);
-                                }
-                            }
-                        }
-
-                    } else //Layer is not of type "tilelayer"
-                        console.warn(`Ignoring Layer "${tl.name}". Layers of type "${tl.type}" are not supported yet.`);
                 }
+
             }
 
             //Call onFinish Callback
@@ -171,7 +187,8 @@ class TiledMap extends PIXI.Container {
         tile.y = tile.gridY * this.spritesheet.tileHeight * TiledMap.SPRITE_SCALE.y;
         tile.scale = TiledMap.SPRITE_SCALE;
 
-        this.tiles[tile.gridY][tile.gridX] = tile;        
+        this.tiles[tile.gridY][tile.gridX] = tile;
+        this.tileContainer.addChild(tile);
     }
 
     pause() {
@@ -183,7 +200,7 @@ class TiledMap extends PIXI.Container {
     }
 
     getObjectCoordinates(mapObject: PIXI.Rectangle) {
-       
+
         //an Object can be placed "between" tiles in tiled map editor. But evnts can be triggered only from whole tiles. So the obejccts position is mapped to the nearest Tile
 
         let originalX = mapObject.x * TiledMap.SPRITE_SCALE.x;
@@ -194,10 +211,7 @@ class TiledMap extends PIXI.Container {
         let yTiles = originalY / this.finalTileHeight;
         yTiles = Math.round(yTiles);
 
-        const gridX = xTiles * this.finalTileWidth;
-        const gridY = yTiles * this.finalTileHeight;
-
-        return { gridX: gridX, gridY: gridY };
+        return { gridX: xTiles, gridY: yTiles };
     }
 
     getTileNearestTo(mapObject: PIXI.Rectangle): Tile {

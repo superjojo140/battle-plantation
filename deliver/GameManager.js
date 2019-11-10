@@ -22,6 +22,12 @@ class GameManager {
         KeyboardManager.init();
         //Register Update scheduler
         GameManager.pixiApp.ticker.add(UpdateScheduler.doStep);
+        TiledMap.loadMap("/data/maps/map1.json", SPRITESHEET, function (parsedMap) {
+            console.log("Map parsed");
+            GameManager.map = parsedMap;
+            GameManager.pixiApp.stage.addChild(parsedMap);
+            GameManager.pixiApp.ticker.start();
+        });
     }
 }
 GameManager.myCanvas = document.getElementById("#pixiCanvas");

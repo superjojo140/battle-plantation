@@ -1,6 +1,6 @@
 class Plant extends TileObject {
-    constructor(parent) {
-        super(parent);
+    constructor(texture, parent) {
+        super(texture, parent);
         const id = "plant" + parent.gridX + "-" + parent.gridY;
         UpdateScheduler.register(id, this.grow, this);
     }

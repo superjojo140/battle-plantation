@@ -1,6 +1,7 @@
 class Player {
-    constructor(x, y, map) {
+    constructor(x, y, map, playerId) {
         this.map = map;
+        this.playerId = playerId;
         this.animations = [];
         let baseTexture = PIXI.Texture.fromImage("data/assets/ranger_2.png").baseTexture;
         for (let row = 0; row < 4; row++) {

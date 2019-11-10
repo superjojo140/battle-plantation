@@ -7,8 +7,8 @@ abstract class Plant extends TileObject {
     crop: object;
     statusBar: StatusBar;
 
-    constructor(parent: Tile) {
-        super(parent);
+    constructor(texture:PIXI.Texture, parent: Tile) {
+        super(texture,parent);
         const id = "plant" + parent.gridX + "-" + parent.gridY;
         UpdateScheduler.register(id, this.grow, this);
     }

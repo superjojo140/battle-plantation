@@ -1,7 +1,16 @@
 class TileObject extends PIXI.Sprite {
-    constructor(parent) {
-        super();
+    constructor(texture, parent) {
+        super(texture);
         this.parent = parent;
+        if (this.parent.isFree()) {
+            this.parent.tileObject = this;
+        }
+        else {
+            throw new Error("Can't add TileObject to a Tile that allready has an TileObject");
+        }
+        //set render coordinates
+        this.x = this.parent.x;
+        this.y = this.parent.y;
     }
     onHit(hitevent) { }
     ;
@@ -9,8 +18,9 @@ class TileObject extends PIXI.Sprite {
     ;
     onHarvest(initiator) { }
     ;
-    destroy() {
+    onDestroy(initiator) {
         delete this.parent.tileObject;
-        super.destroy();
+        this.destroy();
     }
+    ;
 }

@@ -3,11 +3,16 @@ class Tile extends PIXI.Sprite {
     gridX: number;
     gridY: number;
     tileObject: TileObject;
+    map: TiledMap;
 
-    constructor(texture: PIXI.Texture, gridX: number, gridY: number) {
+    constructor(texture: PIXI.Texture, gridX: number, gridY: number, map:TiledMap) {
         super(texture);
         this.gridX = gridX;
         this.gridY = gridY;
+        this.map = map;
+        //calculate own render coordinates
+        this.x = gridX * map.finalTileWidth;
+        this.y = gridY * map.finalTileHeight;
     }
 
     onHit(hitEvent: HitEvent) {
@@ -35,7 +40,7 @@ class Tile extends PIXI.Sprite {
     }
 
     isFree(){
-        return this.tileObject ? true : false;
+        return this.tileObject ? false : true;
     }
 
 

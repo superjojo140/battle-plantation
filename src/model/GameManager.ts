@@ -9,7 +9,7 @@ class GameManager {
     static map: TiledMap;
 
     static myCanvas = document.getElementById("#pixiCanvas");
-    static pixiApp;
+    static pixiApp : PIXI.Application;
 
 
     static startGame() {
@@ -31,6 +31,14 @@ class GameManager {
 
         //Register Update scheduler
         GameManager.pixiApp.ticker.add(UpdateScheduler.doStep);
+
+        
+        TiledMap.loadMap("/data/maps/map1.json",SPRITESHEET,function(parsedMap:TiledMap){
+            console.log("Map parsed");
+            GameManager.map = parsedMap;
+            GameManager.pixiApp.stage.addChild(parsedMap);
+            GameManager.pixiApp.ticker.start();
+        });
     }
 
 }
