@@ -3,14 +3,14 @@
  <tileset firstgid="1" source="Kenney RPG Tiles.tsx"/>
  <layer id="1" name="Background" width="8" height="8">
   <data encoding="csv">
-6,6,6,6,6,6,6,6,
-6,6,6,6,6,6,6,6,
-6,6,6,6,6,6,6,6,
-6,6,6,6,6,6,6,6,
-6,6,6,6,6,6,6,6,
-6,6,6,6,6,6,6,6,
-6,6,6,6,6,6,67,6,
-6,67,67,6,6,6,6,6
+10,10,10,10,10,10,10,10,
+10,10,10,10,10,10,10,10,
+10,10,10,10,10,10,10,10,
+10,10,10,10,10,10,10,10,
+10,10,10,10,10,10,10,10,
+10,10,10,10,10,10,10,10,
+10,10,10,10,10,10,10,10,
+10,10,10,10,10,10,10,10
 </data>
  </layer>
  <objectgroup id="3" name="TileObjects">
@@ -20,7 +20,7 @@
     <property name="type" value="tower"/>
    </properties>
   </object>
-  <object id="15" type="tower" gid="109" x="16" y="80.75" width="16" height="16">
+  <object id="15" type="tower" gid="52" x="16" y="80.75" width="16" height="16">
    <properties>
     <property name="owner" type="int" value="0"/>
     <property name="type" value="tower"/>

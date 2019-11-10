@@ -25,7 +25,7 @@ class Player {
         this.map = map;
         this.playerId = playerId;
         this.animations = [];
-        let baseTexture: PIXI.BaseTexture = PIXI.Texture.fromImage("data/assets/ranger_2.png").baseTexture;
+        let baseTexture: PIXI.BaseTexture = PIXI.Texture.fromImage(`data/assets/player_${playerId}.png`).baseTexture;
         for (let row = 0; row < 4; row++) {
             let textureArray: PIXI.Texture[] = [];
             for (let column = 0; column < 3; column++) {
