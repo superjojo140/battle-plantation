@@ -19,9 +19,11 @@ class Player {
     animations: PIXI.Texture[][];
     map: TiledMap;
     lastKey: string;
+    playerId:number;
 
-    constructor(x: number, y: number, map: TiledMap) {
+    constructor(x: number, y: number, map: TiledMap,playerId:number) {
         this.map = map;
+        this.playerId = playerId;
         this.animations = [];
         let baseTexture: PIXI.BaseTexture = PIXI.Texture.fromImage("data/assets/ranger_2.png").baseTexture;
         for (let row = 0; row < 4; row++) {

@@ -7,6 +7,33 @@ class TiledMap extends PIXI.Container {
     isPaused: boolean;
     finalTileWidth: number;
     finalTileHeight: number;
+    tiles : Tile[][];
+    tileContainer:PIXI.Container;
+    playerContainer: PIXI.Container;
+    tileObjectContainer: PIXI.Container;
+
+
+    constructor() {
+        super();
+        this.playerContainer = new PIXI.Container();
+        this.addChild(this.playerContainer);
+
+        this.tileObjectContainer = new PIXI.Container();
+        this.addChild(this.tileObjectContainer);
+
+        this.tileContainer = new PIXI.Container();
+        this.addChild(this.tileContainer);
+    }
+
+
+    static getMapObjectProperty(mapObject: any, name: string) {
+        for (const prop of mapObject.properties) {
+            if (prop.name == name) {
+                return prop.value();
+            }
+        }
+
+    }
 
     //Loads the map with spritesheet. Last parameter is callback function which is called after parsing the map with the new parsed map as parameter
     static loadMap(mapPath: string, spritesheet: TiledSpritesheet, callback: Function) {
@@ -27,47 +54,74 @@ class TiledMap extends PIXI.Container {
                 let tl = mapData.layers[layerIndex];
 
                 if (tl.type == "objectgroup") {
-                    //Create new PIXI Container for this layer
-                    let container = new PIXI.Container();
-                    map.addChild(container);
 
-                    //Generate Sprites for each object to the container
-                    for (let i in tl.objects) {
 
-                        let co = tl.objects[i];
+                    //Add all players first
+                    for (const co of tl.obejcts) {
+                        /*
+                        *      _____  _                       
+                        *     |  __ \| |                      
+                        *     | |__) | | __ _ _   _  ___ _ __ 
+                        *     |  ___/| |/ _` | | | |/ _ \ '__|
+                        *     | |    | | (_| | |_| |  __/ |   
+                        *     |_|    |_|\__,_|\__, |\___|_|   
+                        *                      __/ |          
+                        *                     |___/           
+                        */
 
-                        if (co.type == "character") {
+                        if (co.type == "player") {
                             let x = Math.round(co.x * SPRITE_SCALE.x);
                             let y = (Math.round(co.y) - co.height) * SPRITE_SCALE.y; // -co.height because tiled uses the bottom-left corner for coordinates and PIXI uses the top-left corner
-                            const newPlayer = new Player(x, y, map);
-                            map.players.push(newPlayer);
-                            container.addChild(newPlayer.sprite);
+                            const playerId: number = TiledMap.getMapObjectProperty(co, "playerId");
+                            const newPlayer = new Player(x, y, map, playerId);
+                            this.addPlayer(newPlayer);
                         }
-                        else {
+                    }
+
+
+
+                    //Generate Sprites for each object to the container
+                    for (const co of tl.objects) {
+                        /*
+                         *      _______                     
+                         *     |__   __|                    
+                         *        | | _____      _____ _ __ 
+                         *        | |/ _ \ \ /\ / / _ \ '__|
+                         *        | | (_) \ V  V /  __/ |   
+                         *        |_|\___/ \_/\_/ \___|_|   
+                         *                                  
+                         *                                  
+                         */
+
+
+                        if (co.type == "tower") {
 
                             let texture = spritesheet.getTexture(co.gid);
-                            let sprite = new PIXI.Sprite(texture);
-                            sprite.scale = SPRITE_SCALE;
-
-                            //an Object can be placed "between" tiles in tiled map editor. But evnts can be triggered only from whole tiles. So the obejccts position is mapped to the nearest Tile
-
-                            let originalX = co.x * SPRITE_SCALE.x;
-                            let xTiles = originalX / map.finalTileWidth;
-                            xTiles = Math.round(xTiles);
-
-                            let originalY = (co.y - co.height) * SPRITE_SCALE.y;  // -co.height because tiled uses the bottom-left corner for coordinates and PIXI uses the top-left corner              
-                            let yTiles = originalY / map.finalTileHeight;
-                            yTiles = Math.round(yTiles);
-
-                            //Set sprites coordinates
-                            sprite.x = xTiles * map.finalTileWidth;
-                            sprite.y = yTiles * map.finalTileHeight;
-
-                            //Set sprites visibility
-                            sprite.visible = co.visible;
-
-                            container.addChild(sprite);
+                            const ownerId = TiledMap.getMapObjectProperty(co, "owner");
+                            const owner = map.players[ownerId];
+                            const parent = map.getTileNearestTo(co);
+                            let newTower = new Tower(texture, parent, owner);
+                            newTower.scale = SPRITE_SCALE;
+                            map.addTileObject(newTower);
                         }
+
+
+                        /*
+                         *      _______            
+                         *     |__   __|           
+                         *        | |_ __ ___  ___ 
+                         *        | | '__/ _ \/ _ \
+                         *        | | | |  __/  __/
+                         *        |_|_|  \___|\___|
+                         *                         
+                         *                         
+                         */
+
+
+                         //TODO ADD A TREE 
+
+
+
 
 
                     }
@@ -126,12 +180,25 @@ class TiledMap extends PIXI.Container {
                     } else //Layer is not of type "tilelayer"
                         console.warn(`Ignoring Layer "${tl.name}". Layers of type "${tl.type}" are not supported yet.`);
                 }
-            }            
+            }
 
             //Call onFinish Callback
             callback(map);
         });
 
+    }
+
+    addPlayer(player: Player) {
+        this.players[player.playerId] = player;
+        this.playerContainer.addChild(player.sprite);
+    }
+
+    addTileObject(tileObject: TileObject) {
+        this.playerContainer.addChild(tileObject);
+    }
+
+    addTile(tile:Tile){
+        this.tiles[tile.gridY][tile.gridX] = tile;
     }
 
     pause() {
@@ -140,6 +207,29 @@ class TiledMap extends PIXI.Container {
 
     play() {
         this.isPaused = false;
+    }
+
+    getObjectCoordinates(mapObject:PIXI.Rectangle) {
+        let SPRITE_SCALE: PIXI.Point = new PIXI.Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);
+        //an Object can be placed "between" tiles in tiled map editor. But evnts can be triggered only from whole tiles. So the obejccts position is mapped to the nearest Tile
+
+        let originalX = mapObject.x * SPRITE_SCALE.x;
+        let xTiles = originalX / this.finalTileWidth;
+        xTiles = Math.round(xTiles);
+
+        let originalY = (mapObject.y - mapObject.height) * SPRITE_SCALE.y;  // -co.height because tiled uses the bottom-left corner for coordinates and PIXI uses the top-left corner              
+        let yTiles = originalY / this.finalTileHeight;
+        yTiles = Math.round(yTiles);
+
+        const gridX = xTiles * this.finalTileWidth;
+        const gridY = yTiles * this.finalTileHeight;
+
+        return { gridX: gridX, gridY: gridY };
+    }
+
+    getTileNearestTo(mapObject:PIXI.Rectangle):Tile{
+        const pos = this.getObjectCoordinates(mapObject);
+        return this.tiles[pos.gridY][pos.gridX];
     }
 
 }

@@ -1,10 +1,11 @@
+
 abstract class TileObject extends PIXI.Sprite{
 
     parent:Tile;
     solid:boolean;
 
-    constructor(parent){
-        super();
+    constructor(texture : PIXI.Texture ,parent:Tile){
+        super(texture);
         this.parent = parent;
     }
 
@@ -14,9 +15,11 @@ abstract class TileObject extends PIXI.Sprite{
 
     onHarvest(initiator:Player){};
 
-    destroy(){
+    onDestroy(initiator:Player){
         delete this.parent.tileObject;
-        super.destroy();
-    }
+        this.destroy();
+    };
+
+
 
 }
