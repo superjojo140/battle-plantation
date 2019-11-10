@@ -4,32 +4,38 @@ class Tile extends PIXI.Sprite {
     gridY: number;
     tileObject: TileObject;
 
-    constructor() {
-        super();
+    constructor(texture: PIXI.Texture, gridX: number, gridY: number) {
+        super(texture);
+        this.gridX = gridX;
+        this.gridY = gridY;
     }
 
-    onHit(hitEvent:HitEvent){
-        if(this.tileObject){
+    onHit(hitEvent: HitEvent) {
+        if (this.tileObject) {
             this.tileObject.onHit(hitEvent);
         }
     }
 
-    onPlant(plant:Plant){
-        if(this.tileObject){
+    onPlant(plant: Plant) {
+        if (this.tileObject) {
             this.tileObject.onPlant(plant);
         }
     }
 
-    onPlace(pumpkin:TntPumpkin){
-        if(this.tileObject == undefined){
+    onPlace(pumpkin: TntPumpkin) {
+        if (this.tileObject == undefined) {
             console.log("Placing Pumpkin TNT");
         }
     }
 
-    onHarvest(initiator:Player){
-        if(this.tileObject){
+    onHarvest(initiator: Player) {
+        if (this.tileObject) {
             this.tileObject.onHarvest(initiator);
         }
+    }
+
+    isFree(){
+        return this.tileObject ? true : false;
     }
 
 

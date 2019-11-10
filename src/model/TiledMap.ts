@@ -1,14 +1,15 @@
 class TiledMap extends PIXI.Container {
 
     static MAP_ZOOM = 4;
+    static SPRITE_SCALE: PIXI.Point = new PIXI.Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);
 
     players: Player[];
     spritesheet: TiledSpritesheet;
     isPaused: boolean;
     finalTileWidth: number;
     finalTileHeight: number;
-    tiles : Tile[][];
-    tileContainer:PIXI.Container;
+    tiles: Tile[][];
+    tileContainer: PIXI.Container;
     playerContainer: PIXI.Container;
     tileObjectContainer: PIXI.Container;
 
@@ -101,7 +102,6 @@ class TiledMap extends PIXI.Container {
                             const owner = map.players[ownerId];
                             const parent = map.getTileNearestTo(co);
                             let newTower = new Tower(texture, parent, owner);
-                            newTower.scale = SPRITE_SCALE;
                             map.addTileObject(newTower);
                         }
 
@@ -116,9 +116,12 @@ class TiledMap extends PIXI.Container {
                          *                         
                          *                         
                          */
-
-
-                         //TODO ADD A TREE 
+                        else if (co.type == "tree") {
+                            let texture = spritesheet.getTexture(co.gid);
+                            const parent = map.getTileNearestTo(co);
+                            let newTree = new Tree(texture, parent);
+                            map.addTileObject(newTree);
+                        }
 
 
 
@@ -129,54 +132,18 @@ class TiledMap extends PIXI.Container {
                 } else {
                     if (tl.type == "tilelayer") {
 
-                        //Could be reused for safe areas
-                        if (tl.name == "Collision" || tl.name == "collision") {
-                            /*map.collisionBitMap = [];
-                            //Generate Bitmap for Collisions. Any GID != 0 is interpreted as solid
-                            for (let row = 0; row < tl.height; row++) {
-                                map.collisionBitMap[row] = [];
-                                for (let column = 0; column < tl.width; column++) {
-                                    let index = row * tl.width + column;
-                                    // gid != 0 means solid
-                                    if (tl.data[index] != 0) {
-                                        map.collisionBitMap[row][column] = true;
-                                    }
-                                    else {
-                                        map.collisionBitMap[row][column] = false;
-                                    }
-                                }
-                            }*/
-                        }
-                        else { //Not the collision layer
-
-
-                            //}if(true){  //Draw the CollisionLayer - only for Debug
-
-
-
-                            //Create new PIXI Container for this layer
-                            let container = new PIXI.Container();
-                            container.width = tl.width * spritesheet.tileWidth;
-                            container.height = tl.height * spritesheet.tileHeight;
-                            container.x = tl.x;
-                            container.y = tl.y;
-                            map.addChild(container);
-
-                            //Generate Sprites for each tile to the container
-                            for (let row = 0; row < tl.height; row++) {
-                                for (let column = 0; column < tl.width; column++) {
-                                    let index = row * tl.width + column;
-                                    if (tl.data[index] > 0) {
-                                        let texture = spritesheet.getTexture(tl.data[index]);
-                                        let sprite = new PIXI.Sprite(texture);
-                                        sprite.x = column * spritesheet.tileWidth * SPRITE_SCALE.x;
-                                        sprite.y = row * spritesheet.tileHeight * SPRITE_SCALE.y;
-                                        sprite.scale = SPRITE_SCALE;
-                                        container.addChild(sprite);
-                                    }
+                        //Generate Tiles for each tile to the container
+                        for (let row = 0; row < tl.height; row++) {
+                            for (let column = 0; column < tl.width; column++) {
+                                let index = row * tl.width + column;
+                                if (tl.data[index] > 0) {
+                                    let texture = spritesheet.getTexture(tl.data[index]);
+                                    const newTile = new Tile(texture, row, column);
+                                    map.addTile(newTile);
                                 }
                             }
                         }
+
                     } else //Layer is not of type "tilelayer"
                         console.warn(`Ignoring Layer "${tl.name}". Layers of type "${tl.type}" are not supported yet.`);
                 }
@@ -189,16 +156,22 @@ class TiledMap extends PIXI.Container {
     }
 
     addPlayer(player: Player) {
+        //player.sprite.scale = TiledMap.SPRITE_SCALE;
         this.players[player.playerId] = player;
         this.playerContainer.addChild(player.sprite);
     }
 
     addTileObject(tileObject: TileObject) {
+        tileObject.scale = TiledMap.SPRITE_SCALE;
         this.playerContainer.addChild(tileObject);
     }
 
-    addTile(tile:Tile){
-        this.tiles[tile.gridY][tile.gridX] = tile;
+    addTile(tile: Tile) {
+        tile.x = tile.gridX * this.spritesheet.tileWidth * TiledMap.SPRITE_SCALE.x;
+        tile.y = tile.gridY * this.spritesheet.tileHeight * TiledMap.SPRITE_SCALE.y;
+        tile.scale = TiledMap.SPRITE_SCALE;
+
+        this.tiles[tile.gridY][tile.gridX] = tile;        
     }
 
     pause() {
@@ -209,15 +182,15 @@ class TiledMap extends PIXI.Container {
         this.isPaused = false;
     }
 
-    getObjectCoordinates(mapObject:PIXI.Rectangle) {
-        let SPRITE_SCALE: PIXI.Point = new PIXI.Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);
+    getObjectCoordinates(mapObject: PIXI.Rectangle) {
+       
         //an Object can be placed "between" tiles in tiled map editor. But evnts can be triggered only from whole tiles. So the obejccts position is mapped to the nearest Tile
 
-        let originalX = mapObject.x * SPRITE_SCALE.x;
+        let originalX = mapObject.x * TiledMap.SPRITE_SCALE.x;
         let xTiles = originalX / this.finalTileWidth;
         xTiles = Math.round(xTiles);
 
-        let originalY = (mapObject.y - mapObject.height) * SPRITE_SCALE.y;  // -co.height because tiled uses the bottom-left corner for coordinates and PIXI uses the top-left corner              
+        let originalY = (mapObject.y - mapObject.height) * TiledMap.SPRITE_SCALE.y;  // -co.height because tiled uses the bottom-left corner for coordinates and PIXI uses the top-left corner              
         let yTiles = originalY / this.finalTileHeight;
         yTiles = Math.round(yTiles);
 
@@ -227,7 +200,7 @@ class TiledMap extends PIXI.Container {
         return { gridX: gridX, gridY: gridY };
     }
 
-    getTileNearestTo(mapObject:PIXI.Rectangle):Tile{
+    getTileNearestTo(mapObject: PIXI.Rectangle): Tile {
         const pos = this.getObjectCoordinates(mapObject);
         return this.tiles[pos.gridY][pos.gridX];
     }

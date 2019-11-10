@@ -1,17 +1,20 @@
-class Tower extends TileObject {
+class Tree extends TileObject {
 
-    owner: Player;
+    
     statusBar: StatusBar;
 
-    constructor(texture: PIXI.Texture, parent: Tile, owner: Player) {
+    constructor(texture: PIXI.Texture, parent: Tile) {
         super(texture, parent);
-        this.owner = owner;
     }
 
     onHit(hitEvent: HitEvent) {
     };
 
     onDestroy(initiator: Player) {
+
+    }
+
+    onHarvest(initiator:Player){
 
     }
 
