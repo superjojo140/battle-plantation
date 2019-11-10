@@ -1,4 +1,6 @@
-class StatusBar extends PIXI.Container{
+import { TileObject } from "./TileObject";
+
+export class StatusBar extends PIXI.Container{
 
     frame : PIXI.Graphics;
     progressShape : PIXI.Graphics;

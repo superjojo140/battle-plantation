@@ -1,4 +1,4 @@
-class KeyboardManager {
+export class KeyboardManager {
 
     static keyUps = {};
     static keyDowns = {};

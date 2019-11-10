@@ -1,4 +1,10 @@
-class Tower extends TileObject {
+import { TileObject } from "./TileObject";
+import { StatusBar } from "./StatusBar";
+import { Player } from "./Player";
+import { Tile } from "./Tile";
+import { HitEvent } from "./HitEvent";
+
+export class Tower extends TileObject {
 
     owner: Player;
     statusBar: StatusBar;

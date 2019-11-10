@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
-        "target": "es6",
-        "module": "es2015",
         "sourceMap": true,
-        "outDir": "deliver"
+        "module": "es6",
+        "target": "es5",
+        "jsx": "react",
+        "allowJs": true
     },
     "include": [
         "src/model/*"

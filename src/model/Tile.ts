@@ -1,4 +1,11 @@
-class Tile extends PIXI.Sprite {
+import { TileObject } from "./TileObject";
+import { TiledMap } from "./TiledMap";
+import { HitEvent } from "./HitEvent";
+import { Plant } from "./Plant";
+import { TntPumpkin } from "./TntPumpkin";
+import { Player } from "./Player";
+
+export class Tile extends PIXI.Sprite {
 
     gridX: number;
     gridY: number;

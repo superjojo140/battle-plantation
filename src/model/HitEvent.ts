@@ -1,4 +1,6 @@
-class HitEvent {
+import { Player } from "./Player";
+
+export class HitEvent {
 
     initator: Player;
     damage: number;

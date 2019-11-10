@@ -1,4 +1,4 @@
-class TiledSpritesheet{
+export class TiledSpritesheet{
 
 	path: string;
 	border: number;

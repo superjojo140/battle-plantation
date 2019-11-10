@@ -1,4 +1,11 @@
-class TiledMap extends PIXI.Container {
+import { Player } from "./Player";
+import { TiledSpritesheet } from "./TiledSpritesheet";
+import { Tile } from "./Tile";
+import { Tower } from "./Tower";
+import { Tree } from "./Tree";
+import { TileObject } from "./TileObject";
+
+export class TiledMap extends PIXI.Container {
 
     static MAP_ZOOM = 4;
     static SPRITE_SCALE: PIXI.Point = new PIXI.Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);

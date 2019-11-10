@@ -1,4 +1,4 @@
-class MovingSprite extends PIXI.Sprite {
+export class MovingSprite extends PIXI.Sprite {
 
     vx: number;
     vy: number;

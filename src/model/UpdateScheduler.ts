@@ -1,4 +1,4 @@
-class UpdateScheduler {
+export class UpdateScheduler {
 
     static clients: object = {};
     static isPaused: boolean = true;

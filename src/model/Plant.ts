@@ -1,4 +1,10 @@
-abstract class Plant extends TileObject {
+import { TileObject } from "./TileObject";
+import { StatusBar } from "./StatusBar";
+import { Tile } from "./Tile";
+import { UpdateScheduler } from "./UpdateScheduler";
+import { Player } from "./Player";
+
+export abstract class Plant extends TileObject {
 
     static growStates: number = 4;
     static growStepTime: number = 3000;

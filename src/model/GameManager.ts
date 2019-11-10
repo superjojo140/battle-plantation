@@ -1,10 +1,15 @@
+import { TiledSpritesheet } from "./TiledSpritesheet";
+import { TiledMap } from "./TiledMap";
+import { KeyboardManager } from "./KeyboardManager";
+import { UpdateScheduler } from "./UpdateScheduler";
+
 const SPRITESHEET = new TiledSpritesheet("data/assets/spritesheet.png", 1, 16, 16, 31, 57) //Kenny Spritesheet see data/maps/Kenney RPG Tiles.tsx
 //TODO Parse this information automatixally from tsx file
 
 const APP_WIDTH = 1000;
 const APP_HEIGHT = 700;
 
-class GameManager {
+export class GameManager {
 
     static map: TiledMap;
 

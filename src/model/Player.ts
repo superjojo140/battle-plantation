@@ -1,4 +1,6 @@
-class Player {
+import { TiledMap } from "./TiledMap";
+
+export class Player {
 
 
     static UP: number = 0;

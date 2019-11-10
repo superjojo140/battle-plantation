@@ -1,31 +1,37 @@
 {
-  "name": "tamo",
+  "name": "battle-plantation",
   "version": "0.0.1",
-  "description": "Some RPG",
-  "main": "tamo.js",
+  "description": "Farm and fight",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "webpack": "webpack"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/superjojo140/tamo.git"
+    "url": "git+https://github.com/superjojo140/battle-plantation.git"
   },
   "keywords": [
-    "rpg"
+    "pixijs"
   ],
   "author": "superjojo140",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/superjojo140/tamo/issues"
+    "url": "https://github.com/superjojo140/battle-plantation/issues"
   },
-  "homepage": "https://github.com/superjojo140/tamo#readme",
+  "homepage": "https://github.com/superjojo140/battle-plantation#readme",
   "dependencies": {
     "@types/jquery": "^3.3.25",
     "@types/pixi.js": "^4.8.4",
-    "bootstrap": ">=4.3.1",
     "jquery": "^3.4.0",
     "pixi-sound": "^2.0.4",
     "pixi.js": "^4.8.3"
+  },
+  "devDependencies": {
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   }
 }

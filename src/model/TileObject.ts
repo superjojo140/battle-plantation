@@ -1,5 +1,9 @@
+import { Tile } from "./Tile";
+import { HitEvent } from "./HitEvent";
+import { Plant } from "./Plant";
+import { Player } from "./Player";
 
-abstract class TileObject extends PIXI.Sprite {
+export abstract class TileObject extends PIXI.Sprite {
 
     parent: Tile;
     solid: boolean;
