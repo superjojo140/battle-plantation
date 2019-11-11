@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/superjojo140/battle-plantation/issues"
   },
-  "homepage": "https://github.com/superjojo140/battle-plantation#readme",
+  "homepage": "https://superjojo140.github.io/battle-plantation/",
   "dependencies": {
     "@types/jquery": "^3.3.25",
     "@types/pixi.js": "^4.8.4",
