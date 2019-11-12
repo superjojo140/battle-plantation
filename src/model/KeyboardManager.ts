@@ -2,6 +2,7 @@ export class KeyboardManager {
 
     static keyUps = {};
     static keyDowns = {};
+    static ANY_KEY = "any_key";
 
     static init() {
         document.addEventListener('keyup', KeyboardManager.onKeyUp);
@@ -11,7 +12,7 @@ export class KeyboardManager {
     static onKeyUp(event) {
         for (const i in KeyboardManager.keyUps) {
             const element = KeyboardManager.keyUps[i];
-            if (event.key == element.key) {
+            if (element.key == KeyboardManager.ANY_KEY || event.key == element.key) {
                 if (typeof element.onKeyUp == "function") {
                     element.onKeyUp(event);
                 }
@@ -22,7 +23,7 @@ export class KeyboardManager {
     static onKeyDown(event) {
         for (const i in KeyboardManager.keyDowns) {
             const element = KeyboardManager.keyDowns[i];
-            if (event.key == element.key) {
+            if (element.key == KeyboardManager.ANY_KEY || event.key == element.key) {
                 if (typeof element.onKeyDown == "function") {
                     element.onKeyDown(event);
                 }

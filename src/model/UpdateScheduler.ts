@@ -1,12 +1,11 @@
 export class UpdateScheduler {
 
     static clients: object = {};
-    static isPaused: boolean = true;
+    static isPaused: boolean = false;
 
-    static register(id: string, callback: Function, myself: object) {
+    static register(id: string, callback: Function) {
         UpdateScheduler.clients[id] = {
-            callback: callback,
-            myself: myself
+            callback: callback
         };
     }
 
@@ -18,8 +17,7 @@ export class UpdateScheduler {
         if (!UpdateScheduler.isPaused) {
             for (let i in UpdateScheduler.clients) {
                 let currentCallback = UpdateScheduler.clients[i].callback;
-                let myself = UpdateScheduler.clients[i].myself;
-                currentCallback(myself, delta);
+                currentCallback(delta);
             }
         }
     }

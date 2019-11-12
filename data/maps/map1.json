@@ -207,11 +207,22 @@
                  "width":16,
                  "x":31.75,
                  "y":96
-                }, 
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":8,
+         "name":"Players",
+         "objects":[
                 {
                  "gid":1765,
                  "height":16,
-                 "id":29,
+                 "id":31,
                  "name":"",
                  "properties":[
                         {
@@ -228,13 +239,13 @@
                  "type":"player",
                  "visible":true,
                  "width":16,
-                 "x":95.5,
-                 "y":79.75
+                 "x":96,
+                 "y":80.25
                 }, 
                 {
                  "gid":1763,
                  "height":16,
-                 "id":30,
+                 "id":32,
                  "name":"",
                  "properties":[
                         {
@@ -251,8 +262,8 @@
                  "type":"player",
                  "visible":true,
                  "width":16,
-                 "x":16,
-                 "y":64
+                 "x":15.75,
+                 "y":64.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -260,8 +271,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":8,
- "nextobjectid":31,
+ "nextlayerid":9,
+ "nextobjectid":33,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.5",

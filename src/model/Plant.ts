@@ -17,10 +17,10 @@ export abstract class Plant extends TileObject {
     constructor(texture:Texture, parent: Tile) {
         super(texture,parent);
         const id = "plant" + parent.gridX + "-" + parent.gridY;
-        UpdateScheduler.register(id, this.grow, this);
+        UpdateScheduler.register(id, this.grow);
     }
 
-    grow(myself: Plant, delta: number) {
+    grow = (delta: number) => {
         console.log("I am growing...");
     }
 

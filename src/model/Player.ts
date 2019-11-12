@@ -1,5 +1,7 @@
 import { TiledMap } from "./TiledMap";
 import { Point, extras, Texture, BaseTexture, Rectangle } from "pixi.js";
+import { KeyboardManager } from "./KeyboardManager";
+import { UpdateScheduler } from "./UpdateScheduler";
 
 export class Player {
 
@@ -13,7 +15,7 @@ export class Player {
     static SPRITE_WIDTH: number = 96 / 3;
     static SPRITE_HEIGHT: number = 144 / 4;
     static SPRITE_SCALE: Point = new Point(1.5, 1.5);
-    static PLAYER_SPEED = 3;
+    static PLAYER_SPEED = 4;
 
 
     sprite: extras.AnimatedSprite;
@@ -23,6 +25,13 @@ export class Player {
     map: TiledMap;
     lastKey: string;
     playerId:number;
+
+    upKey:string;
+    downKey:string;
+    leftKey:string;
+    rightKey:string;
+    actionKey:string;
+    selectKey:string;
 
     constructor(x: number, y: number, map: TiledMap,playerId:number) {
         this.map = map;
@@ -48,6 +57,10 @@ export class Player {
         this.sprite.loop = true;
         this.lastKey = "";
 
+        //register key events
+        KeyboardManager.registerKey(KeyboardManager.ANY_KEY,this.keyDown,this.keyUp,"player"+playerId);
+        UpdateScheduler.register("player"+playerId,this.doStep);
+
     }
 
     changeDirection(direction: number) {
@@ -60,95 +73,70 @@ export class Player {
         }
     }
 
-    keyDown(event) {
+    setKeys(upKey,downKey,leftKey,rightKey,actionKey,selectKey){
+        this.upKey = upKey;
+        this.downKey = downKey;
+        this.leftKey = leftKey;
+        this.rightKey = rightKey;
+        this.actionKey = actionKey;
+        this.selectKey = selectKey;
+    }
+
+    keyDown = (event) => {
         if (event.key != this.lastKey) {
             this.lastKey = event.key;
             switch (event.key) {
-                case "ArrowUp":
-                    this.vy = -1 * Player.PLAYER_SPEED;
+                case this.upKey:
                     this.changeDirection(Player.UP);
+                    this.vy = -1 * Player.PLAYER_SPEED;
                     break;
-                case "ArrowDown":
-                    this.vy = 1 * Player.PLAYER_SPEED;
+                case this.downKey:
                     this.changeDirection(Player.DOWN);
+                    this.vy = 1 * Player.PLAYER_SPEED;
                     break;
-                case "ArrowLeft":
-                    this.vx = -1 * Player.PLAYER_SPEED;
+                case this.leftKey:
                     this.changeDirection(Player.LEFT);
+                    this.vx = -1 * Player.PLAYER_SPEED;
                     break;
-                case "ArrowRight":
-                    this.vx = 1 * Player.PLAYER_SPEED;
+                case this.rightKey:
                     this.changeDirection(Player.RIGHT);
+                    this.vx = 1 * Player.PLAYER_SPEED;
                     break;
 
             }
         }
     }
 
-    keyUp(event) {
+    keyUp = (event) => {
         this.lastKey = "";
         switch (event.key) {
-            case "ArrowUp":
+            case this.upKey:
+                this.changeDirection(Player.STOP);
                 this.vy = 0;
-                this.changeDirection(Player.STOP);
                 break;
-            case "ArrowDown":
+            case this.downKey:  
+                this.changeDirection(Player.STOP);
                 this.vy = 0;
-                this.changeDirection(Player.STOP);
                 break;
-            case "ArrowLeft":
-                this.vx = 0;
+            case this.leftKey:       
                 this.changeDirection(Player.STOP);
+                this.vx = 0;
                 break;
-            case "ArrowRight":
-                this.vx = 0;
+            case this.rightKey:        
                 this.changeDirection(Player.STOP);
+                this.vx = 0;
                 break;
         }
     }
 
 
-    doStep(delta) {
+    doStep = (delta) => {
 
         let newX = this.sprite.x + this.vx * delta;
         let newY = this.sprite.y + this.vy * delta;
 
-        let xRange = {
-            from: Math.floor(newX / this.map.finalTileWidth),
-            to: Math.floor((newX + this.sprite.width) / this.map.finalTileWidth)
-        };
-
-        let yRange = {
-            from: Math.floor(newY / this.map.finalTileHeight),
-            to: Math.floor((newY + this.sprite.height) / this.map.finalTileHeight)
-        };
-
-        let blocked = false;
-
-        /*
-        for (let x = xRange.from; x <= xRange.to; x++) {
-            for (let y = yRange.from; y <= yRange.to; y++) {
-                if (this.map.collisionBitMap[y] == undefined || this.map.collisionBitMap[y][x] == undefined || this.map.collisionBitMap[y][x] == true) {
-                    blocked = true;
-                }
-            }
-        }*/
-
-
-        if (blocked == false) {
-            this.sprite.x = newX;
-            this.sprite.y = newY;
-        }
-
-
-        //Check for event
-        let originalX = this.sprite.x;
-        let xTiles = originalX / this.map.finalTileWidth;
-        xTiles = Math.round(xTiles);
-
-        let originalY = this.sprite.y;
-        let yTiles = originalY / this.map.finalTileHeight;
-        yTiles = Math.round(yTiles);
+        this.sprite.x = newX;
+        this.sprite.y = newY;
 
     }
 
