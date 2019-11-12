@@ -6,7 +6,11 @@ import { Player } from "./Player";
 
 export class Tree extends TileObject {
 
-    
+    constructor(texture,parent){
+        super(texture,parent);
+        this.statusBar = new StatusBar(this,0.5);
+    }
+
     statusBar: StatusBar;
 
     onHit(hitEvent: HitEvent) {
