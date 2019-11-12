@@ -39,7 +39,7 @@ export class GameManager {
         GameManager.pixiApp.ticker.add(UpdateScheduler.doStep);
 
         
-        TiledMap.loadMap("/data/maps/map1.json",SPRITESHEET,function(parsedMap:TiledMap){
+        TiledMap.loadMap("data/maps/map1.json",SPRITESHEET,function(parsedMap:TiledMap){
             console.log("Map parsed");
             GameManager.map = parsedMap;
             GameManager.pixiApp.stage.addChild(parsedMap);
