@@ -141,8 +141,8 @@ export class TiledMap extends Container {
                             let texture = spritesheet.getTexture(co.gid);
                             const ownerId = map.getMapObjectProperty(co, "owner");
                             const owner = map.players[ownerId];
-                            const parent = map.getTileNearestTo(co);
-                            let newTower = new Tower(texture, parent, owner);
+                            const mother = map.getTileNearestTo(co);
+                            let newTower = new Tower(texture, mother, owner);
                             map.addTileObject(newTower);
                         }
 
@@ -159,8 +159,8 @@ export class TiledMap extends Container {
                          */
                         else if (co.type == "tree") {
                             let texture = spritesheet.getTexture(co.gid);
-                            const parent = map.getTileNearestTo(co);
-                            let newTree = new Tree(texture, parent);
+                            const mother = map.getTileNearestTo(co);
+                            let newTree = new Tree(texture, mother);
                             map.addTileObject(newTree);
                         }
 

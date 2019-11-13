@@ -6,8 +6,8 @@ import { Player } from "./Player";
 
 export class Tree extends TileObject {
 
-    constructor(texture,parent){
-        super(texture,parent);
+    constructor(texture,mother){
+        super(texture,mother);
         this.statusBar = new StatusBar(this,0.5);
     }
 

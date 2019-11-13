@@ -6,22 +6,22 @@ import { Sprite, Texture } from "pixi.js";
 
 export abstract class TileObject extends Sprite {
 
-    parent: Tile;
+    mother: Tile;
     solid: boolean;
 
-    constructor(texture: Texture, parent: Tile) {
+    constructor(texture: Texture, mother: Tile) {
         super(texture);
-        this.parent = parent;
-        if (this.parent.isFree()) {
-            this.parent.tileObject = this;
+        this.mother = mother;
+        if (this.mother.isFree()) {
+            this.mother.tileObject = this;
         }
         else {
             throw new Error("Can't add TileObject to a Tile that allready has an TileObject");
         }
 
         //set render coordinates
-        this.x = this.parent.x;
-        this.y = this.parent.y;
+        this.x = this.mother.x;
+        this.y = this.mother.y;
     }
 
     onHit(hitevent: HitEvent) { };
@@ -31,7 +31,7 @@ export abstract class TileObject extends Sprite {
     onHarvest(initiator: Player) { };
 
     onDestroy(initiator: Player) {
-        delete this.parent.tileObject;
+        delete this.mother.tileObject;
         this.destroy();
     };
 

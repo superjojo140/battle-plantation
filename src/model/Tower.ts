@@ -10,8 +10,8 @@ export class Tower extends TileObject {
     owner: Player;
     statusBar: StatusBar;
 
-    constructor(texture: Texture, parent: Tile, owner: Player) {
-        super(texture, parent);
+    constructor(texture: Texture, mother: Tile, owner: Player) {
+        super(texture, mother);
         this.owner = owner;
     }
 

@@ -7,22 +7,22 @@ export class StatusBar extends Container {
     frame: Graphics;
     progressShape: Graphics;
     progress: number; //From 0 to 1
-    parent : TileObject;
+    mother : TileObject;
 
     static LINE_THICKNESS = 3;
 
-    constructor(parent: TileObject, progress: number) {
+    constructor(mother: TileObject, progress: number) {
         super();
-        this.parent = parent;
+        this.mother = mother;
         this.progress = progress;
 
-        const map = parent.parent.map;
+        const map = mother.mother.map;
         map.tileObjectContainer.addChild(this);
-        //position relative to parent
-        this.x = parent.x;
-        this.y = parent.y;
-        this.width = parent.width;
-        this.height = parent.height
+        //position relative to mother
+        this.x = mother.x;
+        this.y = mother.y;
+        this.width = mother.width;
+        this.height = mother.height
         //Draw yourself
         this.frame = new Graphics();
         // set the line style to have a width of 5 and set the color to red

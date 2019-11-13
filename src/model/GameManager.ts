@@ -44,6 +44,8 @@ export class GameManager {
             GameManager.pixiApp.stage.addChild(parsedMap);
             GameManager.pixiApp.ticker.start();
 
+            console.log(parsedMap);
+
             const players = parsedMap.players;
             players[0].setKeys("ArrowUp","ArrowDown","ArrowLeft","ArrowRight","m","n");
             players[1].setKeys("w","s","a","d","x","y");

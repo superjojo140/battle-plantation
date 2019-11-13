@@ -14,9 +14,9 @@ export abstract class Plant extends TileObject {
     crop: object;
     statusBar: StatusBar;
 
-    constructor(texture:Texture, parent: Tile) {
-        super(texture,parent);
-        const id = "plant" + parent.gridX + "-" + parent.gridY;
+    constructor(texture:Texture, mother: Tile) {
+        super(texture,mother);
+        const id = "plant" + mother.gridX + "-" + mother.gridY;
         UpdateScheduler.register(id, this.grow);
     }
 
