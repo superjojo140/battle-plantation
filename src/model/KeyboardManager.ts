@@ -1,18 +1,18 @@
 export class KeyboardManager {
 
-    static keyUps = {};
-    static keyDowns = {};
-    static ANY_KEY = "any_key";
+     keyUps = {};
+     keyDowns = {};
+     ANY_KEY = "any_key";
 
-    static init() {
-        document.addEventListener('keyup', KeyboardManager.onKeyUp);
-        document.addEventListener('keydown', KeyboardManager.onKeyDown);
+     constructor() {
+        document.addEventListener('keyup', this.onKeyUp);
+        document.addEventListener('keydown', this.onKeyDown);
     }
 
-    static onKeyUp(event) {
-        for (const i in KeyboardManager.keyUps) {
-            const element = KeyboardManager.keyUps[i];
-            if (element.key == KeyboardManager.ANY_KEY || event.key == element.key) {
+     onKeyUp = (event) => {
+        for (const i in this.keyUps) {
+            const element = this.keyUps[i];
+            if (element.key == this.ANY_KEY || event.key == element.key) {
                 if (typeof element.onKeyUp == "function") {
                     element.onKeyUp(event);
                 }
@@ -20,10 +20,10 @@ export class KeyboardManager {
         }
     }
 
-    static onKeyDown(event) {
-        for (const i in KeyboardManager.keyDowns) {
-            const element = KeyboardManager.keyDowns[i];
-            if (element.key == KeyboardManager.ANY_KEY || event.key == element.key) {
+     onKeyDown = (event) => {
+        for (const i in this.keyDowns) {
+            const element = this.keyDowns[i];
+            if (element.key == this.ANY_KEY || event.key == element.key) {
                 if (typeof element.onKeyDown == "function") {
                     element.onKeyDown(event);
                 }
@@ -31,14 +31,14 @@ export class KeyboardManager {
         }
     }
 
-    static registerKey(key, onKeyDown, onKeyUp, identifier) {
-        KeyboardManager.keyDowns[identifier] = { key: key, onKeyDown: onKeyDown };
-        KeyboardManager.keyUps[identifier] = { key: key, onKeyUp: onKeyUp };
+     registerKey(key, onKeyDown, onKeyUp, identifier) {
+        this.keyDowns[identifier] = { key: key, onKeyDown: onKeyDown };
+        this.keyUps[identifier] = { key: key, onKeyUp: onKeyUp };
     }
 
-    static unregisterKey(identifier) {
-        delete KeyboardManager.keyDowns[identifier];
-        delete KeyboardManager.keyUps[identifier];
+     unregisterKey(identifier) {
+        delete this.keyDowns[identifier];
+        delete this.keyUps[identifier];
     }
 
 

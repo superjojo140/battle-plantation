@@ -12,12 +12,20 @@ const APP_HEIGHT = 512;
 
 export class GameManager {
 
-    static map: TiledMap;
+     map: TiledMap;
 
-    static pixiApp : Application;
+     pixiApp : Application;
+
+     updateScheduler : UpdateScheduler;
+     keyboardManager : KeyboardManager;
+
+     constructor(){
+         this.keyboardManager = new KeyboardManager();
+         this.updateScheduler = new UpdateScheduler();
+     }
 
 
-    static startGame() {
+     startGame() {
         //Create Pixi stuff
         //Create a Pixi Application
         class PixiOptions implements ApplicationOptions{
@@ -25,26 +33,20 @@ export class GameManager {
         }
         const pixiOptions = new PixiOptions(APP_WIDTH,APP_HEIGHT);
 
-        GameManager.pixiApp = new Application(pixiOptions);
+        this.pixiApp = new Application(pixiOptions);
 
         //Add the canvas that Pixi automatically created for you to the HTML document
         //Still neccesarry????
-        document.body.appendChild(GameManager.pixiApp.view);
-
-        //Init Keyboard Manager
-        KeyboardManager.init();
+        document.body.appendChild(this.pixiApp.view);
 
         //Register Update scheduler
-        GameManager.pixiApp.ticker.add(UpdateScheduler.doStep);
+        this.pixiApp.ticker.add(this.updateScheduler.doStep);
 
         
-        TiledMap.loadMap("data/maps/map1.json",SPRITESHEET,function(parsedMap:TiledMap){
-            console.log("Map parsed");
-            GameManager.map = parsedMap;
-            GameManager.pixiApp.stage.addChild(parsedMap);
-            GameManager.pixiApp.ticker.start();
-
-            console.log(parsedMap);
+        TiledMap.loadMap("data/maps/map1.json",SPRITESHEET,(parsedMap:TiledMap)=>{
+            this.map = parsedMap;
+            this.pixiApp.stage.addChild(parsedMap);
+            this.pixiApp.ticker.start();
 
             const players = parsedMap.players;
             players[0].setKeys("ArrowUp","ArrowDown","ArrowLeft","ArrowRight","m","n");
@@ -53,3 +55,4 @@ export class GameManager {
     }
 
 }
+

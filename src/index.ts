@@ -1,3 +1,7 @@
 import {GameManager} from "./model/GameManager"
 
-GameManager.startGame();
+const gameManager = new GameManager();
+gameManager.startGame();
+
+export {gameManager};
+

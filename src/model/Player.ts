@@ -1,7 +1,6 @@
 import { TiledMap } from "./TiledMap";
 import { Point, extras, Texture, BaseTexture, Rectangle } from "pixi.js";
-import { KeyboardManager } from "./KeyboardManager";
-import { UpdateScheduler } from "./UpdateScheduler";
+import {gameManager} from "./../index"
 
 export class Player {
 
@@ -58,8 +57,8 @@ export class Player {
         this.lastKey = "";
 
         //register key events
-        KeyboardManager.registerKey(KeyboardManager.ANY_KEY,this.keyDown,this.keyUp,"player"+playerId);
-        UpdateScheduler.register("player"+playerId,this.doStep);
+        gameManager.keyboardManager.registerKey(gameManager.keyboardManager.ANY_KEY,this.keyDown,this.keyUp,"player"+playerId);
+        gameManager.updateScheduler.register("player"+playerId,this.doStep);
 
     }
 

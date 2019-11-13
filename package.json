@@ -23,6 +23,7 @@
   "homepage": "https://superjojo140.github.io/battle-plantation/",
   "dependencies": {
     "@types/jquery": "^3.3.25",
+    "@types/node": "^12.12.7",
     "@types/pixi.js": "^4.8.4",
     "jquery": "^3.4.0",
     "pixi-sound": "^2.0.4",

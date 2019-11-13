@@ -1,9 +1,9 @@
 import { TileObject } from "./TileObject";
 import { StatusBar } from "./StatusBar";
 import { Tile } from "./Tile";
-import { UpdateScheduler } from "./UpdateScheduler";
 import { Player } from "./Player";
 import { Texture } from "pixi.js";
+import {gameManager} from "./../index"
 
 export abstract class Plant extends TileObject {
 
@@ -17,7 +17,7 @@ export abstract class Plant extends TileObject {
     constructor(texture:Texture, mother: Tile) {
         super(texture,mother);
         const id = "plant" + mother.gridX + "-" + mother.gridY;
-        UpdateScheduler.register(id, this.grow);
+        gameManager.updateScheduler.register(id, this.grow);
     }
 
     grow = (delta: number) => {

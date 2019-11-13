@@ -1,22 +1,22 @@
 export class UpdateScheduler {
 
-    static clients: object = {};
-    static isPaused: boolean = false;
+     clients: object = {};
+     isPaused: boolean = false;
 
-    static register(id: string, callback: Function) {
-        UpdateScheduler.clients[id] = {
+     register(id: string, callback: Function) {
+        this.clients[id] = {
             callback: callback
         };
     }
 
-    static unregister(id: string) {
-        delete UpdateScheduler.clients[id];
+     unregister(id: string) {
+        delete this.clients[id];
     }
 
-    static doStep(delta: number) {
-        if (!UpdateScheduler.isPaused) {
-            for (let i in UpdateScheduler.clients) {
-                let currentCallback = UpdateScheduler.clients[i].callback;
+     doStep = (delta: number) => {
+        if (!this.isPaused) {
+            for (let i in this.clients) {
+                let currentCallback = this.clients[i].callback;
                 currentCallback(delta);
             }
         }
