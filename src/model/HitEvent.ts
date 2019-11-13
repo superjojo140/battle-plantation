@@ -2,11 +2,11 @@ import { Player } from "./Player";
 
 export class HitEvent {
 
-    initator: Player;
+    initiator: Player;
     damage: number;
 
-    constructor(initator: Player, damage: number) {
-        this.initator = initator;
+    constructor(initiator: Player, damage: number) {
+        this.initiator = initiator;
         this.damage = damage;
 
     }

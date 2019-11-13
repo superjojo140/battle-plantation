@@ -2,6 +2,11 @@ import { TiledMap } from "./TiledMap";
 import { Point, extras, Texture, BaseTexture, Rectangle } from "pixi.js";
 import {gameManager} from "./../index"
 
+class Inventory{
+    tomato_item : number = 0;
+    pumpkin_item : number = 0;
+}
+
 export class Player {
 
 
@@ -25,6 +30,8 @@ export class Player {
     lastKey: string;
     playerId:number;
 
+    inventory : Inventory;
+
     upKey:string;
     downKey:string;
     leftKey:string;
@@ -35,6 +42,7 @@ export class Player {
     constructor(x: number, y: number, map: TiledMap,playerId:number) {
         this.map = map;
         this.playerId = playerId;
+        this.inventory = new Inventory();
         this.animations = [];
         let baseTexture: BaseTexture = Texture.fromImage(`data/assets/player_${playerId}.png`).baseTexture;
         for (let row = 0; row < 4; row++) {
@@ -137,6 +145,11 @@ export class Player {
         this.sprite.x = newX;
         this.sprite.y = newY;
 
+    }
+
+    getItem(itemType:string,count:number){
+        console.log(this.playerId+" got "+count+" pieces of "+itemType);
+        this.inventory[itemType] += count;
     }
 
 }
