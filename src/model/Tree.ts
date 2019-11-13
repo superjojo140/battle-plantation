@@ -1,9 +1,7 @@
 import { TileObject } from "./TileObject";
 import { StatusBar } from "./StatusBar";
-import { Tile } from "./Tile";
 import { HitEvent } from "./HitEvent";
 import { Player } from "./Player";
-import { timingSafeEqual } from "crypto";
 import { WOOD_ITEM } from "./Items";
 
 export class Tree extends TileObject {
