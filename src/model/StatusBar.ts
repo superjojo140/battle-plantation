@@ -1,52 +1,70 @@
 import { TileObject } from "./TileObject";
 import { Container, Graphics } from "pixi.js";
-import { GameManager } from "./GameManager";
 
 export class StatusBar extends Container {
 
-    frame: Graphics;
+    borderRectangle: Graphics;
+    borderColor: number
     progressShape: Graphics;
+    progressColor: number;
     progress: number; //From 0 to 1
-    mother : TileObject;
+    mother: TileObject;
 
     static LINE_THICKNESS = 3;
 
-    constructor(mother: TileObject, progress: number) {
+    constructor(mother: TileObject, visible?: boolean, progress?: number, borderColor?: number, progressColor?: number) {
         super();
         this.mother = mother;
-        this.progress = progress;
+        this.visible = visible === undefined ? true : visible;
+        this.progress = progress || 1;
+        this.borderColor = borderColor || 0xFF0000;
+        this.progressColor = progressColor || 0x00FF00;
 
+        //Add to pixi container
         const map = mother.mother.map;
+
         map.tileObjectContainer.addChild(this);
+
         //position relative to mother
         this.x = mother.x;
         this.y = mother.y;
         this.width = mother.width;
         this.height = mother.height
-        //Draw yourself
-        this.frame = new Graphics();
-        // set the line style to have a width of 5 and set the color to red
-        this.frame.lineStyle(StatusBar.LINE_THICKNESS, 0xFF0000);
-        // draw a rectangle
-        this.frame.drawRect(0, 0, 64, StatusBar.LINE_THICKNESS*3);
-        this.addChild(this.frame);
 
- 
+        //Draw frame
+        this.borderRectangle = new Graphics();
+        this.borderRectangle.lineStyle(StatusBar.LINE_THICKNESS, this.borderColor);
+        this.borderRectangle.drawRect(0, 0, map.finalTileWidth, StatusBar.LINE_THICKNESS * 3);
+        this.addChild(this.borderRectangle);
 
-        this.setProgress(progress);
+        this.setProgress(this.progress);
     }
 
     updateView() {
-        //Paint yourself
-        this.progressShape = new Graphics();
-        // set the line style to have a width of 5 and set the color to red
-        this.progressShape.lineStyle(StatusBar.LINE_THICKNESS, 0x00FF00);
-        // draw a rectangle
-        this.progressShape.drawRect(StatusBar.LINE_THICKNESS, StatusBar.LINE_THICKNESS, 64 * this.progress, StatusBar.LINE_THICKNESS);
-        this.addChild(this.progressShape);
+        //Clear last progress Shape
+        if (this.progressShape) {
+            this.removeChild(this.progressShape);
+        }
+        if (this.progress >= 0.1) { //Draw too small progress looks ugly
+            //Draw new progressbar
+            this.progressShape = new Graphics();
+
+            //Don't worry about this crazy +1/-1 pixels, they are crazy, but necessary
+            const lineWidth = 64 * this.progress - StatusBar.LINE_THICKNESS + 1;
+            const thick = StatusBar.LINE_THICKNESS * 2;
+
+            this.progressShape.lineStyle(thick, this.progressColor)
+                .moveTo(StatusBar.LINE_THICKNESS - 1, thick - 1)
+                .lineTo(lineWidth, thick - 1);
+
+            this.addChild(this.progressShape);
+        }
     }
 
     setProgress(progress: number) {
+        if (progress < 0 || progress > 1) {
+            throw Error("Can't set progress lower than 0 or higher than 1")
+        }
         this.progress = progress;
         this.updateView();
     }

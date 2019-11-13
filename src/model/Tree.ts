@@ -8,7 +8,7 @@ export class Tree extends TileObject {
 
     constructor(texture,mother){
         super(texture,mother);
-        this.statusBar = new StatusBar(this,0.5);
+        this.statusBar = new StatusBar(this,false);
     }
 
     statusBar: StatusBar;
