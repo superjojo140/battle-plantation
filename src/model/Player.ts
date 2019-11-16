@@ -1,10 +1,10 @@
 import { TiledMap } from "./TiledMap";
 import { Point, extras, Texture, BaseTexture, Rectangle } from "pixi.js";
-import {gameManager} from "./../index"
+import { gameManager } from "./../index"
 
-class Inventory{
-    tomato_item : number = 0;
-    pumpkin_item : number = 0;
+class Inventory {
+    tomato_item: number = 0;
+    pumpkin_item: number = 0;
 }
 
 export class Player {
@@ -21,25 +21,27 @@ export class Player {
     static SPRITE_SCALE: Point = new Point(1.5, 1.5);
     static PLAYER_SPEED = 4;
 
+    playerId: number;
+    map: TiledMap;
 
     sprite: extras.AnimatedSprite;
+    animations: Texture[][];
     vx: number;
     vy: number;
-    animations: Texture[][];
-    map: TiledMap;
+    stunned: boolean = false;
+
+    inventory: Inventory;
+
+    actionMode: string;
     lastKey: string;
-    playerId:number;
+    upKey: string;
+    downKey: string;
+    leftKey: string;
+    rightKey: string;
+    actionKey: string;
+    selectKey: string;
 
-    inventory : Inventory;
-
-    upKey:string;
-    downKey:string;
-    leftKey:string;
-    rightKey:string;
-    actionKey:string;
-    selectKey:string;
-
-    constructor(x: number, y: number, map: TiledMap,playerId:number) {
+    constructor(x: number, y: number, map: TiledMap, playerId: number) {
         this.map = map;
         this.playerId = playerId;
         this.inventory = new Inventory();
@@ -65,8 +67,8 @@ export class Player {
         this.lastKey = "";
 
         //register key events
-        gameManager.keyboardManager.registerKey(gameManager.keyboardManager.ANY_KEY,this.keyDown,this.keyUp,"player"+playerId);
-        gameManager.updateScheduler.register("player"+playerId,this.doStep);
+        gameManager.keyboardManager.registerKey(gameManager.keyboardManager.ANY_KEY, this.keyDown, this.keyUp, "player" + playerId);
+        gameManager.updateScheduler.register("player" + playerId, this.doStep);
 
     }
 
@@ -80,7 +82,7 @@ export class Player {
         }
     }
 
-    setKeys(upKey,downKey,leftKey,rightKey,actionKey,selectKey){
+    setKeys(upKey, downKey, leftKey, rightKey, actionKey, selectKey) {
         this.upKey = upKey;
         this.downKey = downKey;
         this.leftKey = leftKey;
@@ -121,15 +123,15 @@ export class Player {
                 this.changeDirection(Player.STOP);
                 this.vy = 0;
                 break;
-            case this.downKey:  
+            case this.downKey:
                 this.changeDirection(Player.STOP);
                 this.vy = 0;
                 break;
-            case this.leftKey:       
+            case this.leftKey:
                 this.changeDirection(Player.STOP);
                 this.vx = 0;
                 break;
-            case this.rightKey:        
+            case this.rightKey:
                 this.changeDirection(Player.STOP);
                 this.vx = 0;
                 break;
@@ -139,16 +141,45 @@ export class Player {
 
     doStep = (delta) => {
 
-        let newX = this.sprite.x + this.vx * delta;
-        let newY = this.sprite.y + this.vy * delta;
+        if (!this.stunned) {
 
-        this.sprite.x = newX;
-        this.sprite.y = newY;
+            //Calculate theoretically next position
+            let newX = this.sprite.x + this.vx * delta;
+            let newY = this.sprite.y + this.vy * delta;
+
+            //Get all tiles that would be touched by the player
+            let xRange = {
+                from: Math.floor(newX / this.map.finalTileWidth),
+                to: Math.floor((newX + this.sprite.width) / this.map.finalTileWidth)
+            };
+
+            let yRange = {
+                from: Math.floor(newY / this.map.finalTileHeight),
+                to: Math.floor((newY + this.sprite.height) / this.map.finalTileHeight)
+            };
+
+            //Check if at least one of this new positions would be in a solid tile or out of the map
+            let blocked = false;
+
+            for (let x = xRange.from; x <= xRange.to; x++) {
+                for (let y = yRange.from; y <= yRange.to; y++) {
+                    if (this.map.tiles[y] == undefined || this.map.tiles[y][x] == undefined || (this.map.tiles[y][x].tileObject && this.map.tiles[y][x].tileObject.solid)) {
+                        blocked = true;
+                    }
+                }
+            }
+
+
+            if (blocked == false) {
+                this.sprite.x = newX;
+                this.sprite.y = newY;
+            }
+        }
 
     }
 
-    giveItem(itemType:string,count:number){
-        console.log(this.playerId+" got "+count+" pieces of "+itemType);
+    giveItem(itemType: string, count: number) {
+        console.log(this.playerId + " got " + count + " pieces of " + itemType);
         this.inventory[itemType] += count;
     }
 

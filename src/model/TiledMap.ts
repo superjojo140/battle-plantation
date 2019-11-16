@@ -116,7 +116,7 @@ export class TiledMap extends Container {
                             let x = Math.round(co.x * SPRITE_SCALE.x);
                             let y = (Math.round(co.y) - co.height) * SPRITE_SCALE.y; // -co.height because tiled uses the bottom-left corner for coordinates and PIXI uses the top-left corner
                             const playerId: number = map.getMapObjectProperty(co, "playerId");
-                            const newPlayer = new Player(x, y, this, playerId);
+                            const newPlayer = new Player(x, y, map, playerId);
                             map.addPlayer(newPlayer);
                         }
                     }

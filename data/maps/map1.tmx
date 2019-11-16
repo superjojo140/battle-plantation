@@ -64,9 +64,9 @@
     <property name="type" value="tree"/>
    </properties>
   </object>
-  <object id="36" type="wall" gid="665" x="95.5" y="94.75" width="16" height="16"/>
-  <object id="40" type="wall" gid="665" x="48.25" y="47" width="16" height="16"/>
-  <object id="41" type="wall" gid="665" x="48.25" y="111" width="16" height="16"/>
+  <object id="36" type="wall" gid="7" x="95.5" y="94.75" width="16" height="16"/>
+  <object id="40" type="wall" gid="7" x="48.25" y="47" width="16" height="16"/>
+  <object id="41" type="wall" gid="7" x="48.25" y="111" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="8" name="Players">
   <object id="31" type="player" gid="1765" x="96" y="80.25" width="16" height="16">
