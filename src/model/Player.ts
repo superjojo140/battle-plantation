@@ -1,20 +1,17 @@
 import { TiledMap } from "./TiledMap";
 import { Point, extras, Texture, BaseTexture, Rectangle } from "pixi.js";
 import { gameManager } from "./../index"
+import { ITEM } from "./Items";
 
 class Inventory {
     tomato_item: number = 0;
     pumpkin_item: number = 0;
 }
 
-export class Player {
+enum DIRECTION {UP,RIGHT,DOWN,LEFT,STOP};
 
+export class Player {  
 
-    static UP: number = 0;
-    static RIGHT: number = 1;
-    static DOWN: number = 2;
-    static LEFT: number = 3;
-    static STOP: number = 4;
 
     static SPRITE_WIDTH: number = 96 / 3;
     static SPRITE_HEIGHT: number = 144 / 4;
@@ -56,7 +53,7 @@ export class Player {
             this.animations.push(textureArray);
         }
 
-        this.sprite = new extras.AnimatedSprite(this.animations[Player.DOWN]);
+        this.sprite = new extras.AnimatedSprite(this.animations[DIRECTION.DOWN]);
         this.sprite.x = x;
         this.sprite.y = y;
         this.vx = 0;
@@ -77,7 +74,7 @@ export class Player {
             this.sprite.textures = this.animations[direction];
             this.sprite.play();
         }
-        else if (direction == Player.STOP) {
+        else if (direction == DIRECTION.STOP) {
             this.sprite.stop();
         }
     }
@@ -96,19 +93,19 @@ export class Player {
             this.lastKey = event.key;
             switch (event.key) {
                 case this.upKey:
-                    this.changeDirection(Player.UP);
+                    this.changeDirection(DIRECTION.UP);
                     this.vy = -1 * Player.PLAYER_SPEED;
                     break;
                 case this.downKey:
-                    this.changeDirection(Player.DOWN);
+                    this.changeDirection(DIRECTION.DOWN);
                     this.vy = 1 * Player.PLAYER_SPEED;
                     break;
                 case this.leftKey:
-                    this.changeDirection(Player.LEFT);
+                    this.changeDirection(DIRECTION.LEFT);
                     this.vx = -1 * Player.PLAYER_SPEED;
                     break;
                 case this.rightKey:
-                    this.changeDirection(Player.RIGHT);
+                    this.changeDirection(DIRECTION.RIGHT);
                     this.vx = 1 * Player.PLAYER_SPEED;
                     break;
 
@@ -120,19 +117,19 @@ export class Player {
         this.lastKey = "";
         switch (event.key) {
             case this.upKey:
-                this.changeDirection(Player.STOP);
+                this.changeDirection(DIRECTION.STOP);
                 this.vy = 0;
                 break;
             case this.downKey:
-                this.changeDirection(Player.STOP);
+                this.changeDirection(DIRECTION.STOP);
                 this.vy = 0;
                 break;
             case this.leftKey:
-                this.changeDirection(Player.STOP);
+                this.changeDirection(DIRECTION.STOP);
                 this.vx = 0;
                 break;
             case this.rightKey:
-                this.changeDirection(Player.STOP);
+                this.changeDirection(DIRECTION.STOP);
                 this.vx = 0;
                 break;
         }
@@ -178,7 +175,7 @@ export class Player {
 
     }
 
-    giveItem(itemType: string, count: number) {
+    giveItem(itemType: ITEM, count: number) {
         console.log(this.playerId + " got " + count + " pieces of " + itemType);
         this.inventory[itemType] += count;
     }

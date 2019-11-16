@@ -2,7 +2,7 @@ import { TileObject } from "./TileObject";
 import { StatusBar } from "./StatusBar";
 import { HitEvent } from "./HitEvent";
 import { Player } from "./Player";
-import { WOOD_ITEM } from "./Items";
+import { ITEM } from "./Items";
 
 export class Tree extends TileObject {
 
@@ -34,7 +34,7 @@ export class Tree extends TileObject {
     };
 
     onDestroy(initiator: Player) {
-        initiator.giveItem(WOOD_ITEM, 1);
+        initiator.giveItem(ITEM.WOOD_ITEM, 1);
         Tree.onDestroySound.play();
         this.statusBar.destroy({ children: true });
         super.onDestroy(initiator);
