@@ -22,7 +22,7 @@ export class TiledSpritesheet{
 		this.textures = [];
 	}
 
-	getTexture(gid):Texture  {
+	getTexture(gid:number):Texture  {
 		//Check wether textures was allready framed form spritesheet
 		if (this.textures[gid]) {
 		  return this.textures[gid];

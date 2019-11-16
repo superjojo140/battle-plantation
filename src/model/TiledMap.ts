@@ -6,6 +6,7 @@ import { Tree } from "./Tree";
 import { TileObject } from "./TileObject";
 import { Container, Point, Rectangle } from "pixi.js";
 import * as $ from "jquery";
+import { Wall } from "./Wall";
 
 export class TiledMap extends Container {
 
@@ -36,7 +37,7 @@ export class TiledMap extends Container {
 
         this.playerContainer = new Container();
         this.addChild(this.playerContainer);
-        
+
         this.players = [];
     }
 
@@ -73,7 +74,7 @@ export class TiledMap extends Container {
 
                     //Init map's tiles array
                     map.tiles = new Array(map.gridHeight);
-                    for(let i=0; i<map.tiles.length; i++){
+                    for (let i = 0; i < map.tiles.length; i++) {
                         map.tiles[i] = new Array(map.gridWidth);
                     }
 
@@ -83,7 +84,7 @@ export class TiledMap extends Container {
                             let index = row * tl.width + column;
                             if (tl.data[index] > 0) {
                                 let texture = spritesheet.getTexture(tl.data[index]);
-                                const newTile = new Tile(texture, row, column,map);
+                                const newTile = new Tile(texture, row, column, map);
                                 map.addTile(newTile);
                             }
                         }
@@ -163,6 +164,24 @@ export class TiledMap extends Container {
                             let newTree = new Tree(texture, mother);
                             map.addTileObject(newTree);
                         }
+
+
+                        /***
+                         *     __          __   _ _ 
+                         *     \ \        / /  | | |
+                         *      \ \  /\  / /_ _| | |
+                         *       \ \/  \/ / _` | | |
+                         *        \  /\  / (_| | | |
+                         *         \/  \/ \__,_|_|_|
+                         *                          
+                         *                          
+                         */
+
+                        else if (co.type == "wall") {
+                            const mother = map.getTileNearestTo(co);
+                            map.addTileObject(new Wall(mother));
+                        }
+
 
 
 

@@ -147,7 +147,7 @@ export class Player {
 
     }
 
-    getItem(itemType:string,count:number){
+    giveItem(itemType:string,count:number){
         console.log(this.playerId+" got "+count+" pieces of "+itemType);
         this.inventory[itemType] += count;
     }

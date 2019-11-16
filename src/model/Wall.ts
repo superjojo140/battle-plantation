@@ -2,18 +2,19 @@ import { TileObject } from "./TileObject";
 import { StatusBar } from "./StatusBar";
 import { HitEvent } from "./HitEvent";
 import { Player } from "./Player";
-import { WOOD_ITEM } from "./Items";
+import { gameManager } from "../index";
 
-export class Tree extends TileObject {
+export class Wall extends TileObject {
+
 
     statusBar: StatusBar;
     health: number = 1;
-    static onHitSound = new Audio('../data/assets/sound/blob4.mp3');
-    static onDestroySound = new Audio('../data/assets/sound/blob1.mp3');
+  
 
-    constructor(texture, mother) {
-        super(texture, mother);
+    constructor(mother) {
+        super(gameManager.spriteSheet.getTexture(665), mother); //665 is a box sprite
         this.statusBar = new StatusBar(this, false);
+        this.solid = true;
     }
 
 
@@ -28,20 +29,15 @@ export class Tree extends TileObject {
                 this.statusBar.visible = true;
                 this.statusBar.setProgress(this.health);
                 this.wiggle(3);
-                Tree.onHitSound.play();
+                Wall.onHitSound.play();
             }
         }
     };
 
     onDestroy(initiator: Player) {
-        initiator.giveItem(WOOD_ITEM, 1);
-        Tree.onDestroySound.play();
+        Wall.onDestroySound.play();
         this.statusBar.destroy({ children: true });
         super.onDestroy(initiator);
-    }
-
-    onHarvest(initiator: Player) {
-
     }
 
 
