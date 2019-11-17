@@ -1,4 +1,7 @@
 Antifarea's RPG sprite set by Antifarea from https://opengameart.org/content/antifareas-rpg-sprite-set-1-enlarged-w-transparent-background-fixed under CC-BY 3.0 License
 Roguelike/RPG pack by Kenney.nl from https://kenney.nl/assets/roguelike-rpg-pack under CC0 1.0 Universal License
 pumpkins.png by TearOfTheStar from https://opengameart.org/content/32x32px-5-colors-pumpkins under CC-BY 3.0
-
+Arrows and UI elements by Kenney from https://kenney.nl/assets/ui-pack-rpg-expansion under CC0 1.0 Universal License
+Plants (e.g. tomato) by josehzz from https://opengameart.org/content/farming-crops-16x16 under CC0
+Shovel from https://opengameart.org/content/pixel-hammer-and-shovel under CC0
+Axe by Rod_Praet from https://opengameart.org/content/axes-pixel-art under CC4

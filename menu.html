@@ -1,0 +1,135 @@
+<style>
+    img[src$=".gif"],
+    img[src$=".png"] {
+        image-rendering: -moz-crisp-edges;
+        /* Firefox */
+        image-rendering: crisp-edges;
+        image-rendering: pixelated;
+    }
+
+    .menu-panel {
+        background-color: #55280e;
+        border: 5px solid #311708;
+        outline: 7px solid #55280e;
+        padding: 20px;
+        margin: 20px;
+        ;
+        width: 300px;
+        height: 300px;
+        display: grid;
+        grid-template-rows: 1fr, 1fr, 1fr;
+        grid-template-columns: 1fr, 1fr, 1fr;
+    }
+
+    .item-top {
+        grid-row-start: 1;
+        grid-column-start: 2;
+        background-image: url("data/assets/tomato.png");
+        background-size: 65%;
+    }
+
+    .item-left {
+        grid-row-start: 2;
+        grid-column-start: 1;
+        background-image: url("data/assets/shovel.png");
+        background-size: 30%;
+    }
+
+    .item-right {
+        grid-row-start: 2;
+        grid-column-start: 3;
+        background-image: url("data/assets/axe.png");
+        background-size: 100%;
+    }
+
+    .item-bottom {
+        grid-row-start: 3;
+        grid-column-start: 2;
+        background-image: url("data/assets/cross.png");
+        background-size: 40%;
+    }
+
+    .arrow-top {
+        grid-row-start: 1;
+        grid-column-start: 2;
+        background-image: url("data/assets/arrow.png");
+        background-size: 50%;
+        background-repeat: no-repeat;
+        background-position: center;
+        transform: rotate(90deg);
+    }
+
+    .arrow-left {
+        grid-row-start: 2;
+        grid-column-start: 1;
+        background-image: url("data/assets/arrow.png");
+        background-size: 50%;
+        background-repeat: no-repeat;
+        background-position: center;
+        
+    }
+
+    .arrow-right {
+        grid-row-start: 2;
+        grid-column-start: 3;
+        background-image: url("data/assets/arrow.png");
+        background-size: 50%;
+        background-repeat: no-repeat;
+        background-position: center;
+        transform: rotate(180deg);
+    }
+
+    .arrow-bottom {
+        grid-row-start: 3;
+        grid-column-start: 2;
+        background-image: url("data/assets/arrow.png");
+        background-size: 50%;
+        background-repeat: no-repeat;
+        background-position: center;
+        transform: rotate(-90deg);
+    }
+
+    .item-center {
+        grid-row-start: 2;
+        grid-column-start: 2;
+        display: grid;
+        grid-template-rows: 1fr, 1fr, 1fr;
+        grid-template-columns: 1fr, 1fr, 1fr;
+    }
+
+    .item {
+        text-align: center;
+        vertical-align: text-bottom;
+        line-height: 90px;
+     
+    }
+
+    .item-side {
+        border: 5px solid #311708;
+        border-radius: 100%;
+        background-color: #55280e;
+        width: 100%;
+        height: 100%;
+
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+</style>
+
+
+<div class="menu-panel">
+
+    <div class="item item-side item-top">top</div>
+    <div class="item item-side item-left">left
+    </div>
+    <div class="item item-side item-right">right</div>
+    <div class="item item-side item-bottom">bot</div>
+    <div class="item item-center">
+        <div class="arrow-bottom"></div>
+        <div class="arrow-top"></div>
+        <div class="arrow-left"></div>
+        <div class="arrow-right"></div>
+    </div>
+
+
+</div>
