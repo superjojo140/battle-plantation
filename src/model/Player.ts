@@ -9,6 +9,7 @@ class Inventory {
 }
 
 enum DIRECTION {UP,RIGHT,DOWN,LEFT,STOP};
+enum ACTION_MODE {HARVEST,PLACE_PUMPKIN_SEED,PLACE_TOMATO_SEED,PLACE_TNT_PUMPKIN,SHOOT};
 
 export class Player {  
 
@@ -25,11 +26,11 @@ export class Player {
     animations: Texture[][];
     vx: number;
     vy: number;
-    stunned: boolean = false;
+    stunned: boolean;
 
     inventory: Inventory;
 
-    actionMode: string;
+    actionMode: ACTION_MODE;
     lastKey: string;
     upKey: string;
     downKey: string;
@@ -40,8 +41,11 @@ export class Player {
 
     constructor(x: number, y: number, map: TiledMap, playerId: number) {
         this.map = map;
+        this.stunned = false;
         this.playerId = playerId;
         this.inventory = new Inventory();
+        this.actionMode = ACTION_MODE.PLACE_TOMATO_SEED;
+
         this.animations = [];
         let baseTexture: BaseTexture = Texture.fromImage(`data/assets/player_${playerId}.png`).baseTexture;
         for (let row = 0; row < 4; row++) {
@@ -171,6 +175,8 @@ export class Player {
                 this.sprite.x = newX;
                 this.sprite.y = newY;
             }
+
+
         }
 
     }
@@ -178,6 +184,16 @@ export class Player {
     giveItem(itemType: ITEM, count: number) {
         console.log(this.playerId + " got " + count + " pieces of " + itemType);
         this.inventory[itemType] += count;
+    }
+
+    getCurrentTile(){
+         let xTiles = this.sprite.x / this.map.finalTileWidth;
+         xTiles = Math.round(xTiles);
+ 
+         let yTiles = this.sprite.y / this.map.finalTileHeight;
+         yTiles = Math.round(yTiles);
+ 
+         return this.map.tiles[yTiles][xTiles];
     }
 
 }
