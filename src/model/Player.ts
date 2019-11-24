@@ -8,15 +8,17 @@ import { TntPumpkin } from './TntPumpkin';
 import { TomatoProjectile } from './TomatoProjectile';
 import { PumpkinPlant } from './PumpkinPlant';
 import { TomatoPlant } from './TomatoPlant';
+import { Wall } from './Wall';
 
 
-class Inventory {
+export class Inventory {
     tomato_item: number = 0;
     pumpkin_item: number = 0;
+    wood_item:number = 0;
 }
 
 export enum DIRECTION { UP, RIGHT, DOWN, LEFT, STOP };
-export enum ACTION_MODE { HARVEST, PLACE_PUMPKIN_SEED, PLACE_TOMATO_SEED, PLACE_TNT_PUMPKIN, SHOOT };
+export enum ACTION_MODE { HARVEST, PLACE_PUMPKIN_SEED, PLACE_TOMATO_SEED, PLACE_TNT_PUMPKIN, PLACE_WALL, SHOOT };
 
 export class Player {
 
@@ -234,6 +236,14 @@ export class Player {
                 case ACTION_MODE.PLACE_TNT_PUMPKIN:
                     if (currentTile.tileObject === undefined) {
                         new TntPumpkin(currentTile);
+                    }
+                    break;
+                case ACTION_MODE.PLACE_WALL:
+                    if (currentTile.tileObject === undefined) {
+                        if (this.inventory.wood_item > 0) {
+                            this.inventory.wood_item--;
+                            new Wall(currentTile);
+                        }
                     }
                     break;
                 case ACTION_MODE.SHOOT:
