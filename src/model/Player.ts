@@ -243,6 +243,7 @@ export class Player {
                         if (this.inventory.wood_item > 0) {
                             this.inventory.wood_item--;
                             new Wall(currentTile);
+                            console.warn("Please invent something to get out of this stupid wall!");
                         }
                     }
                     break;
