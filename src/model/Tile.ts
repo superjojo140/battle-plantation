@@ -23,6 +23,12 @@ export class Tile extends Sprite {
         this.y = gridY * map.finalTileHeight;
     }
 
+    addTileObject(newTileObject:TileObject){
+        if(this.isFree()){
+            this.tileObject = newTileObject;
+        }
+    }
+
     onHit(hitEvent: HitEvent) {
         if (this.tileObject) {
             this.tileObject.onHit(hitEvent);

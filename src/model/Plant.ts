@@ -13,6 +13,7 @@ export abstract class Plant extends TileObject {
     spritePrefix: string;
     crop: object;
     statusBar: StatusBar;
+    ready:boolean = false;
 
     constructor(texture:Texture, mother: Tile) {
         super(texture,mother);

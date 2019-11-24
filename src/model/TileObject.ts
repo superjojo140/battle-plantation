@@ -28,6 +28,8 @@ export abstract class TileObject extends Sprite {
         this.y = this.mother.y;
     }
 
+    
+
     onHit(hitevent: HitEvent) { };
 
     onPlant(plant: Plant) { };

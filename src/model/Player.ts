@@ -1,17 +1,24 @@
+import { Tree } from './Tree';
 import { TiledMap } from "./TiledMap";
 import { Point, extras, Texture, BaseTexture, Rectangle } from "pixi.js";
 import { gameManager } from "./../index"
 import { ITEM } from "./Items";
+import { Plant } from "./Plant";
+import { TntPumpkin } from './TntPumpkin';
+import { TomatoProjectile } from './TomatoProjectile';
+import { PumpkinPlant } from './PumpkinPlant';
+import { TomatoPlant } from './TomatoPlant';
+
 
 class Inventory {
     tomato_item: number = 0;
     pumpkin_item: number = 0;
 }
 
-enum DIRECTION {UP,RIGHT,DOWN,LEFT,STOP};
-enum ACTION_MODE {HARVEST,PLACE_PUMPKIN_SEED,PLACE_TOMATO_SEED,PLACE_TNT_PUMPKIN,SHOOT};
+export enum DIRECTION { UP, RIGHT, DOWN, LEFT, STOP };
+export enum ACTION_MODE { HARVEST, PLACE_PUMPKIN_SEED, PLACE_TOMATO_SEED, PLACE_TNT_PUMPKIN, SHOOT };
 
-export class Player {  
+export class Player {
 
 
     static SPRITE_WIDTH: number = 96 / 3;
@@ -32,6 +39,8 @@ export class Player {
 
     actionMode: ACTION_MODE;
     lastKey: string;
+    currentDirection:DIRECTION;
+
     upKey: string;
     downKey: string;
     leftKey: string;
@@ -44,7 +53,7 @@ export class Player {
         this.stunned = false;
         this.playerId = playerId;
         this.inventory = new Inventory();
-        this.actionMode = ACTION_MODE.PLACE_TOMATO_SEED;
+        this.actionMode = ACTION_MODE.HARVEST;
 
         this.animations = [];
         let baseTexture: BaseTexture = Texture.fromImage(`data/assets/player_${playerId}.png`).baseTexture;
@@ -58,6 +67,7 @@ export class Player {
         }
 
         this.sprite = new extras.AnimatedSprite(this.animations[DIRECTION.DOWN]);
+        this.currentDirection = DIRECTION.DOWN;
         this.sprite.x = x;
         this.sprite.y = y;
         this.vx = 0;
@@ -73,7 +83,7 @@ export class Player {
 
     }
 
-    changeDirection(direction: number) {
+    changeDirection(direction: DIRECTION) {
         if (0 <= direction && direction <= 3) {
             this.sprite.textures = this.animations[direction];
             this.sprite.play();
@@ -81,6 +91,7 @@ export class Player {
         else if (direction == DIRECTION.STOP) {
             this.sprite.stop();
         }
+        this.currentDirection = direction;
     }
 
     setKeys(upKey, downKey, leftKey, rightKey, actionKey, selectKey) {
@@ -111,6 +122,9 @@ export class Player {
                 case this.rightKey:
                     this.changeDirection(DIRECTION.RIGHT);
                     this.vx = 1 * Player.PLAYER_SPEED;
+                    break;
+                case this.actionKey:
+                    this.onAction();
                     break;
 
             }
@@ -172,8 +186,10 @@ export class Player {
 
 
             if (blocked == false) {
+                this.getCurrentTile().tint = 0xFFFFFF;
                 this.sprite.x = newX;
                 this.sprite.y = newY;
+                this.getCurrentTile().tint = 0x00FF00;
             }
 
 
@@ -186,14 +202,51 @@ export class Player {
         this.inventory[itemType] += count;
     }
 
-    getCurrentTile(){
-         let xTiles = this.sprite.x / this.map.finalTileWidth;
-         xTiles = Math.round(xTiles);
- 
-         let yTiles = this.sprite.y / this.map.finalTileHeight;
-         yTiles = Math.round(yTiles);
- 
-         return this.map.tiles[yTiles][xTiles];
+    getCurrentTile() {
+        let xTiles = this.sprite.x / this.map.finalTileWidth;
+        xTiles = Math.round(xTiles);
+
+        let yTiles = this.sprite.y / this.map.finalTileHeight;
+        yTiles = Math.round(yTiles);
+
+        return this.map.tiles[yTiles][xTiles];
     }
+
+    onAction = () => {
+        if (!this.stunned) {
+            const currentTile = this.getCurrentTile();
+            switch (this.actionMode) {
+                case ACTION_MODE.HARVEST:
+                    if ((currentTile.tileObject instanceof Plant && currentTile.tileObject.ready) || currentTile.tileObject instanceof Tree) {
+                        currentTile.tileObject.onHarvest(this);
+                    }
+                    break;
+                case ACTION_MODE.PLACE_PUMPKIN_SEED:
+                    if (currentTile.tileObject === undefined) {
+                        const newPumpkinPlant = new PumpkinPlant(currentTile);
+                        currentTile.addTileObject(newPumpkinPlant);
+                    }
+                    break;
+                case ACTION_MODE.PLACE_TOMATO_SEED:
+                    if (currentTile.tileObject === undefined) {
+                        const newTomatoPlant = new TomatoPlant(currentTile);
+                        currentTile.addTileObject(newTomatoPlant);
+                    }
+                    break;
+                case ACTION_MODE.PLACE_TNT_PUMPKIN:
+                    if (currentTile.tileObject === undefined) {
+                        const newTntPumpkin = new TntPumpkin(currentTile);
+                        currentTile.addTileObject(newTntPumpkin);
+                    }
+                    break;
+                case ACTION_MODE.SHOOT:
+                    if (this.inventory.tomato_item > 0) {
+                        this.inventory.tomato_item--;
+                        TomatoProjectile.createTomatoProjectile(this.sprite.x,this.sprite.y,this.currentDirection);
+                    }
+                    break;
+            }
+        }
+    };
 
 }

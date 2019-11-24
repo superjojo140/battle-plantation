@@ -41,7 +41,7 @@ export class Tree extends TileObject {
     }
 
     onHarvest(initiator: Player) {
-
+        this.onHit(new HitEvent(initiator,0.2));
     }
 
 
