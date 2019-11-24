@@ -16,19 +16,17 @@ export abstract class TileObject extends Sprite {
     constructor(texture: Texture, mother: Tile) {
         super(texture);
         this.mother = mother;
-        if (this.mother.isFree()) {
-            this.mother.tileObject = this;
-        }
-        else {
-            throw new Error("Can't add TileObject to a Tile that allready has an TileObject");
-        }
+
+        this.mother.addTileObject(this);     
+
+
 
         //set render coordinates
         this.x = this.mother.x;
         this.y = this.mother.y;
     }
 
-    
+
 
     onHit(hitevent: HitEvent) { };
 
@@ -73,19 +71,19 @@ export abstract class TileObject extends Sprite {
         this.vulnerable = false;
         this.x += this.width / 2;
         this.y += this.height;
-        this.anchor.set(0.5,1);
+        this.anchor.set(0.5, 1);
         this.shrinkAndDieRecursive(this.scale);
     }
 
     shrinkAndDieRecursive = (scale) => {
         const scaleDiff = 0.2;
-        if(scale.x <= 0 || scale.y <= 0){
+        if (scale.x <= 0 || scale.y <= 0) {
             this.destroy();
         }
-        else{
+        else {
             this.scale.x = scale.x - scaleDiff;
             this.scale.y = scale.y - scaleDiff;
-            setTimeout(()=>{this.shrinkAndDieRecursive(this.scale)},10);
+            setTimeout(() => { this.shrinkAndDieRecursive(this.scale) }, 10);
         }
     }
 

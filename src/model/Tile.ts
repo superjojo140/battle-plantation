@@ -13,7 +13,7 @@ export class Tile extends Sprite {
     tileObject: TileObject;
     map: TiledMap;
 
-    constructor(texture: Texture, gridX: number, gridY: number, map:TiledMap) {
+    constructor(texture: Texture, gridX: number, gridY: number, map: TiledMap) {
         super(texture);
         this.gridX = gridX;
         this.gridY = gridY;
@@ -23,9 +23,14 @@ export class Tile extends Sprite {
         this.y = gridY * map.finalTileHeight;
     }
 
-    addTileObject(newTileObject:TileObject){
-        if(this.isFree()){
+    addTileObject(newTileObject: TileObject) {
+        if (this.isFree()) {
             this.tileObject = newTileObject;
+            newTileObject.scale = TiledMap.SPRITE_SCALE;
+            this.map.tileObjectContainer.addChild(newTileObject);
+        }
+        else {
+            throw new Error("Can't add TileObject to a Tile that allready has an TileObject");
         }
     }
 
@@ -53,7 +58,7 @@ export class Tile extends Sprite {
         }
     }
 
-    isFree(){
+    isFree() {
         return this.tileObject ? false : true;
     }
 

@@ -39,7 +39,7 @@ export class Player {
 
     actionMode: ACTION_MODE;
     lastKey: string;
-    currentDirection:DIRECTION;
+    currentDirection: DIRECTION;
 
     upKey: string;
     downKey: string;
@@ -223,26 +223,23 @@ export class Player {
                     break;
                 case ACTION_MODE.PLACE_PUMPKIN_SEED:
                     if (currentTile.tileObject === undefined) {
-                        const newPumpkinPlant = new PumpkinPlant(currentTile);
-                        currentTile.addTileObject(newPumpkinPlant);
+                        new PumpkinPlant(currentTile);
                     }
                     break;
                 case ACTION_MODE.PLACE_TOMATO_SEED:
                     if (currentTile.tileObject === undefined) {
-                        const newTomatoPlant = new TomatoPlant(currentTile);
-                        currentTile.addTileObject(newTomatoPlant);
+                        new TomatoPlant(currentTile);
                     }
                     break;
                 case ACTION_MODE.PLACE_TNT_PUMPKIN:
                     if (currentTile.tileObject === undefined) {
-                        const newTntPumpkin = new TntPumpkin(currentTile);
-                        currentTile.addTileObject(newTntPumpkin);
+                        new TntPumpkin(currentTile);
                     }
                     break;
                 case ACTION_MODE.SHOOT:
                     if (this.inventory.tomato_item > 0) {
                         this.inventory.tomato_item--;
-                        TomatoProjectile.createTomatoProjectile(this.sprite.x,this.sprite.y,this.currentDirection);
+                        TomatoProjectile.createTomatoProjectile(this.sprite.x, this.sprite.y, this.currentDirection);
                     }
                     break;
             }

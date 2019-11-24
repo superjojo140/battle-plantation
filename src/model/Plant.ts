@@ -18,7 +18,7 @@ export abstract class Plant extends TileObject {
     constructor(texture:Texture, mother: Tile) {
         super(texture,mother);
         const id = "plant" + mother.gridX + "-" + mother.gridY;
-        gameManager.updateScheduler.register(id, this.grow);
+        //gameManager.updateScheduler.register(id, this.grow);
     }
 
     grow = (delta: number) => {
