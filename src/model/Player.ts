@@ -14,7 +14,7 @@ import { Wall } from './Wall';
 export class Inventory {
     tomato_item: number = 0;
     pumpkin_item: number = 0;
-    wood_item:number = 0;
+    wood_item: number = 0;
 }
 
 export enum DIRECTION { UP, RIGHT, DOWN, LEFT, STOP };
@@ -177,26 +177,45 @@ export class Player {
 
             //Check if at least one of this new positions would be in a solid tile or out of the map
             let blocked = false;
+            let outOfBorder = false;
 
             for (let x = xRange.from; x <= xRange.to; x++) {
                 for (let y = yRange.from; y <= yRange.to; y++) {
-                    if (this.map.tiles[y] == undefined || this.map.tiles[y][x] == undefined || (this.map.tiles[y][x].tileObject && this.map.tiles[y][x].tileObject.solid)) {
+                    if (this.positionIsBlocked(x, y)) {
                         blocked = true;
+                        if(this.positionOutOfBorder(x,y)){
+                            outOfBorder = true;
+                        }
                     }
                 }
             }
 
-
-            if (blocked == false) {
+            //If the new position would be blocked bbut not out of border, check if the current position is allready blocked
+            //This is done to prevent getting stucked in a currently placed Wall
+            if (blocked == false || (outOfBorder == false && this.positionIsBlocked(Math.round(this.sprite.x/this.map.finalTileWidth),Math.round(this.sprite.y/this.map.finalTileHeight)))) {
                 this.getCurrentTile().tint = 0xFFFFFF;
                 this.sprite.x = newX;
                 this.sprite.y = newY;
                 this.getCurrentTile().tint = 0x00FF00;
             }
-
+         
 
         }
 
+    }
+
+    private positionIsBlocked(gridX: number,gridY: number): boolean {
+        //Check if position is out of border to prevent accessing attributes of undefined tile
+        if (this.positionOutOfBorder(gridX,gridY)) {
+            return true;
+        }
+        else {
+            return (this.map.tiles[gridY][gridX].tileObject && this.map.tiles[gridY][gridX].tileObject.solid)
+        };
+    }
+
+    private positionOutOfBorder(gridX: number, gridY: number): boolean {
+        return (this.map.tiles[gridY] == undefined || this.map.tiles[gridY][gridX] == undefined);
     }
 
     giveItem(itemType: ITEM, count: number) {
