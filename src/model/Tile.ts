@@ -62,6 +62,44 @@ export class Tile extends Sprite {
         return this.tileObject ? false : true;
     }
 
+    /**
+     * Checks wether this tile is occuped by any player and returns the first player that occupies this tile.
+     * Returns undefined if this tile is not occupied
+     */
+    isOccupiedBy():Player{
+        for(const player of this.map.players){
+                   //Get all tiles that would be touched by the player
+                   let xRange = {
+                    from: Math.floor(player.sprite.x / this.map.finalTileWidth),
+                    to: Math.floor((player.sprite.x + player.sprite.width) / this.map.finalTileWidth)
+                };
+    
+                let yRange = {
+                    from: Math.floor(player.sprite.y / this.map.finalTileHeight),
+                    to: Math.floor((player.sprite.y + player.sprite.height) / this.map.finalTileHeight)
+                };
+    
+                if (this.gridX >= xRange.from && this.gridX <= xRange.to && this.gridY >= yRange.from && this.gridY <= yRange.to){
+                    return player;
+                }
+        }
+        return undefined;
+    }
+
+    /**
+     * Checks wether this tile is occuped by any player and returns true if there is any player on this tile.
+     */
+    isOccupiedByAnyPlayer():boolean{
+        const player = this.isOccupiedBy();
+        if (player === undefined){
+            return false
+        }
+        else{
+            console.log("occupied by player" + player.playerId);
+            return true;
+        }
+    }
+
 
 
 

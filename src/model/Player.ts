@@ -224,22 +224,22 @@ export class Player {
                     }
                     break;
                 case ACTION_MODE.PLACE_PUMPKIN_SEED:
-                    if (currentTile.tileObject === undefined) {
+                    if (currentTile.isFree()) {
                         new PumpkinPlant(currentTile);
                     }
                     break;
                 case ACTION_MODE.PLACE_TOMATO_SEED:
-                    if (currentTile.tileObject === undefined) {
+                    if (currentTile.isFree()) {
                         new TomatoPlant(currentTile);
                     }
                     break;
                 case ACTION_MODE.PLACE_TNT_PUMPKIN:
-                    if (currentTile.tileObject === undefined) {
+                    if (currentTile.isFree() && currentTile.isOccupiedByAnyPlayer() == false) {
                         new TntPumpkin(currentTile);
                     }
                     break;
                 case ACTION_MODE.PLACE_WALL:
-                    if (currentTile.tileObject === undefined) {
+                    if (currentTile.isFree() && currentTile.isOccupiedByAnyPlayer() == false) {
                         if (this.inventory.wood_item > 0) {
                             this.inventory.wood_item--;
                             new Wall(currentTile);
