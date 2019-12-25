@@ -9,13 +9,15 @@ import { TomatoProjectile } from './TomatoProjectile';
 import { PumpkinPlant } from './PumpkinPlant';
 import { TomatoPlant } from './TomatoPlant';
 import { Wall } from './Wall';
+import { Tile } from './Tile';
 
 
 export class Inventory {
     tomato_item: number = 0;
     pumpkin_item: number = 0;
-    wood_item:number = 0;
+    wood_item: number = 0;
 }
+
 
 export enum DIRECTION { UP, RIGHT, DOWN, LEFT, STOP };
 export enum ACTION_MODE { HARVEST, PLACE_PUMPKIN_SEED, PLACE_TOMATO_SEED, PLACE_TNT_PUMPKIN, PLACE_WALL, SHOOT };
@@ -49,6 +51,7 @@ export class Player {
     rightKey: string;
     actionKey: string;
     selectKey: string;
+    lastTintedTile: Tile;
 
     constructor(x: number, y: number, map: TiledMap, playerId: number) {
         this.map = map;
@@ -89,11 +92,11 @@ export class Player {
         if (0 <= direction && direction <= 3) {
             this.sprite.textures = this.animations[direction];
             this.sprite.play();
+            this.currentDirection = direction;
         }
         else if (direction == DIRECTION.STOP) {
             this.sprite.stop();
         }
-        this.currentDirection = direction;
     }
 
     setKeys(upKey, downKey, leftKey, rightKey, actionKey, selectKey) {
@@ -186,12 +189,11 @@ export class Player {
                 }
             }
 
-
             if (blocked == false) {
-                this.getCurrentTile().tint = 0xFFFFFF;
                 this.sprite.x = newX;
                 this.sprite.y = newY;
-                this.getCurrentTile().tint = 0x00FF00;
+                //Tint the new currentTile
+                this.tintCurrentTile();
             }
 
 
@@ -204,14 +206,48 @@ export class Player {
         this.inventory[itemType] += count;
     }
 
-    getCurrentTile() {
-        let xTiles = this.sprite.x / this.map.finalTileWidth;
-        xTiles = Math.round(xTiles);
+    /**
+    * Returns the currently active Tile.
+    * This is always the next tile in currentDirection, which is not occupied by the player himself.
+    * The current Tile may be undefined, if it would be out of bounds.
+    */
+    getCurrentTile(): Tile {
+        let directionVector: Point;
+        switch (this.currentDirection) {
+            case DIRECTION.UP: directionVector = new Point(0, -1); break;
+            case DIRECTION.RIGHT: directionVector = new Point(1, 0); break;
+            case DIRECTION.LEFT: directionVector = new Point(-1, 0); break;
+            case DIRECTION.DOWN: directionVector = new Point(0, 1); break;
+        }
 
-        let yTiles = this.sprite.y / this.map.finalTileHeight;
-        yTiles = Math.round(yTiles);
+        let gridX = Math.round((this.sprite.x - this.sprite.width / 2) / this.map.finalTileWidth);
+        let gridY = Math.round((this.sprite.y - this.sprite.height / 2) / this.map.finalTileHeight);
 
-        return this.map.tiles[yTiles][xTiles];
+        const tiles = this.map.tiles;
+        while (tiles[gridY] && tiles[gridY][gridX] && tiles[gridY][gridX].isOccupiedBy() == this) {
+            gridX += directionVector.x;
+            gridY += directionVector.y;
+        }
+
+        if (tiles[gridY]) {
+            return tiles[gridY][gridX];
+        }
+        else {
+            return undefined;
+        }
+
+    }
+
+    tintCurrentTile() {
+        if (this.lastTintedTile) {
+            this.lastTintedTile.tint = 0xFFFFFF;
+        }
+        const ct = this.getCurrentTile();
+        if (ct) {
+            ct.tint = 0x00FF00;
+        }
+        this.lastTintedTile = ct;
+
     }
 
     onAction = () => {
