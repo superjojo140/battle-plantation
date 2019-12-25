@@ -100,6 +100,13 @@ export class Tile extends Sprite {
         }
     }
 
+    setTint(color:number){
+        this.tint = color;
+        if(!this.isFree()){
+            this.tileObject.tint = color;
+        }
+    }
+
 
 
 

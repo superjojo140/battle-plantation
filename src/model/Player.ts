@@ -220,8 +220,8 @@ export class Player {
             case DIRECTION.DOWN: directionVector = new Point(0, 1); break;
         }
 
-        let gridX = Math.round((this.sprite.x - this.sprite.width / 2) / this.map.finalTileWidth);
-        let gridY = Math.round((this.sprite.y - this.sprite.height / 2) / this.map.finalTileHeight);
+        let gridX = Math.floor((this.sprite.x + this.sprite.width / 2) / this.map.finalTileWidth);
+        let gridY = Math.floor((this.sprite.y + this.sprite.height) / this.map.finalTileHeight);
 
         const tiles = this.map.tiles;
         while (tiles[gridY] && tiles[gridY][gridX] && tiles[gridY][gridX].isOccupiedBy() == this) {
@@ -240,11 +240,11 @@ export class Player {
 
     tintCurrentTile() {
         if (this.lastTintedTile) {
-            this.lastTintedTile.tint = 0xFFFFFF;
+            this.lastTintedTile.setTint(0xFFFFFF);
         }
         const ct = this.getCurrentTile();
         if (ct) {
-            ct.tint = 0x00FF00;
+            ct.setTint(0xCCFFCC);
         }
         this.lastTintedTile = ct;
 
