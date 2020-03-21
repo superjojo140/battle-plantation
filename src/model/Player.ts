@@ -271,7 +271,11 @@ export class Player {
                     break;
                 case ACTION_MODE.PLACE_TNT_PUMPKIN:
                     if (currentTile.isFree() && currentTile.isOccupiedByAnyPlayer() == false) {
-                        new TntPumpkin(currentTile);
+                        if (this.inventory.pumpkin_item > 0) {
+                            this.inventory.pumpkin_item--;
+                            new TntPumpkin(currentTile);
+                        }
+
                     }
                     break;
                 case ACTION_MODE.PLACE_WALL:
@@ -279,7 +283,6 @@ export class Player {
                         if (this.inventory.wood_item > 0) {
                             this.inventory.wood_item--;
                             new Wall(currentTile);
-                            console.warn("Please invent something to get out of this stupid wall!");
                         }
                     }
                     break;

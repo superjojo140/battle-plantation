@@ -47,7 +47,7 @@ export abstract class TileObject extends Sprite {
         this.wiggleRecursiv(times * 4);
     }
 
-    wiggleRecursiv = (times: number) => {
+    private wiggleRecursiv = (times: number) => {
         const radiant = 0.07;
         if (times > 0) {
             switch (times % 4) {
@@ -75,7 +75,7 @@ export abstract class TileObject extends Sprite {
         this.shrinkAndDieRecursive(this.scale);
     }
 
-    shrinkAndDieRecursive = (scale) => {
+    private shrinkAndDieRecursive = (scale) => {
         const scaleDiff = 0.2;
         if (scale.x <= 0 || scale.y <= 0) {
             this.destroy();
@@ -85,6 +85,26 @@ export abstract class TileObject extends Sprite {
             this.scale.y = scale.y - scaleDiff;
             setTimeout(() => { this.shrinkAndDieRecursive(this.scale) }, 10);
         }
+    }
+
+    blink(times) {
+        this.vulnerable = false;
+        this.blinkRecursiv(times * 2);
+    }
+
+    private blinkRecursiv = (times: number) => {
+        if (times > 0) {
+            switch (times % 2) {
+                case 0: this.tint = 0xCCFFCC; break;
+                case 1: this.tint = 0xFFFFFF; break;
+            }
+            setTimeout(() => { this.blinkRecursiv(--times) }, 100);
+        }
+        else {
+            this.tint = 0xFFFFFF;
+            this.vulnerable = true;
+        }
+
     }
 
 
