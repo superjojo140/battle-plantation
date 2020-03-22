@@ -17,7 +17,7 @@ export abstract class TileObject extends Sprite {
         super(texture);
         this.mother = mother;
 
-        this.mother.addTileObject(this);     
+        this.mother.addTileObject(this);
 
 
 
@@ -26,7 +26,9 @@ export abstract class TileObject extends Sprite {
         this.y = this.mother.y;
     }
 
-
+    static wait = ms => {
+        return new Promise(resolve => setTimeout(resolve, ms))
+    }
 
     onHit(hitevent: HitEvent) { };
 
@@ -87,25 +89,29 @@ export abstract class TileObject extends Sprite {
         }
     }
 
-    blink(times) {
+    async blink(times) {
+
+        //Prolog
         this.vulnerable = false;
-        this.blinkRecursiv(times * 2);
-    }
 
-    private blinkRecursiv = (times: number) => {
-        if (times > 0) {
-            switch (times % 2) {
-                case 0: this.tint = 0xCCFFCC; break;
-                case 1: this.tint = 0xFFFFFF; break;
-            }
-            setTimeout(() => { this.blinkRecursiv(--times) }, 100);
-        }
-        else {
+        //Loop
+        while (times > 0) {
+            //Give the tileobject a green tint
+            this.tint = 0xFFAAAA;
+            await TileObject.wait(200);
+            //Remove the tint
             this.tint = 0xFFFFFF;
-            this.vulnerable = true;
+            await TileObject.wait(200);
+            times--;
         }
 
+        //Epilog
+        this.vulnerable = true;
+
     }
+
+
+
 
 
 

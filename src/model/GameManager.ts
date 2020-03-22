@@ -3,6 +3,7 @@ import { TiledMap } from "./TiledMap";
 import { KeyboardManager } from "./KeyboardManager";
 import { UpdateScheduler } from "./UpdateScheduler";
 import { Application, ApplicationOptions } from "pixi.js";
+import { TntPumpkin } from "./TntPumpkin";
 
 
 
@@ -55,6 +56,10 @@ export class GameManager {
             players[0].setKeys("ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "m", "n");
             players[1].setKeys("w", "s", "a", "d", "x", "y");
         });
+    }
+
+    test(){
+        TntPumpkin.testExplosion();
     }
 
 }
