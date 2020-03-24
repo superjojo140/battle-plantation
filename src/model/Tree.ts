@@ -18,25 +18,29 @@ export class Tree extends TileObject {
 
 
 
-    onHit(hitEvent: HitEvent) {
+    async onHit(hitEvent: HitEvent) {
         if (this.vulnerable) {
             this.health -= hitEvent.damage;
             if (this.health < 0.01) {
                 this.onDestroy(hitEvent.initiator);
             }
             else {
+                this.vulnerable = false;
                 this.statusBar.visible = true;
                 this.statusBar.setProgress(this.health);
-                this.wiggle(3);
                 Tree.onHitSound.play();
+                await this.wiggle(3);  
+                this.vulnerable = true;              
             }
         }
     };
 
-    onDestroy(initiator: Player) {
+    async onDestroy(initiator: Player) {
+        this.vulnerable = false;
         initiator.giveItem(ITEM.WOOD_ITEM, 1);
         Tree.onDestroySound.play();
         this.statusBar.destroy({ children: true });
+        await this.shrink();
         super.onDestroy(initiator);
     }
 

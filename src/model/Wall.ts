@@ -19,17 +19,19 @@ export class Wall extends TileObject {
 
 
 
-    onHit(hitEvent: HitEvent) {
+    async onHit(hitEvent: HitEvent) {
         if (this.vulnerable) {
             this.health -= hitEvent.damage;
             if (this.health < 0.01) {
                 this.onDestroy(hitEvent.initiator);
             }
             else {
+                this.vulnerable = false;
                 this.statusBar.visible = true;
                 this.statusBar.setProgress(this.health);
-                this.wiggle(3);
                 Wall.onHitSound.play();
+                await this.wiggle(3);
+                this.vulnerable = true;
             }
         }
     };

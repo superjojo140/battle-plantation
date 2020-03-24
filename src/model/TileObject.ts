@@ -38,61 +38,61 @@ export abstract class TileObject extends Sprite {
 
     onDestroy(initiator: Player) {
         delete this.mother.tileObject;
-        this.shrinkAndDie();
+        this.destroy();
     };
 
-    wiggle(times) {
-        this.vulnerable = false;
+    async wiggle(times) {
+
+        //Prolog
+        const radiant = 0.07;
         this.x += this.width / 2;
         this.y += this.height / 2;
         this.anchor.set(0.5);
-        this.wiggleRecursiv(times * 4);
-    }
 
-    private wiggleRecursiv = (times: number) => {
-        const radiant = 0.07;
-        if (times > 0) {
-            switch (times % 4) {
-                case 0: this.rotation += radiant; break;
-                case 1: this.rotation -= radiant; break;
-                case 2: this.rotation -= radiant; break;
-                case 3: this.rotation += radiant; break;
-            }
-            setTimeout(() => { this.wiggleRecursiv(--times) }, 30);
-        }
-        else {
-            this.x -= this.width / 2;
-            this.y -= this.height / 2;
-            this.anchor.set(0);
-            this.vulnerable = true;
+        //Loop
+        while (times > 0) {
+            this.rotation += radiant;
+            await TileObject.wait(30);
+            this.rotation -= radiant;
+            await TileObject.wait(30);
+            this.rotation -= radiant;
+            await TileObject.wait(30);
+            this.rotation += radiant;
+            await TileObject.wait(30);
+
+            times--;
         }
 
+        //Epilog
+        this.x -= this.width / 2;
+        this.y -= this.height / 2;
+        this.anchor.set(0);
+
     }
 
-    shrinkAndDie() {
-        this.vulnerable = false;
+
+    async shrink() {
+
+        //Prolog        
+        const scaleDiff = 0.2;
+        //Change anchor
         this.x += this.width / 2;
         this.y += this.height;
         this.anchor.set(0.5, 1);
-        this.shrinkAndDieRecursive(this.scale);
-    }
 
-    private shrinkAndDieRecursive = (scale) => {
-        const scaleDiff = 0.2;
-        if (scale.x <= 0 || scale.y <= 0) {
-            this.destroy();
+        //Loop
+        while (this.scale.x > 0 && this.scale.y > 0) {
+            this.scale.x -= scaleDiff;
+            this.scale.y -= scaleDiff;
+            await TileObject.wait(10);
         }
-        else {
-            this.scale.x = scale.x - scaleDiff;
-            this.scale.y = scale.y - scaleDiff;
-            setTimeout(() => { this.shrinkAndDieRecursive(this.scale) }, 10);
-        }
+
+        //Epilog
+        this.anchor.set(0);
+
     }
 
     async blink(times) {
-
-        //Prolog
-        this.vulnerable = false;
 
         //Loop
         while (times > 0) {
@@ -104,9 +104,6 @@ export abstract class TileObject extends Sprite {
             await TileObject.wait(200);
             times--;
         }
-
-        //Epilog
-        this.vulnerable = true;
 
     }
 

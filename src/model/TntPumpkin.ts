@@ -8,16 +8,15 @@ export class TntPumpkin extends TileObject {
 
     static texturePath = "../../data/assets/pumpkin.png";
 
-    exploding: boolean = false;
 
     constructor(mother: Tile) {
         super(Texture.fromImage(TntPumpkin.texturePath, true, SCALE_MODES.NEAREST), mother);
     }
 
     async onHit(hitEvent: HitEvent) {
-        if (!this.exploding) {
-            this.exploding = true;
-            //this.wiggle(1);
+        if (this.vulnerable) {
+            this.vulnerable = false;
+            await this.wiggle(1);
             //Blink very dangerous
             await this.blink(4);            
             //Explode!!!
@@ -27,7 +26,7 @@ export class TntPumpkin extends TileObject {
 
     static testExplosion() {
         const p = new TntPumpkin(gameManager.map.tiles[0][1]);
-        p.onHit({ initiator: null, damage: 0 });
+        p.onHit(new HitEvent(undefined,0));
     }
 
 }
