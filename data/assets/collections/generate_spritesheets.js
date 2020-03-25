@@ -5,17 +5,16 @@ var Spritesmith = require('spritesmith');
 //Search for all directories in collections
 
 //Loop over all directories
+const currentDirectory = __dirname + '/Player/';
 
 //Generate Sourcepaths from all files in current directory
-const srcPaths = [
-    __dirname + '/TntPumpkin/pumpkin_idle.png',
-    __dirname + '/TntPumpkin/pumpkin_explode_1.png',
-    __dirname + '/TntPumpkin/pumpkin_explode_2.png'
-];
+let srcPaths = fs.readdirSync(currentDirectory);
+for(let index in srcPaths){
+    srcPaths[index] = currentDirectory + srcPaths[index];
+}
 
 const spritesmithOptions = {
-    src: srcPaths,
-    algorithm: 'top-down'
+    src: srcPaths
 };
 
 // Generate our spritesheet
@@ -31,7 +30,7 @@ function handleResult(err, result) {
     }
 
     // Output the image
-    fs.writeFileSync(__dirname + '/../spritesheets/TntPumpkin.png', result.image);
+    fs.writeFileSync(__dirname + '/../spritesmith_spritesheet.png', result.image);
 
     //Prepare Json data
     let jsonData = {
@@ -47,6 +46,6 @@ function handleResult(err, result) {
         }
     }
 
-    fs.writeFileSync(__dirname + '/../spritesheets/TntPumpkin.json', JSON.stringify(jsonData));
+    fs.writeFileSync(__dirname + '/../spritesmith_spritesheet.json', JSON.stringify(jsonData));
 
 }
