@@ -37,6 +37,8 @@ export class Player {
     animations: Texture[][];
     vx: number;
     vy: number;
+
+    //Player ignores doStep and onAction Events if stunned
     stunned: boolean;
 
     inventory: Inventory;

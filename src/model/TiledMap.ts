@@ -14,7 +14,7 @@ export class TiledMap extends Container {
     static SPRITE_SCALE: Point = new Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);
 
     players: Player[];
-    spritesheet: TiledSpritesheet;
+    tiledSpritesheet: TiledSpritesheet;
     isPaused: boolean;
     finalTileWidth: number;
     finalTileHeight: number;
@@ -60,7 +60,7 @@ export class TiledMap extends Container {
         let SPRITE_SCALE: Point = new Point(TiledMap.MAP_ZOOM, TiledMap.MAP_ZOOM);
         map.finalTileWidth = spritesheet.tileWidth * SPRITE_SCALE.x;
         map.finalTileHeight = spritesheet.tileHeight * SPRITE_SCALE.y;
-        map.spritesheet = spritesheet;
+        map.tiledSpritesheet = spritesheet;
 
         //Load Map and Parse it
         $.getJSON(mapPath, {}, function (mapData) {
@@ -211,8 +211,8 @@ export class TiledMap extends Container {
     }
 
     addTile(tile: Tile) {
-        tile.x = tile.gridX * this.spritesheet.tileWidth * TiledMap.SPRITE_SCALE.x;
-        tile.y = tile.gridY * this.spritesheet.tileHeight * TiledMap.SPRITE_SCALE.y;
+        tile.x = tile.gridX * this.tiledSpritesheet.tileWidth * TiledMap.SPRITE_SCALE.x;
+        tile.y = tile.gridY * this.tiledSpritesheet.tileHeight * TiledMap.SPRITE_SCALE.y;
         tile.scale = TiledMap.SPRITE_SCALE;
 
         this.tiles[tile.gridY][tile.gridX] = tile;
