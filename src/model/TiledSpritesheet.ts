@@ -2,7 +2,6 @@ import { Texture, SCALE_MODES, Rectangle } from "pixi.js";
 
 export class TiledSpritesheet{
 
-	path: string;
 	border: number;
 	tileHeight: number;
 	tileWidth: number;
@@ -11,14 +10,14 @@ export class TiledSpritesheet{
 	bigTexture: Texture;
 	textures: Texture[];
 
-	constructor(path,border,tileWidth,tileHeight,rows,columns){
-		this.path = path;
+	constructor(texture,border,tileWidth,tileHeight,rows,columns){
 		this.border = border;
 		this.tileHeight = tileHeight;
 		this.tileWidth = tileWidth;
 		this.rows = rows;
 		this.columns = columns;
-		this.bigTexture = Texture.fromImage(path, true, SCALE_MODES.NEAREST);
+		this.bigTexture = texture;
+		this.bigTexture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
 		this.textures = [];
 	}
 

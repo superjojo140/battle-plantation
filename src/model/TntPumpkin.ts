@@ -1,16 +1,14 @@
 import { TileObject } from "./TileObject";
 import { HitEvent } from "./HitEvent";
 import { Tile } from "./Tile";
-import { Texture, SCALE_MODES } from "pixi.js";
 import { gameManager } from "../index";
 
 export class TntPumpkin extends TileObject {
 
-    static texturePath = "../../data/assets/pumpkin.png";
 
 
     constructor(mother: Tile) {
-        super(Texture.fromImage(TntPumpkin.texturePath, true, SCALE_MODES.NEAREST), mother);
+        super(gameManager.atlasSpritesheet.getTexture("pumpkin_idle"), mother);
     }
 
     async onHit(hitEvent: HitEvent) {

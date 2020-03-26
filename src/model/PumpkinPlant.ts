@@ -5,6 +5,6 @@ import { gameManager } from "../index";
 export class PumpkinPlant extends Plant {
 
     constructor(mother:Tile){
-        super(gameManager.spriteSheet.getTexture(471),mother);
+        super(gameManager.tiledSpritesheet.getTexture(471),mother);
     }
 }
