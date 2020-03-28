@@ -1,6 +1,6 @@
 import { Tree } from './Tree';
 import { TiledMap } from "./TiledMap";
-import { Point, extras } from "pixi.js";
+import { Point, extras, Texture } from "pixi.js";
 import { gameManager } from "./../index"
 import { ITEM } from "./Items";
 import { Plant } from "./Plant";
@@ -32,7 +32,7 @@ export class Player {
 
     playerId: number;
     //A hex value of a color all player's sprites are tinted with
-    color:number = 0xFFFFFF;
+    color: number = 0xFFFFFF;
     map: TiledMap;
 
     sprite: extras.AnimatedSprite;
@@ -47,7 +47,9 @@ export class Player {
 
     actionMode: ACTION_MODE;
     lastKey: string;
+    /** Saves the current direction (STOP will not be saved here, in this case the value is the last direction before STOP) */
     currentDirection: DIRECTION;
+
 
     upKey: string;
     downKey: string;
@@ -84,6 +86,10 @@ export class Player {
 
     }
 
+    static wait = ms => {
+        return new Promise(resolve => setTimeout(resolve, ms))
+    }
+
     private loadAnimations() {
         const animations = {
             walk: {
@@ -103,7 +109,7 @@ export class Player {
         for (const stateName in animations) {
             for (const subStateName in animations[stateName]) {
 
-                const numberOfFrames = animations[stateName][subStateName] - 1;
+                const numberOfFrames = animations[stateName][subStateName];
                 let currentFramesArray = [];
 
                 for (let i = 0; i < numberOfFrames; i++) {
@@ -130,6 +136,32 @@ export class Player {
         }
     }
 
+    async playAnimation(state: string) {
+        const frames: Texture[] = this.animations[state][this.currentDirection];
+
+        this.sprite.stop()
+
+        //Play animation forwards
+        for (const frame of frames) {
+            this.sprite.texture = frame;
+            await Player.wait(50);
+        }
+
+        //Wait a moment
+        await Player.wait(80);
+
+        //Play animation backwards
+        for (let i = frames.length - 1; i >= 0; i--) {
+            this.sprite.texture = frames[i];
+            await Player.wait(50);
+        }
+
+
+        //Restore last direction's texture
+        this.changeDirection(this.currentDirection);
+        this.sprite.stop();
+    }
+
     setKeys(upKey, downKey, leftKey, rightKey, actionKey, selectKey) {
         this.upKey = upKey;
         this.downKey = downKey;
@@ -139,7 +171,7 @@ export class Player {
         this.selectKey = selectKey;
     }
 
-    setColor(color:number){
+    setColor(color: number) {
         this.color = color;
         this.sprite.tint = color;
     }
@@ -309,6 +341,7 @@ export class Player {
                     if (currentTile.isFree() && currentTile.isOccupiedByAnyPlayer() == false) {
                         if (this.inventory.pumpkin_item > 0) {
                             this.inventory.pumpkin_item--;
+                            this.playAnimation("put");
                             new TntPumpkin(currentTile);
                         }
 
@@ -318,6 +351,7 @@ export class Player {
                     if (currentTile.isFree() && currentTile.isOccupiedByAnyPlayer() == false) {
                         if (this.inventory.wood_item > 0) {
                             this.inventory.wood_item--;
+                            this.playAnimation("put");
                             new Wall(currentTile);
                         }
                     }
