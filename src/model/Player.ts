@@ -1,6 +1,6 @@
 import { Tree } from './Tree';
 import { TiledMap } from "./TiledMap";
-import { Point, extras, Texture, BaseTexture, Rectangle } from "pixi.js";
+import { Point, extras } from "pixi.js";
 import { gameManager } from "./../index"
 import { ITEM } from "./Items";
 import { Plant } from "./Plant";
@@ -19,7 +19,7 @@ export class Inventory {
 }
 
 
-export enum DIRECTION { UP, RIGHT, DOWN, LEFT, STOP };
+export enum DIRECTION { UP = "up", RIGHT = "right", DOWN = "down", LEFT = "left", STOP = "stop" };
 export enum ACTION_MODE { HARVEST, PLACE_PUMPKIN_SEED, PLACE_TOMATO_SEED, PLACE_TNT_PUMPKIN, PLACE_WALL, SHOOT };
 
 export class Player {
@@ -31,10 +31,12 @@ export class Player {
     static PLAYER_SPEED = 4;
 
     playerId: number;
+    //A hex value of a color all player's sprites are tinted with
+    color:number = 0xFFFFFF;
     map: TiledMap;
 
     sprite: extras.AnimatedSprite;
-    animations: Texture[][];
+    animations;
     vx: number;
     vy: number;
 
@@ -62,18 +64,10 @@ export class Player {
         this.inventory = new Inventory();
         this.actionMode = ACTION_MODE.HARVEST;
 
-        this.animations = [];
-        let baseTexture: BaseTexture = Texture.fromImage(`data/assets/player_${playerId}.png`).baseTexture;
-        for (let row = 0; row < 4; row++) {
-            let textureArray: Texture[] = [];
-            for (let column = 0; column < 3; column++) {
-                let t = new Texture(baseTexture, new Rectangle(column * Player.SPRITE_WIDTH, row * Player.SPRITE_HEIGHT, Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT));
-                textureArray.push(t);
-            }
-            this.animations.push(textureArray);
-        }
+        this.loadAnimations();
 
-        this.sprite = new extras.AnimatedSprite(this.animations[DIRECTION.DOWN]);
+        this.sprite = new extras.AnimatedSprite(this.animations.walk[DIRECTION.DOWN]);
+        this.sprite.tint = this.color;
         this.currentDirection = DIRECTION.DOWN;
         this.sprite.x = x;
         this.sprite.y = y;
@@ -90,14 +84,49 @@ export class Player {
 
     }
 
+    private loadAnimations() {
+        const animations = {
+            walk: {
+                up: 3,
+                down: 3,
+                left: 3,
+                right: 3
+            },
+            put: {
+                up: 3,
+                down: 3,
+                left: 3,
+                right: 3
+            }
+        }
+
+        for (const stateName in animations) {
+            for (const subStateName in animations[stateName]) {
+
+                const numberOfFrames = animations[stateName][subStateName] - 1;
+                let currentFramesArray = [];
+
+                for (let i = 0; i < numberOfFrames; i++) {
+                    const textureName = `player_${stateName}_${subStateName}_${i}`;
+                    const texture = gameManager.atlasSpritesheet.getTexture(textureName);
+                    currentFramesArray.push(texture);
+                }
+
+                animations[stateName][subStateName] = currentFramesArray;
+            }
+        }
+
+        this.animations = animations;
+    }
+
     changeDirection(direction: DIRECTION) {
-        if (0 <= direction && direction <= 3) {
-            this.sprite.textures = this.animations[direction];
+        if (direction == DIRECTION.STOP) {
+            this.sprite.stop();
+        }
+        else {
+            this.sprite.textures = this.animations.walk[direction];
             this.sprite.play();
             this.currentDirection = direction;
-        }
-        else if (direction == DIRECTION.STOP) {
-            this.sprite.stop();
         }
     }
 
@@ -108,6 +137,11 @@ export class Player {
         this.rightKey = rightKey;
         this.actionKey = actionKey;
         this.selectKey = selectKey;
+    }
+
+    setColor(color:number){
+        this.color = color;
+        this.sprite.tint = color;
     }
 
     keyDown = (event) => {
@@ -246,7 +280,7 @@ export class Player {
         }
         const ct = this.getCurrentTile();
         if (ct) {
-            ct.setTint(0xCCFFCC);
+            ct.setTint(this.color);
         }
         this.lastTintedTile = ct;
 

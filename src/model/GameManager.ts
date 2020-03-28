@@ -69,7 +69,9 @@ export class GameManager {
         //Set Player Controls
         const players = this.map.players;
         players[0].setKeys("ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "m", "n");
+        players[0].setColor(0xCCCCFF);
         players[1].setKeys("w", "s", "a", "d", "x", "y");
+        players[1].setColor(0xCCEEAA);
 
         //Start Pixi App
         this.pixiApp.ticker.start();

@@ -37,9 +37,11 @@ function handleResult(err, result) {
         throw err;
     }
 
+    console.log(`--------------------------------------------`);
+
     // Output the image
     fs.writeFileSync(__dirname + '/../spritesmith_spritesheet.png', result.image);
-    console.log(`Saved spritesmith_spritesheet.png successfull`);
+    console.log(`Saving spritesheet to spritesmith_spritesheet.png`);
 
     //Prepare Json data
     let jsonData = {
@@ -56,7 +58,7 @@ function handleResult(err, result) {
     }
 
     fs.writeFileSync(__dirname + '/../spritesmith_spritesheet.json', JSON.stringify(jsonData));
-    console.log(`Saved spritesmith_spritesheet.json successfull`);
+    console.log(`Saving data to spritesmith_spritesheet.json`);
 
 }
 
