@@ -14,6 +14,7 @@ export class Tree extends TileObject {
     constructor(texture, mother) {
         super(texture, mother);
         this.statusBar = new StatusBar(this, false);
+        this.solid = true;
     }
 
 
@@ -29,8 +30,8 @@ export class Tree extends TileObject {
                 this.statusBar.visible = true;
                 this.statusBar.setProgress(this.health);
                 Tree.onHitSound.play();
-                await this.wiggle(3);  
-                this.vulnerable = true;              
+                await this.wiggle(3);
+                this.vulnerable = true;
             }
         }
     };
@@ -45,7 +46,7 @@ export class Tree extends TileObject {
     }
 
     onHarvest(initiator: Player) {
-        this.onHit(new HitEvent(initiator,0.2));
+        this.onHit(new HitEvent(initiator, 0.2));
     }
 
 

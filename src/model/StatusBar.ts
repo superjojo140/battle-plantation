@@ -23,13 +23,13 @@ export class StatusBar extends Container {
         //Add to pixi container
         const map = mother.mother.map;
 
-        map.tileObjectContainer.addChild(this);
+        map.extraStuffContainer.addChild(this);
 
         //position relative to mother
         this.x = mother.x;
         this.y = mother.y;
         this.width = mother.width;
-        this.height = mother.height
+        this.height = mother.height;
 
         //Draw frame
         this.borderRectangle = new Graphics();

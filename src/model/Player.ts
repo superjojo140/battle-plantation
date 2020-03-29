@@ -126,6 +126,11 @@ export class Player {
     }
 
     changeDirection(direction: DIRECTION) {
+        if(this.stunned){
+            //Player is stunned and can't change it's direction
+            return;
+        }
+
         if (direction == DIRECTION.STOP) {
             this.sprite.stop();
         }
@@ -139,6 +144,7 @@ export class Player {
     async playAnimation(state: string) {
         const frames: Texture[] = this.animations[state][this.currentDirection];
 
+        this.stunned = true;
         this.sprite.stop()
 
         //Play animation forwards
@@ -158,6 +164,7 @@ export class Player {
 
 
         //Restore last direction's texture
+        this.stunned = false;
         this.changeDirection(this.currentDirection);
         this.sprite.stop();
     }
@@ -177,7 +184,7 @@ export class Player {
     }
 
     keyDown = (event) => {
-        if (event.key != this.lastKey) {
+        if (event.key != this.lastKey && !this.stunned) {
             this.lastKey = event.key;
             switch (event.key) {
                 case this.upKey:
@@ -323,7 +330,7 @@ export class Player {
             const currentTile = this.getCurrentTile();
             switch (this.actionMode) {
                 case ACTION_MODE.HARVEST:
-                    if ((currentTile.tileObject instanceof Plant && currentTile.tileObject.ready) || currentTile.tileObject instanceof Tree) {
+                    if ((currentTile.tileObject instanceof Plant && currentTile.tileObject.ready) || currentTile.tileObject instanceof Tree || currentTile.tileObject instanceof Wall) {
                         currentTile.tileObject.onHarvest(this);
                     }
                     break;

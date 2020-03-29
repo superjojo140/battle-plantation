@@ -16,12 +16,14 @@ export class TiledMap extends Container {
     isPaused: boolean;
     finalTileWidth: number;
     finalTileHeight: number;
+    /**Hold all Tiles. Usage: tiles[y][x] */
     tiles: Tile[][];
     gridWidth: number;
     gridHeight: number;
     tileContainer: Container;
     playerContainer: Container;
     tileObjectContainer: Container;
+    extraStuffContainer: Container;
 
 
     constructor() {
@@ -35,6 +37,9 @@ export class TiledMap extends Container {
 
         this.playerContainer = new Container();
         this.addChild(this.playerContainer);
+
+        this.extraStuffContainer = new Container();
+        this.addChild(this.extraStuffContainer);
 
         this.players = [];
     }
@@ -204,6 +209,21 @@ export class TiledMap extends Container {
 
         this.tiles[tile.gridY][tile.gridX] = tile;
         this.tileContainer.addChild(tile);
+    }
+
+    /**
+     * Returns the tile at position specified by x and y grid coordinates
+     * Returns undefined if there is no tile at this coordinates
+     * @param gridX x-coordinate
+     * @param gridY y-coordinate
+     */
+    getTile(gridX:number,gridY:number):Tile{
+        if(this.tiles[gridY]){
+            return this.tiles[gridY][gridX];
+        }
+        else{
+            return undefined;
+        }
     }
 
     pause() {
