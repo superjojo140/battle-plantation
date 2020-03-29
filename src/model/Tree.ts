@@ -3,13 +3,12 @@ import { StatusBar } from "./StatusBar";
 import { HitEvent } from "./HitEvent";
 import { Player } from "./Player";
 import { ITEM } from "./Items";
+import {Balancing} from "./Balancing";
 
 export class Tree extends TileObject {
 
     statusBar: StatusBar;
-    health: number = 1;
-    static onHitSound = new Audio('../data/assets/sound/blob4.mp3');
-    static onDestroySound = new Audio('../data/assets/sound/blob1.mp3');
+    health: number = Balancing.tree.defaultHealth;
 
     constructor(texture, mother) {
         super(texture, mother);
@@ -28,7 +27,7 @@ export class Tree extends TileObject {
             else {
                 this.vulnerable = false;
                 this.statusBar.visible = true;
-                this.statusBar.setProgress(this.health);
+                this.statusBar.setProgress(this.health/Balancing.tree.defaultHealth);
                 Tree.onHitSound.play();
                 await this.wiggle(3);
                 this.vulnerable = true;
@@ -38,16 +37,13 @@ export class Tree extends TileObject {
 
     async onDestroy(initiator: Player) {
         this.vulnerable = false;
-        initiator.giveItem(ITEM.WOOD_ITEM, 1);
+        initiator.inventory.giveItem(ITEM.WALL, 1);
         Tree.onDestroySound.play();
         this.statusBar.destroy({ children: true });
         await this.shrink();
         super.onDestroy(initiator);
     }
 
-    onHarvest(initiator: Player) {
-        this.onHit(new HitEvent(initiator, 0.2));
-    }
 
 
 }

@@ -1,14 +1,12 @@
 import { TileObject } from "./TileObject";
 import { StatusBar } from "./StatusBar";
 import { Tile } from "./Tile";
-import { Player } from "./Player";
 import { Texture } from "pixi.js";
-import {gameManager} from "./../index"
+import { HitEvent } from "./HitEvent";
 
 export abstract class Plant extends TileObject {
 
     static growStates: number = 4;
-    static growStepTime: number = 3000;
 
     spritePrefix: string;
     crop: object;
@@ -26,10 +24,12 @@ export abstract class Plant extends TileObject {
     }
 
 
-    onHarvest(initinator: Player) {
+    async onHit(hitEvent:HitEvent) {
+        this.vulnerable = false;
         //Harvest yourself
         //give the initiator the items
-        this.destroy();
+        await this.shrink();
+        this.onDestroy(hitEvent.initiator);
     }
 
 }

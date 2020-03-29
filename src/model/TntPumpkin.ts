@@ -3,6 +3,7 @@ import { HitEvent } from "./HitEvent";
 import { Tile } from "./Tile";
 import { gameManager } from "../index";
 import { Texture } from "pixi.js";
+import { Balancing } from "./Balancing";
 
 export class TntPumpkin extends TileObject {
 
@@ -19,14 +20,14 @@ export class TntPumpkin extends TileObject {
     async onHit(hitEvent: HitEvent) {
         if (this.vulnerable && hitEvent.damage > 0) {
             this.vulnerable = false;
-            await this.wiggle(1);
+            this.wiggle(1);
             TntPumpkin.tickSound.play();
             //Blink very dangerous
             await this.blink(4);
             //Trigger TileObjects around
             const tilesAround = this.getTilesAround();
             for(const tile of tilesAround){
-                tile.onHit(new HitEvent(hitEvent.initiator,0.5))
+                tile.onHit(new HitEvent(hitEvent.initiator,Balancing.tntPumpkin.explosionDamage))
             }
             //Explode!!!
             TntPumpkin.explodeSound.play();

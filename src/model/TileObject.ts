@@ -32,10 +32,6 @@ export abstract class TileObject extends Sprite {
 
     onHit(hitevent: HitEvent) { };
 
-    onPlant(plant: Plant) { };
-
-    onHarvest(initiator: Player) { };
-
     onDestroy(initiator: Player) {
         delete this.mother.tileObject;
         this.destroy();

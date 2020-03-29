@@ -5,6 +5,7 @@ import { UpdateScheduler } from "./UpdateScheduler";
 import { Application, ApplicationOptions, loader } from "pixi.js";
 import { TntPumpkin } from "./TntPumpkin";
 import { AtlasSpritesheet } from "./AtlasSpritesheet";
+import { ITEM } from "./Items";
 
 const APP_WIDTH = 512;
 const APP_HEIGHT = 512;
@@ -68,9 +69,9 @@ export class GameManager {
 
         //Set Player Controls
         const players = this.map.players;
-        players[0].setKeys("ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "m", "n");
+        players[0].setKeys("ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "m", "b", "n");
         players[0].setColor(0xCCCCFF);
-        players[1].setKeys("w", "s", "a", "d", "x", "y");
+        players[1].setKeys("w", "s", "a", "d", "x", "c", "y");
         players[1].setColor(0xCCEEAA);
 
         //Start Pixi App
@@ -83,7 +84,7 @@ export class GameManager {
 
 
     test() {
-        TntPumpkin.testExplosion();
+        this.map.players[0].inventory.giveItem(ITEM.TNT_PUMPKIN,100);
     }
 
 }

@@ -5,6 +5,12 @@ import { Plant } from "./Plant";
 import { TntPumpkin } from "./TntPumpkin";
 import { Player } from "./Player";
 import { Sprite, Texture } from "pixi.js";
+import { Tree } from "./Tree";
+import { Wall } from "./Wall";
+import { Tower } from "./Tower";
+import { ITEM } from "./Items";
+import { TomatoPlant } from "./TomatoPlant";
+import { PumpkinPlant } from "./PumpkinPlant";
 
 export class Tile extends Sprite {
 
@@ -40,21 +46,19 @@ export class Tile extends Sprite {
         }
     }
 
-    onPlant(plant: Plant) {
-        if (this.tileObject) {
-            this.tileObject.onPlant(plant);
-        }
-    }
 
-    onPlace(pumpkin: TntPumpkin) {
-        if (this.tileObject == undefined) {
-            console.log("Placing Pumpkin TNT");
-        }
-    }
-
-    onHarvest(initiator: Player) {
-        if (this.tileObject) {
-            this.tileObject.onHarvest(initiator);
+    onPlace(objectType: ITEM) {
+        if (this.isFree() && this.isOccupiedByAnyPlayer() == false) {
+            switch (objectType) {
+                case ITEM.TOMATO_PLANT:
+                    new TomatoPlant(this); break;
+                case ITEM.PUMPKIN_PLANT:
+                    new PumpkinPlant(this); break;
+                case ITEM.TNT_PUMPKIN:
+                    new TntPumpkin(this); break;
+                case ITEM.WALL:
+                    new Wall(this); break;
+            }
         }
     }
 
@@ -66,22 +70,22 @@ export class Tile extends Sprite {
      * Checks wether this tile is occuped by any player and returns the first player that occupies this tile.
      * Returns undefined if this tile is not occupied
      */
-    isOccupiedBy():Player{
-        for(const player of this.map.players){
-                   //Get all tiles that would be touched by the player
-                   let xRange = {
-                    from: Math.floor(player.sprite.x / this.map.finalTileWidth),
-                    to: Math.floor((player.sprite.x + player.sprite.width) / this.map.finalTileWidth)
-                };
-    
-                let yRange = {
-                    from: Math.floor(player.sprite.y / this.map.finalTileHeight),
-                    to: Math.floor((player.sprite.y + player.sprite.height) / this.map.finalTileHeight)
-                };
-    
-                if (this.gridX >= xRange.from && this.gridX <= xRange.to && this.gridY >= yRange.from && this.gridY <= yRange.to){
-                    return player;
-                }
+    isOccupiedBy(): Player {
+        for (const player of this.map.players) {
+            //Get all tiles that would be touched by the player
+            let xRange = {
+                from: Math.floor(player.sprite.x / this.map.finalTileWidth),
+                to: Math.floor((player.sprite.x + player.sprite.width) / this.map.finalTileWidth)
+            };
+
+            let yRange = {
+                from: Math.floor(player.sprite.y / this.map.finalTileHeight),
+                to: Math.floor((player.sprite.y + player.sprite.height) / this.map.finalTileHeight)
+            };
+
+            if (this.gridX >= xRange.from && this.gridX <= xRange.to && this.gridY >= yRange.from && this.gridY <= yRange.to) {
+                return player;
+            }
         }
         return undefined;
     }
@@ -89,20 +93,20 @@ export class Tile extends Sprite {
     /**
      * Checks wether this tile is occuped by any player and returns true if there is any player on this tile.
      */
-    isOccupiedByAnyPlayer():boolean{
+    isOccupiedByAnyPlayer(): boolean {
         const player = this.isOccupiedBy();
-        if (player === undefined){
+        if (player === undefined) {
             return false
         }
-        else{
+        else {
             console.log("occupied by player" + player.playerId);
             return true;
         }
     }
 
-    setTint(color:number){
+    setTint(color: number) {
         this.tint = color;
-        if(!this.isFree()){
+        if (!this.isFree()) {
             this.tileObject.tint = color;
         }
     }

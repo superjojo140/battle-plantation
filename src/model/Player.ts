@@ -1,34 +1,20 @@
-import { Tree } from './Tree';
 import { TiledMap } from "./TiledMap";
 import { Point, extras, Texture } from "pixi.js";
 import { gameManager } from "./../index"
 import { ITEM } from "./Items";
-import { Plant } from "./Plant";
-import { TntPumpkin } from './TntPumpkin';
 import { TomatoProjectile } from './TomatoProjectile';
-import { PumpkinPlant } from './PumpkinPlant';
-import { TomatoPlant } from './TomatoPlant';
-import { Wall } from './Wall';
 import { Tile } from './Tile';
-
-
-export class Inventory {
-    tomato_item: number = 0;
-    pumpkin_item: number = 0;
-    wood_item: number = 0;
-}
-
+import { Balancing } from './Balancing';
+import { HitEvent } from './HitEvent';
+import { Inventory } from "./Inventory";
 
 export enum DIRECTION { UP = "up", RIGHT = "right", DOWN = "down", LEFT = "left", STOP = "stop" };
-export enum ACTION_MODE { HARVEST, PLACE_PUMPKIN_SEED, PLACE_TOMATO_SEED, PLACE_TNT_PUMPKIN, PLACE_WALL, SHOOT };
 
 export class Player {
-
 
     static SPRITE_WIDTH: number = 96 / 3;
     static SPRITE_HEIGHT: number = 144 / 4;
     static SPRITE_SCALE: Point = new Point(1.5, 1.5);
-    static PLAYER_SPEED = 4;
 
     playerId: number;
     //A hex value of a color all player's sprites are tinted with
@@ -45,7 +31,7 @@ export class Player {
 
     inventory: Inventory;
 
-    actionMode: ACTION_MODE;
+    placeMode: ITEM;
     lastKey: string;
     /** Saves the current direction (STOP will not be saved here, in this case the value is the last direction before STOP) */
     currentDirection: DIRECTION;
@@ -57,6 +43,7 @@ export class Player {
     rightKey: string;
     actionKey: string;
     selectKey: string;
+    placeKey: string;
     lastTintedTile: Tile;
 
     constructor(x: number, y: number, map: TiledMap, playerId: number) {
@@ -64,7 +51,7 @@ export class Player {
         this.stunned = false;
         this.playerId = playerId;
         this.inventory = new Inventory();
-        this.actionMode = ACTION_MODE.HARVEST;
+        this.placeMode = ITEM.TOMATO_PLANT;
 
         this.loadAnimations();
 
@@ -125,8 +112,19 @@ export class Player {
         this.animations = animations;
     }
 
+    switchPlaceMode() {
+        switch (this.placeMode) {
+            case ITEM.PUMPKIN_PLANT: this.placeMode = ITEM.TNT_PUMPKIN; break;
+            case ITEM.TNT_PUMPKIN: this.placeMode = ITEM.TOMATO_PLANT; break;
+            case ITEM.TOMATO_PLANT: this.placeMode = ITEM.TOMATO_PROJECTILE; break;
+            case ITEM.TOMATO_PROJECTILE: this.placeMode = ITEM.WALL; break;
+            case ITEM.WALL: this.placeMode = ITEM.PUMPKIN_PLANT; break;
+        }
+        console.log(`Changed PlaceMode. New mode is: ${this.placeMode}`);
+    }
+
     changeDirection(direction: DIRECTION) {
-        if(this.stunned){
+        if (this.stunned) {
             //Player is stunned and can't change it's direction
             return;
         }
@@ -169,13 +167,14 @@ export class Player {
         this.sprite.stop();
     }
 
-    setKeys(upKey, downKey, leftKey, rightKey, actionKey, selectKey) {
+    setKeys(upKey, downKey, leftKey, rightKey, actionKey, selectKey, placeKey) {
         this.upKey = upKey;
         this.downKey = downKey;
         this.leftKey = leftKey;
         this.rightKey = rightKey;
         this.actionKey = actionKey;
         this.selectKey = selectKey;
+        this.placeKey = placeKey;
     }
 
     setColor(color: number) {
@@ -189,22 +188,28 @@ export class Player {
             switch (event.key) {
                 case this.upKey:
                     this.changeDirection(DIRECTION.UP);
-                    this.vy = -1 * Player.PLAYER_SPEED;
+                    this.vy = -1 * Balancing.player.speed;
                     break;
                 case this.downKey:
                     this.changeDirection(DIRECTION.DOWN);
-                    this.vy = 1 * Player.PLAYER_SPEED;
+                    this.vy = 1 * Balancing.player.speed;
                     break;
                 case this.leftKey:
                     this.changeDirection(DIRECTION.LEFT);
-                    this.vx = -1 * Player.PLAYER_SPEED;
+                    this.vx = -1 * Balancing.player.speed;
                     break;
                 case this.rightKey:
                     this.changeDirection(DIRECTION.RIGHT);
-                    this.vx = 1 * Player.PLAYER_SPEED;
+                    this.vx = 1 * Balancing.player.speed;
                     break;
                 case this.actionKey:
-                    this.onAction();
+                    this.onHit();
+                    break;
+                case this.placeKey:
+                    this.onPlace();
+                    break;
+                case this.selectKey:
+                    this.switchPlaceMode();
                     break;
 
             }
@@ -276,10 +281,7 @@ export class Player {
 
     }
 
-    giveItem(itemType: ITEM, count: number) {
-        console.log(this.playerId + " got " + count + " pieces of " + itemType);
-        this.inventory[itemType] += count;
-    }
+
 
     /**
     * Returns the currently active Tile.
@@ -325,52 +327,28 @@ export class Player {
 
     }
 
-    onAction = () => {
+    onPlace = () => {
         if (!this.stunned) {
             const currentTile = this.getCurrentTile();
-            switch (this.actionMode) {
-                case ACTION_MODE.HARVEST:
-                    if ((currentTile.tileObject instanceof Plant && currentTile.tileObject.ready) || currentTile.tileObject instanceof Tree || currentTile.tileObject instanceof Wall) {
-                        currentTile.tileObject.onHarvest(this);
-                    }
-                    break;
-                case ACTION_MODE.PLACE_PUMPKIN_SEED:
-                    if (currentTile.isFree()) {
-                        new PumpkinPlant(currentTile);
-                    }
-                    break;
-                case ACTION_MODE.PLACE_TOMATO_SEED:
-                    if (currentTile.isFree()) {
-                        new TomatoPlant(currentTile);
-                    }
-                    break;
-                case ACTION_MODE.PLACE_TNT_PUMPKIN:
-                    if (currentTile.isFree() && currentTile.isOccupiedByAnyPlayer() == false) {
-                        if (this.inventory.pumpkin_item > 0) {
-                            this.inventory.pumpkin_item--;
-                            this.playAnimation("put");
-                            new TntPumpkin(currentTile);
-                        }
 
-                    }
-                    break;
-                case ACTION_MODE.PLACE_WALL:
-                    if (currentTile.isFree() && currentTile.isOccupiedByAnyPlayer() == false) {
-                        if (this.inventory.wood_item > 0) {
-                            this.inventory.wood_item--;
-                            this.playAnimation("put");
-                            new Wall(currentTile);
-                        }
-                    }
-                    break;
-                case ACTION_MODE.SHOOT:
-                    if (this.inventory.tomato_item > 0) {
-                        this.inventory.tomato_item--;
-                        TomatoProjectile.createTomatoProjectile(this.sprite.x, this.sprite.y, this.currentDirection);
-                    }
-                    break;
+            //Create Tomato if neccessary
+            if (this.placeMode == ITEM.TOMATO_PROJECTILE && this.inventory.getItem(ITEM.TOMATO_PROJECTILE)) {
+                TomatoProjectile.createTomatoProjectile(this.sprite.x, this.sprite.y, this.currentDirection);
+            }
+
+            //Else place tileObject if ressources are in inventory
+            else if (this.inventory.getItem(this.placeMode)) {
+                this.playAnimation("put");
+                currentTile.onPlace(this.placeMode);
             }
         }
-    };
+    }
+
+    onHit = () => {
+        if (!this.stunned) {
+            const currentTile = this.getCurrentTile();
+            currentTile.onHit(new HitEvent(this, Balancing.player.hitDamage));
+        }
+    }
 
 }

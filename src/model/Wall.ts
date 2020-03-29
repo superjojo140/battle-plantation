@@ -3,12 +3,12 @@ import { StatusBar } from "./StatusBar";
 import { HitEvent } from "./HitEvent";
 import { Player } from "./Player";
 import { gameManager } from "../index";
+import { Balancing } from "./Balancing";
 
 export class Wall extends TileObject {
 
-
     statusBar: StatusBar;
-    health: number = 1;
+    health: number = Balancing.wall.defaultHealth;
   
 
     constructor(mother) {
@@ -28,7 +28,7 @@ export class Wall extends TileObject {
             else {
                 this.vulnerable = false;
                 this.statusBar.visible = true;
-                this.statusBar.setProgress(this.health);
+                this.statusBar.setProgress(this.health/Balancing.wall.defaultHealth);
                 Wall.onHitSound.play();
                 await this.wiggle(3);
                 this.vulnerable = true;
@@ -37,14 +37,11 @@ export class Wall extends TileObject {
     };
 
     async onDestroy(initiator: Player) {
+        this.vulnerable = false;
         Wall.onDestroySound.play();
         this.statusBar.destroy({ children: true });
         await this.shrink();
         super.onDestroy(initiator);
-    }
-
-    onHarvest(initiator:Player){
-        this.onHit(new HitEvent(initiator,0.1));
     }
 
 
