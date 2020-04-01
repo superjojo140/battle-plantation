@@ -7,6 +7,7 @@ import { Tile } from './Tile';
 import { Balancing } from './Balancing';
 import { HitEvent } from './HitEvent';
 import { Inventory } from "./Inventory";
+import { UpdateScheduler } from "./UpdateScheduler";
 
 export enum DIRECTION { UP = "up", RIGHT = "right", DOWN = "down", LEFT = "left", STOP = "stop" };
 
@@ -73,9 +74,7 @@ export class Player {
 
     }
 
-    static wait = ms => {
-        return new Promise(resolve => setTimeout(resolve, ms))
-    }
+   
 
     private loadAnimations() {
         const animations = {
@@ -148,16 +147,16 @@ export class Player {
         //Play animation forwards
         for (const frame of frames) {
             this.sprite.texture = frame;
-            await Player.wait(50);
+            await UpdateScheduler.wait(50);
         }
 
         //Wait a moment
-        await Player.wait(80);
+        await UpdateScheduler.wait(80);
 
         //Play animation backwards
         for (let i = frames.length - 1; i >= 0; i--) {
             this.sprite.texture = frames[i];
-            await Player.wait(50);
+            await UpdateScheduler.wait(50);
         }
 
 
@@ -263,7 +262,7 @@ export class Player {
 
             for (let x = xRange.from; x <= xRange.to; x++) {
                 for (let y = yRange.from; y <= yRange.to; y++) {
-                    if (this.map.tiles[y] == undefined || this.map.tiles[y][x] == undefined || (this.map.tiles[y][x].tileObject && this.map.tiles[y][x].tileObject.solid)) {
+                    if (this.map.getTile(x,y) == undefined || (this.map.getTile(x,y).tileObject && this.map.getTile(x,y).tileObject.solid)) {
                         blocked = true;
                     }
                 }
@@ -300,18 +299,13 @@ export class Player {
         let gridX = Math.floor((this.sprite.x + this.sprite.width / 2) / this.map.finalTileWidth);
         let gridY = Math.floor((this.sprite.y + this.sprite.height) / this.map.finalTileHeight);
 
-        const tiles = this.map.tiles;
-        while (tiles[gridY] && tiles[gridY][gridX] && tiles[gridY][gridX].isOccupiedBy() == this) {
+       
+        while (this.map.getTile(gridX,gridY) && this.map.getTile(gridX,gridY).isOccupiedBy() == this) {
             gridX += directionVector.x;
             gridY += directionVector.y;
         }
 
-        if (tiles[gridY]) {
-            return tiles[gridY][gridX];
-        }
-        else {
-            return undefined;
-        }
+        return this.map.getTile(gridX,gridY);
 
     }
 

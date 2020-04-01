@@ -17,7 +17,7 @@ export class TiledMap extends Container {
     finalTileWidth: number;
     finalTileHeight: number;
     /**Hold all Tiles. Usage: tiles[y][x] */
-    tiles: Tile[][];
+    private tiles: Tile[][];
     gridWidth: number;
     gridHeight: number;
     tileContainer: Container;

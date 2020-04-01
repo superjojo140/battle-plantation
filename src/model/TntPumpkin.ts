@@ -4,6 +4,7 @@ import { Tile } from "./Tile";
 import { gameManager } from "../index";
 import { Texture } from "pixi.js";
 import { Balancing } from "./Balancing";
+import { UpdateScheduler } from "./UpdateScheduler";
 
 export class TntPumpkin extends TileObject {
 
@@ -61,7 +62,7 @@ export class TntPumpkin extends TileObject {
         //Play animation forwards
         for (const frame of frames) {
             this.texture = frame;
-            await TileObject.wait(50);
+            await UpdateScheduler.wait(50);
         }
 
     }
@@ -92,8 +93,8 @@ export class TntPumpkin extends TileObject {
     }
 
     static testExplosion() {
-        const p = new TntPumpkin(gameManager.map.tiles[0][1]);
-        new TntPumpkin(gameManager.map.tiles[0][2]);
+        const p = new TntPumpkin(gameManager.map.getTile(1,0));
+        new TntPumpkin(gameManager.map.getTile(2,0));
         p.onHit(new HitEvent(gameManager.map.players[0], 1));
     }
 

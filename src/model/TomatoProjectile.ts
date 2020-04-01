@@ -5,6 +5,7 @@ import { gameManager } from '../index';
 import { Balancing } from './Balancing';
 import { Tile } from './Tile';
 import { HitEvent } from './HitEvent';
+import { UpdateScheduler } from './UpdateScheduler';
 
 export class TomatoProjectile extends Sprite {
 
@@ -82,9 +83,9 @@ export class TomatoProjectile extends Sprite {
 
         for (let x = xRange.from; x <= xRange.to; x++) {
             for (let y = yRange.from; y <= yRange.to; y++) {
-                if (gameManager.map.tiles[y] == undefined || gameManager.map.tiles[y][x] == undefined || gameManager.map.tiles[y][x].tileObject) {
+                if ( gameManager.map.getTile(x,y) == undefined || gameManager.map.getTile(x,y).tileObject) {
                     blocked = true;
-                    blockedTile = gameManager.map.tiles[y] ? gameManager.map.tiles[y][x] : undefined;
+                    blockedTile = gameManager.map.getTile(x,y);
                 }
             }
         }
@@ -118,7 +119,7 @@ export class TomatoProjectile extends Sprite {
         //Play Smash animation
         for (const frame of this.animations) {
             this.texture = frame;
-            await Player.wait(40);
+            await UpdateScheduler.wait(40);
         }
 
         this.destroy();

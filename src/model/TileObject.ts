@@ -3,6 +3,7 @@ import { HitEvent } from "./HitEvent";
 import { Plant } from "./Plant";
 import { Player } from "./Player";
 import { Sprite, Texture, Point } from "pixi.js";
+import { UpdateScheduler } from "./UpdateScheduler";
 
 export abstract class TileObject extends Sprite {
 
@@ -26,10 +27,7 @@ export abstract class TileObject extends Sprite {
         this.y = this.mother.y;
     }
 
-    static wait = ms => {
-        return new Promise(resolve => setTimeout(resolve, ms))
-    }
-
+    
     onHit(hitevent: HitEvent) { };
 
     onDestroy(initiator: Player) {
@@ -48,13 +46,13 @@ export abstract class TileObject extends Sprite {
         //Loop
         while (times > 0) {
             this.rotation += radiant;
-            await TileObject.wait(30);
+            await UpdateScheduler.wait(30);
             this.rotation -= radiant;
-            await TileObject.wait(30);
+            await UpdateScheduler.wait(30);
             this.rotation -= radiant;
-            await TileObject.wait(30);
+            await UpdateScheduler.wait(30);
             this.rotation += radiant;
-            await TileObject.wait(30);
+            await UpdateScheduler.wait(30);
 
             times--;
         }
@@ -80,7 +78,7 @@ export abstract class TileObject extends Sprite {
         while (this.scale.x > 0 && this.scale.y > 0) {
             this.scale.x -= scaleDiff;
             this.scale.y -= scaleDiff;
-            await TileObject.wait(10);
+            await UpdateScheduler.wait(10);
         }
 
         //Epilog
@@ -94,10 +92,10 @@ export abstract class TileObject extends Sprite {
         while (times > 0) {
             //Give the tileobject a green tint
             this.tint = 0xFFAAAA;
-            await TileObject.wait(200);
+            await UpdateScheduler.wait(200);
             //Remove the tint
             this.tint = 0xFFFFFF;
-            await TileObject.wait(200);
+            await UpdateScheduler.wait(200);
             times--;
         }
 

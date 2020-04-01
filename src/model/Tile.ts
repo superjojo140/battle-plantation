@@ -1,13 +1,10 @@
 import { TileObject } from "./TileObject";
 import { TiledMap } from "./TiledMap";
 import { HitEvent } from "./HitEvent";
-import { Plant } from "./Plant";
 import { TntPumpkin } from "./TntPumpkin";
 import { Player } from "./Player";
 import { Sprite, Texture } from "pixi.js";
-import { Tree } from "./Tree";
 import { Wall } from "./Wall";
-import { Tower } from "./Tower";
 import { ITEM } from "./Items";
 import { TomatoPlant } from "./TomatoPlant";
 import { PumpkinPlant } from "./PumpkinPlant";
