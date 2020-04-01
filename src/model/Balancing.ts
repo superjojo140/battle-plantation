@@ -19,6 +19,11 @@ const Balancing = {
     
     tower: {
         defaultHealth: 10,
+    },
+
+    tomatoProjectile:{
+        speed : 7,
+        hitDamage: 0.5,
     }
 
 }

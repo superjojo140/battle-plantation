@@ -77,6 +77,8 @@ export class GameManager {
         //Start Pixi App
         this.pixiApp.ticker.start();
 
+        this.test();
+
     }
 
 
@@ -85,6 +87,8 @@ export class GameManager {
 
     test() {
         this.map.players[0].inventory.giveItem(ITEM.TNT_PUMPKIN,100);
+        this.map.players[0].inventory.giveItem(ITEM.TOMATO_PROJECTILE,100);
+        this.map.players[0].placeMode = ITEM.TOMATO_PROJECTILE;
     }
 
 }

@@ -15,6 +15,7 @@ export class Inventory {
                 this.tomato_projectile--;
                 return true;
             } else {
+                console.log(`Cant get ${itemType}. Inventory is empty!`)
                 return false;
             } break;
 
@@ -22,6 +23,7 @@ export class Inventory {
                 this.tnt_pumpkin--;
                 return true;
             } else {
+                console.log(`Cant get ${itemType}. Inventory is empty!`)
                 return false;
             } break;
 
@@ -29,6 +31,7 @@ export class Inventory {
                 this.wall--;
                 return true;
             } else {
+                console.log(`Cant get ${itemType}. Inventory is empty!`)
                 return false;
             } break;
         }

@@ -6,8 +6,8 @@ import { Sprite, Texture, Point } from "pixi.js";
 
 export abstract class TileObject extends Sprite {
 
-    static onHitSound = new Audio('../data/assets/sound/blob4.mp3');
-    static onDestroySound = new Audio('../data/assets/sound/blob1.mp3');
+    static onHitSound = new Audio('../data/assets/sound/hit.mp3');
+    static onDestroySound = new Audio('../data/assets/sound/blob.mp3');
 
     mother: Tile;
     solid: boolean = false;

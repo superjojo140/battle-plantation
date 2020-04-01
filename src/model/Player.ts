@@ -333,7 +333,7 @@ export class Player {
 
             //Create Tomato if neccessary
             if (this.placeMode == ITEM.TOMATO_PROJECTILE && this.inventory.getItem(ITEM.TOMATO_PROJECTILE)) {
-                TomatoProjectile.createTomatoProjectile(this.sprite.x, this.sprite.y, this.currentDirection);
+                new TomatoProjectile(this.sprite.x, this.sprite.y, this.currentDirection,this);
             }
 
             //Else place tileObject if ressources are in inventory
