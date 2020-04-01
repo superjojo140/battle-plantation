@@ -4,6 +4,7 @@ import { Plant } from "./Plant";
 import { Player } from "./Player";
 import { Sprite, Texture, Point } from "pixi.js";
 import { UpdateScheduler } from "./UpdateScheduler";
+import { gameManager } from "../index";
 
 export abstract class TileObject extends Sprite {
 
@@ -14,21 +15,33 @@ export abstract class TileObject extends Sprite {
     solid: boolean = false;
     vulnerable: boolean = true;
 
-    constructor(texture: Texture, mother: Tile) {
+    constructor(texture: Texture, mother: Tile, solid?:boolean) {
         super(texture);
         this.mother = mother;
 
         this.mother.addTileObject(this);
 
-
-
         //set render coordinates
         this.x = this.mother.x;
         this.y = this.mother.y;
+
+        //Set timer for solid tiles
+        if(solid){
+            this.tint = 0xAAAAAA;
+            gameManager.updateScheduler.register(`wait_to_become_solid_${this.mother.gridX}_${this.mother.gridY}`,this.tryToBecomeSolid);
+        }
+    }
+
+    tryToBecomeSolid = ()=>{
+        if(!this.mother.isOccupiedByAnyPlayer()){
+            this.tint = 0xFFFFFF;
+            this.solid = true;
+        }
     }
 
     
     onHit(hitevent: HitEvent) { };
+
 
     onDestroy(initiator: Player) {
         delete this.mother.tileObject;

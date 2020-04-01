@@ -1,6 +1,6 @@
 import { TiledMap } from "./TiledMap";
 import { Point, extras, Texture } from "pixi.js";
-import { gameManager } from "./../index"
+import { gameManager } from "../index"
 import { ITEM } from "./Items";
 import { TomatoProjectile } from './TomatoProjectile';
 import { Tile } from './Tile';
@@ -284,13 +284,29 @@ export class Player {
 
     /**
     * Returns the currently active Tile.
-    * This is always the tile the player's standing on.
+    * This is always the next tile in currentDirection, which is not occupied by the player himself.
+    * The current Tile may be undefined, if it would be out of bounds.
     */
     getCurrentTile(): Tile {
+        let directionVector: Point;
+        switch (this.currentDirection) {
+            case DIRECTION.UP: directionVector = new Point(0, -1); break;
+            case DIRECTION.RIGHT: directionVector = new Point(1, 0); break;
+            case DIRECTION.LEFT: directionVector = new Point(-1, 0); break;
+            case DIRECTION.DOWN: directionVector = new Point(0, 1); break;
+        }
+
         let gridX = Math.floor((this.sprite.x + this.sprite.width / 2) / this.map.finalTileWidth);
-        let gridY = Math.floor((this.sprite.y + this.sprite.height / 2) / this.map.finalTileHeight);
+        let gridY = Math.floor((this.sprite.y + this.sprite.height) / this.map.finalTileHeight);
+
+       
+        while (this.map.getTile(gridX,gridY) && this.map.getTile(gridX,gridY).isOccupiedBy() == this) {
+            gridX += directionVector.x;
+            gridY += directionVector.y;
+        }
 
         return this.map.getTile(gridX,gridY);
+
     }
 
     tintCurrentTile() {

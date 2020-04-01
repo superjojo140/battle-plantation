@@ -45,7 +45,7 @@ export class Tile extends Sprite {
 
 
     onPlace(objectType: ITEM) {
-        if (this.isFree() && this.isOccupiedByAnyPlayer() == false) {
+        if (this.isFree()) {
             switch (objectType) {
                 case ITEM.TOMATO_PLANT:
                     new TomatoPlant(this); break;
@@ -96,7 +96,7 @@ export class Tile extends Sprite {
             return false
         }
         else {
-            console.log("occupied by player" + player.playerId);
+            //console.log("occupied by player" + player.playerId);
             return true;
         }
     }

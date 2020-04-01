@@ -12,9 +12,8 @@ export class Wall extends TileObject {
   
 
     constructor(mother) {
-        super(gameManager.tiledSpritesheet.getTexture(949), mother); //949 is a box sprite
+        super(gameManager.tiledSpritesheet.getTexture(949), mother, true); //949 is a box sprite
         this.statusBar = new StatusBar(this, false);
-        this.solid = true;
     }
 
 
