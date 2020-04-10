@@ -36,7 +36,7 @@ export class Tree extends TileObject {
 
     async onDestroy(initiator: Player) {
         this.vulnerable = false;
-        initiator.inventory.giveItem(ITEM.WALL, 1);
+        initiator.inventory.giveItem(ITEM.WALL, Balancing.tree.cropCount);
         Tree.onDestroySound.play();
         this.statusBar.destroy({ children: true });
         await this.shrink();

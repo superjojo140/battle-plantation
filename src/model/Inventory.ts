@@ -38,6 +38,7 @@ export class Inventory {
     }
 
     giveItem(itemType: ITEM, count: number) {
+        console.log(`give ${itemType}x${count}`);
         switch (itemType) {
             case ITEM.TOMATO_PROJECTILE: this.tomato_projectile += count; break;
 
