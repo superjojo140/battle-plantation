@@ -24,7 +24,15 @@ const Balancing = {
     tomatoProjectile:{
         speed : 7,
         hitDamage: 0.5,
-    }
+    },
+
+    tomatoPlant:{
+        growStepTime : 4000
+    },
+
+    pumpkinPlant:{
+        growStepTime : 10000
+    },
 
 }
 
