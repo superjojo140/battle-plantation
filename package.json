@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
     "webpack": "webpack",
-    "gen-spritesheet" : "node data/assets/collections/generate_spritesheets"
+    "gen-spritesheet": "node data/assets/collections/generate_spritesheets"
   },
   "repository": {
     "type": "git",
