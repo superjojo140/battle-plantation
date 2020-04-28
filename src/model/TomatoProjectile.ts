@@ -10,8 +10,8 @@ import { UpdateScheduler } from './UpdateScheduler';
 export class TomatoProjectile extends Sprite {
 
     static idCounter = 0;
-    static throwSound = new Audio('../data/assets/sound/snap.mp3');
-    static smashSound = new Audio('../data/assets/sound/smash.mp3');
+    static throwSound = new Audio('data/assets/sound/snap.mp3');
+    static smashSound = new Audio('data/assets/sound/smash.mp3');
 
     private id: string;
     private initiator: Player;

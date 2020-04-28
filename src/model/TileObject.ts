@@ -8,8 +8,8 @@ import { gameManager } from "../index";
 
 export abstract class TileObject extends Sprite {
 
-    static onHitSound = new Audio('../data/assets/sound/hit.mp3');
-    static onDestroySound = new Audio('../data/assets/sound/blob.mp3');
+    static onHitSound = new Audio('data/assets/sound/hit.mp3');
+    static onDestroySound = new Audio('data/assets/sound/blob.mp3');
 
     mother: Tile;
     solid: boolean = false;

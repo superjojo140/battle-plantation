@@ -10,8 +10,8 @@ export class TntPumpkin extends TileObject {
 
     private animations;
 
-    static tickSound = new Audio('../data/assets/sound/klick.mp3');
-    static explodeSound = new Audio('../data/assets/sound/explode.mp3');
+    static tickSound = new Audio('data/assets/sound/klick.mp3');
+    static explodeSound = new Audio('data/assets/sound/explode.mp3');
 
     constructor(mother: Tile) {
         super(gameManager.atlasSpritesheet.getTexture("pumpkin_idle"), mother);
