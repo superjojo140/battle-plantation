@@ -141,9 +141,8 @@ export class TiledMap extends Container {
 
                         let texture = tiledSpritesheet.getTexture(co.gid);
                         const ownerId = map.getMapObjectProperty(co, "owner");
-                        const owner = map.players[ownerId];
                         const mother = map.getTileNearestTo(co);
-                        let newTower = new Tower(texture, mother, owner);
+                        let newTower = new Tower(texture, mother, ownerId);
                         map.addTileObject(newTower);
                     }
 

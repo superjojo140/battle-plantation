@@ -8,14 +8,14 @@ import { Balancing } from "./Balancing";
 
 export class Tower extends TileObject {
 
-    owner: Player;
+    ownerId: string;
     health: number = Balancing.tower.defaultHealth;
     statusBar: StatusBar;
 
-    constructor(texture: Texture, mother: Tile, owner: Player) {
+    constructor(texture: Texture, mother: Tile, ownerId: string) {
         super(texture, mother);
         this.statusBar = new StatusBar(this, false);
-        this.owner = owner;
+        this.ownerId = ownerId;
     }
 
     async onHit(hitEvent: HitEvent) {
@@ -36,7 +36,7 @@ export class Tower extends TileObject {
     };
 
     onDestroy(initiator: Player) {
-
+        alert(`Player${this.ownerId} has lost!`);
     }
 
 
