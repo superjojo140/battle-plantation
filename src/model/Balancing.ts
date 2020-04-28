@@ -2,7 +2,7 @@
 const Balancing = {
     tree: {
         defaultHealth: 1,
-        cropCount: 3,
+        cropCount: 4,
     },
 
     wall: {
@@ -10,7 +10,7 @@ const Balancing = {
     },
 
     tntPumpkin: {
-        explosionDamage: 1,
+        explosionDamage: 1.5,
     },
 
     player: {
@@ -28,13 +28,13 @@ const Balancing = {
     },
 
     tomatoPlant:{
-        growStepTime : 4000,
-        cropCount: 5
+        growStepTime : 5000,
+        cropCount: 2
     },
 
     pumpkinPlant:{
         growStepTime : 10000,
-        cropCount: 3
+        cropCount: 2
     },
 
 }

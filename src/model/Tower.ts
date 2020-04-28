@@ -13,7 +13,7 @@ export class Tower extends TileObject {
     statusBar: StatusBar;
 
     constructor(texture: Texture, mother: Tile, ownerId: string) {
-        super(texture, mother);
+        super(texture, mother, true);
         this.statusBar = new StatusBar(this, false);
         this.ownerId = ownerId;
     }
