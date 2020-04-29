@@ -1,7 +1,33 @@
+# Sprites
+
 Antifarea's RPG sprite set by Antifarea from https://opengameart.org/content/antifareas-rpg-sprite-set-1-enlarged-w-transparent-background-fixed under CC-BY 3.0 License
+
 Roguelike/RPG pack by Kenney.nl from https://kenney.nl/assets/roguelike-rpg-pack under CC0 1.0 Universal License
+
 pumpkins.png by TearOfTheStar from https://opengameart.org/content/32x32px-5-colors-pumpkins under CC-BY 3.0
-Arrows and UI elements by Kenney from https://kenney.nl/assets/ui-pack-rpg-expansion under CC0 1.0 Universal License
+
 Plants (e.g. tomato) by josehzz from https://opengameart.org/content/farming-crops-16x16 under CC0
-Shovel from https://opengameart.org/content/pixel-hammer-and-shovel under CC0
-Axe by Rod_Praet from https://opengameart.org/content/axes-pixel-art under CC4
+
+
+# Music
+
+Towel_Defence_OST by sawsquarenoise from https://freemusicarchive.org/music/sawsquarenoise/Towel_Defence_OST under CC4.0
+
+RottenMage SpaceJacked OST by sawsquarenoise from https://freemusicarchive.org/music/sawsquarenoise/RottenMage_SpaceJacked under CC4.0
+
+OverHeated Alfa by sawsquarenoise from https://freemusicarchive.org/music/sawsquarenoise/OverHeated_Alfa_02 under CC4.0
+
+Itty Bitty 8 Bit by Kevin MacLeod
+Link: https://incompetech.filmmusic.io/song/3933-itty-bitty-8-bit
+License: http://creativecommons.org/licenses/by/4.0/
+
+Bit Quest by Kevin MacLeod
+Link: https://incompetech.filmmusic.io/song/3438-bit-quest
+License: http://creativecommons.org/licenses/by/4.0/
+
+La Calahorra by Rolemusic from https://freemusicarchive.org/search?quicksearch=calahorra
+
+# Sound effects
+
+If not other mentioned, the sound effects are created by myself (superjojo140) and may be used by everyone without restricts (CC0)
+
