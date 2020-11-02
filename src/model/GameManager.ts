@@ -9,6 +9,7 @@ import { ITEM } from "./Items";
 import uiConstants from "../ui/uiConstants";
 import { Player } from "./Player";
 import MenuBar from "../ui/menuBar";
+import MusicPlayer from '../music/MusicPlayer'
 
 
 
@@ -19,6 +20,8 @@ export class GameManager {
     
     map: TiledMap;
     pixiApp: Application;
+
+    musicPlayer:MusicPlayer;
     
     updateScheduler: UpdateScheduler;
     keyboardManager: KeyboardManager;
@@ -55,6 +58,11 @@ export class GameManager {
         
         this.keyboardManager = new KeyboardManager();
         this.updateScheduler = new UpdateScheduler();
+
+        this.musicPlayer = new MusicPlayer();
+        this.musicPlayer.addMusic('data/assets/music/La_Calahorra.mp3');
+        this.musicPlayer.addMusic('data/assets/music/Towel_Defence_Ending.mp3');
+        //this.musicPlayer.play();
         
         //Kenny Spritesheet see data/maps/Kenney RPG Tiles.tsx
         this.tiledSpritesheet = new TiledSpritesheet(PIXI.loader.resources.tiledSpritesheetTexture.texture, 1, 16, 16, 31, 57)

@@ -27,7 +27,6 @@
     "@types/node": "^12.12.7",
     "@types/pixi.js": "^4.8.4",
     "jquery": "^3.5.1",
-    "pixi-sound": "^2.0.4",
     "pixi.js": "^4.8.3",
     "spritesmith": "^3.4.0"
   },
