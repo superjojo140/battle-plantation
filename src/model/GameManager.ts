@@ -59,7 +59,9 @@ export class GameManager {
         this.keyboardManager = new KeyboardManager();
         this.updateScheduler = new UpdateScheduler();
 
-        this.musicPlayer = new MusicPlayer();
+        this.musicPlayer = new MusicPlayer(document.getElementById("container"));
+        this.musicPlayer.addMusic('data/assets/music/gogogo.mp3');
+        this.musicPlayer.addMusic('data/assets/music/Lets_Rest.mp3');
         this.musicPlayer.addMusic('data/assets/music/La_Calahorra.mp3');
         this.musicPlayer.addMusic('data/assets/music/Towel_Defence_Ending.mp3');
         //this.musicPlayer.play();
