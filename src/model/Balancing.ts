@@ -20,6 +20,7 @@ const Balancing = {
     
     tower: {
         defaultHealth: 10,
+        cooldown : 6 //How often this Object wiggles until it is again vulnerable
     },
 
     tomatoProjectile:{

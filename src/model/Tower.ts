@@ -29,7 +29,7 @@ export class Tower extends TileObject {
                 this.statusBar.visible = true;
                 this.statusBar.setProgress(this.health/Balancing.tower.defaultHealth);
                 Tower.onHitSound.play();
-                await this.wiggle(3);
+                await this.wiggle(Balancing.tower.cooldown);
                 this.vulnerable = true;
             }
         }

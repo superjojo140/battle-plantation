@@ -74,7 +74,7 @@ export class Player {
 
     }
 
-   
+
 
     private loadAnimations() {
         const animations = {
@@ -117,7 +117,8 @@ export class Player {
             case ITEM.TNT_PUMPKIN: this.placeMode = ITEM.TOMATO_PLANT; break;
             case ITEM.TOMATO_PLANT: this.placeMode = ITEM.TOMATO_PROJECTILE; break;
             case ITEM.TOMATO_PROJECTILE: this.placeMode = ITEM.WALL; break;
-            case ITEM.WALL: this.placeMode = ITEM.PUMPKIN_PLANT; break;
+            case ITEM.WALL: this.placeMode = ITEM.HAND; break;
+            case ITEM.HAND: this.placeMode = ITEM.PUMPKIN_PLANT; break;
         }
         console.log(`Changed PlaceMode. New mode is: ${this.placeMode}`);
     }
@@ -262,7 +263,7 @@ export class Player {
 
             for (let x = xRange.from; x <= xRange.to; x++) {
                 for (let y = yRange.from; y <= yRange.to; y++) {
-                    if (this.map.getTile(x,y) == undefined || (this.map.getTile(x,y).tileObject && this.map.getTile(x,y).tileObject.solid)) {
+                    if (this.map.getTile(x, y) == undefined || (this.map.getTile(x, y).tileObject && this.map.getTile(x, y).tileObject.solid)) {
                         blocked = true;
                     }
                 }
@@ -290,7 +291,7 @@ export class Player {
         let gridX = Math.floor((this.sprite.x + this.sprite.width / 2) / this.map.finalTileWidth);
         let gridY = Math.floor((this.sprite.y + this.sprite.height / 2) / this.map.finalTileHeight);
 
-        return this.map.getTile(gridX,gridY);
+        return this.map.getTile(gridX, gridY);
     }
 
     tintCurrentTile() {
@@ -309,9 +310,17 @@ export class Player {
         if (!this.stunned) {
             const currentTile = this.getCurrentTile();
 
+            //Create hitEvent if placeMode is HAND
+            if (this.placeMode == ITEM.HAND) {
+                const currentTile = this.getCurrentTile();
+                currentTile.onHit(new HitEvent(this, Balancing.player.hitDamage));
+                return;
+            }
+
             //Create Tomato if neccessary
             if (this.placeMode == ITEM.TOMATO_PROJECTILE && this.inventory.getItem(ITEM.TOMATO_PROJECTILE)) {
-                new TomatoProjectile(this.sprite.x, this.sprite.y, this.currentDirection,this);
+                new TomatoProjectile(this.sprite.x, this.sprite.y, this.currentDirection, this);
+                return;
             }
 
             //Else place tileObject if ressources are in inventory
@@ -323,10 +332,7 @@ export class Player {
     }
 
     onHit = () => {
-        if (!this.stunned) {
-            const currentTile = this.getCurrentTile();
-            currentTile.onHit(new HitEvent(this, Balancing.player.hitDamage));
-        }
+
     }
 
 }
