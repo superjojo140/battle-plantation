@@ -9,7 +9,7 @@ export class TomatoPlant extends Plant{
 
     constructor(mother:Tile){
         super(gameManager.atlasSpritesheet.getTexture("tomato_plant_0"),mother);
-        this.crop = {type:ITEM.TOMATO_PROJECTILE, count:Balancing.tomatoPlant.cropCount};
+        this.crops = Balancing.tomatoPlant.crops;
     }
 
     async grow() {

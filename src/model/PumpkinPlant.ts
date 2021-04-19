@@ -9,7 +9,7 @@ export class PumpkinPlant extends Plant {
 
     constructor(mother: Tile) {
         super(gameManager.atlasSpritesheet.getTexture("pumpkin_plant_0"), mother);
-        this.crop = {type:ITEM.TNT_PUMPKIN, count:Balancing.pumpkinPlant.cropCount};
+        this.crops = Balancing.pumpkinPlant.crops;
     }
 
     async grow() {
