@@ -3,7 +3,6 @@ import { Tile } from "./Tile";
 import { gameManager } from "../index";
 import { Balancing } from "./Balancing";
 import { UpdateScheduler } from "./UpdateScheduler";
-import { ITEM } from "./Items";
 
 export class PumpkinPlant extends Plant {
 

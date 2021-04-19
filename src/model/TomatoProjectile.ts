@@ -1,17 +1,17 @@
-import { Player } from './Player';
-import { Sprite, Point, Texture } from 'pixi.js';
-import { DIRECTION } from "./Player"
+import { Point, Sprite, Texture } from 'pixi.js';
 import { gameManager } from '../index';
 import { Balancing } from './Balancing';
-import { Tile } from './Tile';
+import { Constants } from './Constants';
 import { HitEvent } from './HitEvent';
+import { DIRECTION, Player } from './Player';
+import { Tile } from './Tile';
 import { UpdateScheduler } from './UpdateScheduler';
 
 export class TomatoProjectile extends Sprite {
 
     static idCounter = 0;
-    static throwSound = new Audio('data/assets/sound/snap.mp3');
-    static smashSound = new Audio('data/assets/sound/smash.mp3');
+    static throwSound = new Audio(`${Constants.SOUND_PATH}/snap.mp3`);
+    static smashSound = new Audio(`${Constants.SOUND_PATH}/smash.mp3`);
 
     private id: string;
     private initiator: Player;

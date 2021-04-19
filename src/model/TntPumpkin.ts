@@ -1,17 +1,18 @@
-import { TileObject } from "./TileObject";
+import { Texture } from "pixi.js";
+import { gameManager } from "../index";
+import { Balancing } from "./Balancing";
+import { Constants } from "./Constants";
 import { HitEvent } from "./HitEvent";
 import { Tile } from "./Tile";
-import { gameManager } from "../index";
-import { Texture } from "pixi.js";
-import { Balancing } from "./Balancing";
+import { TileObject } from "./TileObject";
 import { UpdateScheduler } from "./UpdateScheduler";
 
 export class TntPumpkin extends TileObject {
 
     private animations;
 
-    static tickSound = new Audio('data/assets/sound/klick.mp3');
-    static explodeSound = new Audio('data/assets/sound/explode.mp3');
+    static tickSound = new Audio(`${Constants.SOUND_PATH}/klick.mp3`);
+    static explodeSound = new Audio(`${Constants.SOUND_PATH}/explode.mp3`);
 
     constructor(mother: Tile) {
         super(gameManager.atlasSpritesheet.getTexture("pumpkin_idle"), mother);

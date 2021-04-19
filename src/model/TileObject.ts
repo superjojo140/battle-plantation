@@ -1,21 +1,21 @@
-import { Tile } from "./Tile";
-import { HitEvent } from "./HitEvent";
-import { Plant } from "./Plant";
-import { Player } from "./Player";
-import { Sprite, Texture, Point } from "pixi.js";
-import { UpdateScheduler } from "./UpdateScheduler";
+import { Sprite, Texture } from "pixi.js";
 import { gameManager } from "../index";
+import { Constants } from "./Constants";
+import { HitEvent } from "./HitEvent";
+import { Player } from "./Player";
+import { Tile } from "./Tile";
+import { UpdateScheduler } from "./UpdateScheduler";
 
 export abstract class TileObject extends Sprite {
 
-    static onHitSound = new Audio('data/assets/sound/hit.mp3');
-    static onDestroySound = new Audio('data/assets/sound/blob.mp3');
+    static onHitSound = new Audio(`${Constants.SOUND_PATH}/hit.mp3`);
+    static onDestroySound = new Audio(`${Constants.SOUND_PATH}/blob.mp3`);
 
     mother: Tile;
     solid: boolean = false;
     vulnerable: boolean = true;
 
-    constructor(texture: Texture, mother: Tile, solid?:boolean) {
+    constructor(texture: Texture, mother: Tile, solid?: boolean) {
         super(texture);
         this.mother = mother;
 
@@ -26,20 +26,20 @@ export abstract class TileObject extends Sprite {
         this.y = this.mother.y;
 
         //Set timer for solid tiles
-        if(solid){
+        if (solid) {
             this.tint = 0xAAAAAA;
-            gameManager.updateScheduler.register(`wait_to_become_solid_${this.mother.gridX}_${this.mother.gridY}`,this.tryToBecomeSolid);
+            gameManager.updateScheduler.register(`wait_to_become_solid_${this.mother.gridX}_${this.mother.gridY}`, this.tryToBecomeSolid);
         }
     }
 
-    tryToBecomeSolid = ()=>{
-        if(!this.mother.isOccupiedByAnyPlayer()){
+    tryToBecomeSolid = () => {
+        if (!this.mother.isOccupiedByAnyPlayer()) {
             this.tint = 0xFFFFFF;
             this.solid = true;
         }
     }
 
-    
+
     onHit(hitevent: HitEvent) { };
 
 

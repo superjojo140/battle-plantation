@@ -3,13 +3,13 @@ import { TiledMap } from "./TiledMap";
 import { KeyboardManager } from "./KeyboardManager";
 import { UpdateScheduler } from "./UpdateScheduler";
 import { Application, ApplicationOptions, loader } from "pixi.js";
-import { TntPumpkin } from "./TntPumpkin";
 import { AtlasSpritesheet } from "./AtlasSpritesheet";
 import { ITEM } from "./Items";
 import uiConstants from "../ui/uiConstants";
 import { Player } from "./Player";
 import MenuBar from "../ui/menuBar";
 import MusicPlayer from '../music/MusicPlayer'
+import { Constants } from "./Constants";
 
 
 
@@ -44,10 +44,10 @@ export class GameManager {
     startGame() {
         
         const toLoad = [
-            {name:'tiledSpritesheetTexture', url:'data/assets/spritesheet.png'},
-            {name:'atlasSpritesheetTexture', url:'data/assets/spritesmith_spritesheet.png'},
-            {name:'atlasSpritesheetData', url:'data/assets/spritesmith_spritesheet.json'},
-            {name:'mapData', url:'data/maps/map1.json'},
+            {name:'tiledSpritesheetTexture', url:`${Constants.ASSET_PATH}/spritesheet.png`},
+            {name:'atlasSpritesheetTexture', url:`${Constants.ASSET_PATH}/spritesmith_spritesheet.png`},
+            {name:'atlasSpritesheetData', url:`${Constants.ASSET_PATH}/spritesmith_spritesheet.json`},
+            {name:'mapData', url:`${Constants.MAP_PATH}/map1.json`},
         ]
         
         loader.add(toLoad).load(this.loaderFinished);
@@ -60,10 +60,10 @@ export class GameManager {
         this.updateScheduler = new UpdateScheduler();
 
         this.musicPlayer = new MusicPlayer(document.getElementById("container"));
-        this.musicPlayer.addMusic('data/assets/music/gogogo.mp3');
-        this.musicPlayer.addMusic('data/assets/music/Lets_Rest.mp3');
-        this.musicPlayer.addMusic('data/assets/music/La_Calahorra.mp3');
-        this.musicPlayer.addMusic('data/assets/music/Towel_Defence_Ending.mp3');
+        this.musicPlayer.addMusic(`${Constants.MUSIC_PATH}/gogogo.mp3`);
+        this.musicPlayer.addMusic(`${Constants.MUSIC_PATH}/Lets_Rest.mp3`);
+        this.musicPlayer.addMusic(`${Constants.MUSIC_PATH}/La_Calahorra.mp3`);
+        this.musicPlayer.addMusic(`${Constants.MUSIC_PATH}/Towel_Defence_Ending.mp3`);
         //this.musicPlayer.play();
         
         //Kenny Spritesheet see data/maps/Kenney RPG Tiles.tsx
