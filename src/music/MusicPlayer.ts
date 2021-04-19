@@ -42,7 +42,7 @@ export default class MusicPlayer {
                 }
             </style>
 
-            <div class="musicPlayer">
+            <div class="musicPlayer" style="display:none">
                 <img class="musicPlayerCover" width="80px" src="https://www.superjojo.de/main/pics/mensa.png">
                 <div class="musicPlayerInfo">
                     <div class="musicPlayerTitle">

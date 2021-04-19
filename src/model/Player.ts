@@ -16,6 +16,8 @@ export class Player {
     static SPRITE_WIDTH: number = 96 / 3;
     static SPRITE_HEIGHT: number = 144 / 4;
     static SPRITE_SCALE: Point = new Point(1.5, 1.5);
+    static HITBOX_TOLERANCE_HORIZONTAL = 10;
+    static HITBOX_TOLERANCE_TOP = 10;
 
     playerId: number;
     //A hex value of a color all player's sprites are tinted with
@@ -249,12 +251,12 @@ export class Player {
 
             //Get all tiles that would be touched by the player
             let xRange = {
-                from: Math.floor(newX / this.map.finalTileWidth),
-                to: Math.floor((newX + this.sprite.width) / this.map.finalTileWidth)
+                from: Math.floor((newX + Player.HITBOX_TOLERANCE_HORIZONTAL) / this.map.finalTileWidth),
+                to: Math.floor((newX + this.sprite.width - Player.HITBOX_TOLERANCE_HORIZONTAL) / this.map.finalTileWidth)
             };
 
             let yRange = {
-                from: Math.floor(newY / this.map.finalTileHeight),
+                from: Math.floor((newY + Player.HITBOX_TOLERANCE_TOP) / this.map.finalTileHeight),
                 to: Math.floor((newY + this.sprite.height) / this.map.finalTileHeight)
             };
 

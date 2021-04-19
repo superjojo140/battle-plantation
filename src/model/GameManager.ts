@@ -82,7 +82,7 @@ export class GameManager {
         
         //Set Player Controls
         const players = this.map.players;
-        players[0].setKeys("w", "s", "a", "d", "x", "c", "y");
+        players[0].setKeys("w", "s", "a", "d", "c", "y", "x");
         players[0].setColor(0xCCEEAA);
         players[1].setKeys("ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "m", "b", "n");
         players[1].setColor(0xCCCCFF);

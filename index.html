@@ -8,18 +8,39 @@
 
 	<script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
 	</script>
-	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.3/pixi.min.js" integrity="sha256-xLH1Z7Xs1uRQXRUZmkIVWZXlX3qkpG7Zl+ks1rW6GKU=" crossorigin="anonymous"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.3/pixi.min.js"
+		integrity="sha256-xLH1Z7Xs1uRQXRUZmkIVWZXlX3qkpG7Zl+ks1rW6GKU=" crossorigin="anonymous"></script>
 
 	<title>Battle Plantation</title>
+
+	<style>
+		kbd {
+			border-radius: 2px;
+			padding: 2px;
+			border: 1px solid beige;
+			font-weight: bold;
+		}
+
+		body {
+			background-color: #3a3d44;
+			padding-top: 50px;
+			padding-left: 70px;
+			color: beige;
+		}
+	</style>
 
 
 
 </head>
 
-<body style="background-color: #3a3d44; padding-top: 50px; padding-left: 70px;">
+<body>
 
 	<div id="container"></div>
+
+	<div>Player 1 Controls: Move: <kbd>Arrow Keys</kbd> Select: <kbd>b</kbd> Action: <kbd>n</kbd> </div>
+	<div>Player 2 Controls: Move: <kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><kbd>W</kbd> Select: <kbd>y</kbd> Action: <kbd>x</kbd> </div>
+	<br>
 
 	<script src="dist/bundle.js"></script>
 </body>

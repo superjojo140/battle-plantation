@@ -28,42 +28,6 @@
          "name":"TileObjects",
          "objects":[
                 {
-                 "gid":223,
-                 "height":16,
-                 "id":14,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"owner",
-                         "type":"int",
-                         "value":0
-                        }],
-                 "rotation":0,
-                 "type":"tower",
-                 "visible":true,
-                 "width":16,
-                 "x":14.5832,
-                 "y":47.8209
-                }, 
-                {
-                 "gid":52,
-                 "height":16,
-                 "id":15,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"owner",
-                         "type":"int",
-                         "value":1
-                        }],
-                 "rotation":0,
-                 "type":"tower",
-                 "visible":true,
-                 "width":16,
-                 "x":94.6158,
-                 "y":62.1976
-                }, 
-                {
                  "gid":529,
                  "height":16,
                  "id":21,
@@ -296,6 +260,42 @@
                  "width":16,
                  "x":49.0486457106622,
                  "y":16.118126641906
+                }, 
+                {
+                 "gid":403,
+                 "height":16,
+                 "id":66,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"owner",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"tower",
+                 "visible":true,
+                 "width":16,
+                 "x":96.1745827984596,
+                 "y":63.209242618742
+                }, 
+                {
+                 "gid":745,
+                 "height":16,
+                 "id":67,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"owner",
+                         "type":"string",
+                         "value":"0"
+                        }],
+                 "rotation":0,
+                 "type":"tower",
+                 "visible":true,
+                 "width":16,
+                 "x":15.6611039794608,
+                 "y":48.0924261874198
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -361,10 +361,10 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":66,
+ "nextobjectid":68,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.3",
+ "tiledversion":"1.5.0",
  "tileheight":16,
  "tilesets":[
         {
@@ -373,6 +373,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":1.2,
+ "version":1.5,
  "width":8
 }
