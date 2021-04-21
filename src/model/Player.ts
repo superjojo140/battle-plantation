@@ -10,6 +10,12 @@ import { Inventory } from "./Inventory";
 import { UpdateScheduler } from "./UpdateScheduler";
 
 export enum DIRECTION { UP = "up", RIGHT = "right", DOWN = "down", LEFT = "left", STOP = "stop" };
+export interface Hitbox {
+    leftX: number;
+    rightX: number;
+    upperY: number;
+    lowerY: number;
+}
 
 export class Player {
 
@@ -74,6 +80,15 @@ export class Player {
         gameManager.keyboardManager.registerKey(gameManager.keyboardManager.ANY_KEY, this.keyDown, this.keyUp, "player" + playerId);
         gameManager.updateScheduler.register("player" + playerId, this.doStep);
 
+    }
+
+    getHitbox(): Hitbox {
+        return {
+            leftX: this.sprite.x + Player.HITBOX_TOLERANCE_HORIZONTAL,
+            rightX: this.sprite.x + this.sprite.width - Player.HITBOX_TOLERANCE_HORIZONTAL,
+            upperY: this.sprite.y + Player.HITBOX_TOLERANCE_TOP,
+            lowerY: this.sprite.y + this.sprite.height
+        }
     }
 
 
@@ -241,23 +256,25 @@ export class Player {
     }
 
 
-    doStep = (delta) => {
+    doStep = (delta): void => {
 
         if (!this.stunned) {
 
-            //Calculate theoretically next position
-            let newX = this.sprite.x + this.vx * delta;
-            let newY = this.sprite.y + this.vy * delta;
+            const hitbox = this.getHitbox();
+            const stepX = this.vx * delta;
+            const stepY = this.vy * delta;
+            const tileWidth = this.map.finalTileWidth;
+            const tileHeight = this.map.finalTileHeight;
 
-            //Get all tiles that would be touched by the player
+            //Get all tiles that would be touched by the player if he would do a step in direction (stepX|stepY)
             let xRange = {
-                from: Math.floor((newX + Player.HITBOX_TOLERANCE_HORIZONTAL) / this.map.finalTileWidth),
-                to: Math.floor((newX + this.sprite.width - Player.HITBOX_TOLERANCE_HORIZONTAL) / this.map.finalTileWidth)
+                from: Math.floor((hitbox.leftX + stepX) / tileWidth),
+                to: Math.floor((hitbox.rightX + stepX) / tileWidth)
             };
 
             let yRange = {
-                from: Math.floor((newY + Player.HITBOX_TOLERANCE_TOP) / this.map.finalTileHeight),
-                to: Math.floor((newY + this.sprite.height) / this.map.finalTileHeight)
+                from: Math.floor((hitbox.upperY + stepY) / tileHeight),
+                to: Math.floor((hitbox.lowerY + stepY) / tileHeight)
             };
 
             //Check if at least one of this new positions would be in a solid tile or out of the map
@@ -272,8 +289,8 @@ export class Player {
             }
 
             if (blocked == false) {
-                this.sprite.x = newX;
-                this.sprite.y = newY;
+                this.sprite.x += stepX;
+                this.sprite.y += stepY;
                 //Tint the new currentTile
                 this.tintCurrentTile();
             }
