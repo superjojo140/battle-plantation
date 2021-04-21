@@ -19,6 +19,8 @@ export class TomatoProjectile extends Sprite {
     private vy: number = 0;
     animations: Texture[] = [];
 
+    explodable: boolean = false; //Tomato is not explodable at initialisation to avoid hitting the creating Player instantly
+
     static getNewId(): string {
         return `tomato_projectile_${TomatoProjectile.idCounter++}`;
     }
@@ -26,11 +28,11 @@ export class TomatoProjectile extends Sprite {
     constructor(x: number, y: number, direction: DIRECTION, initiator: Player) {
 
         super(gameManager.atlasSpritesheet.getTexture("tomato_projectile_fly"));
+
         this.id = TomatoProjectile.getNewId();
-
-
         this.x = x;
         this.y = y;
+        this.initiator = initiator;
 
         this.scale = new Point(2, 2);
         this.x += this.width;
@@ -50,15 +52,9 @@ export class TomatoProjectile extends Sprite {
             this.animations.push(texture);
         }
 
-
-        this.initiator = initiator;
-
         gameManager.updateScheduler.register(this.id, this.doStep);
-
         gameManager.map.extraStuffContainer.addChild(this);
-
         TomatoProjectile.throwSound.play();
-
     }
 
     doStep = (delta: number) => {
@@ -77,51 +73,60 @@ export class TomatoProjectile extends Sprite {
             to: Math.floor((newY + this.height / 2) / gameManager.map.finalTileHeight)
         };
 
-        //Check if at least one of this new positions would be in a solid tile or out of the map
-        let blocked = false;
-        let blockedTile: Tile;
 
+        //Check if the tomato hits a Player
+        for (const player of gameManager.map.players) {
+            const hitbox = player.getHitbox();
+            if (this.x < hitbox.rightX && this.x + this.width > hitbox.leftX && this.y < hitbox.lowerY && this.y + this.height > hitbox.upperY) {
+                //Fly into the Player
+                this.x += this.vx * 2;
+                this.y += this.vy * 2;
+                this.smash(player);
+                return;
+            }
+        }
+
+
+        //Check if at least one of this new positions would be in a solid tile or out of the map
         for (let x = xRange.from; x <= xRange.to; x++) {
             for (let y = yRange.from; y <= yRange.to; y++) {
-                if ( gameManager.map.getTile(x,y) == undefined || gameManager.map.getTile(x,y).tileObject) {
-                    blocked = true;
-                    blockedTile = gameManager.map.getTile(x,y);
+                if (gameManager.map.getTile(x, y) == undefined || gameManager.map.getTile(x, y).tileObject) {
+                    const blockedTile = gameManager.map.getTile(x, y);
+                    //Fly into the tileObject
+                    this.x += this.vx * 2;
+                    this.y += this.vy * 2;
+                    this.smash(blockedTile);
+                    return;
                 }
             }
         }
 
-        if (blocked == false) {
-            this.x = newX;
-            this.y = newY;
-            this.rotation += 0.5 * delta;
-        }
-        else {
-            //Fly into the tileObject
-            this.x += this.vx * 2;
-            this.y += this.vy * 2;
-            this.smash(blockedTile);
-        }
+        //If no collision, just fly your way
+        this.x = newX;
+        this.y = newY;
+        this.rotation += 0.5 * delta;
+        this.explodable = true;
+
     }
 
 
 
-    private async smash(tile: Tile) {
-        gameManager.updateScheduler.unregister(this.id);
+    private async smash(collider: Tile | Player) {
+        if (this.explodable) {
+            gameManager.updateScheduler.unregister(this.id);
+            TomatoProjectile.smashSound.play(); //Play Smash sound
 
-        //Play Smash sound
-        TomatoProjectile.smashSound.play();
+            //Trigger Hit event on hitten tile or Player
+            if (collider) {
+                collider.onHit(new HitEvent(this.initiator, Balancing.tomatoProjectile.hitDamage));
+            }
 
-        //Trigger Hit event on hitten tile
-        if (tile) {
-            tile.onHit(new HitEvent(this.initiator, Balancing.tomatoProjectile.hitDamage));
+            //Play Smash animation
+            for (const frame of this.animations) {
+                this.texture = frame;
+                await UpdateScheduler.wait(40);
+            }
+            this.destroy();
         }
-
-        //Play Smash animation
-        for (const frame of this.animations) {
-            this.texture = frame;
-            await UpdateScheduler.wait(40);
-        }
-
-        this.destroy();
     }
 }

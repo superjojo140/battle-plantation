@@ -24,7 +24,7 @@ export class UpdateScheduler {
 
     /**
      * Asynchronus Promise for waiting the given time in ms
-     * This does NOT pause or stop the UpdateSheduler
+     * This does NOT pause or stop the UpdateScheduler
      */
     static wait = ms => {
         return new Promise(resolve => setTimeout(resolve, ms))

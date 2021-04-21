@@ -17,6 +17,7 @@ const Balancing = {
     player: {
         speed: 4,
         hitDamage: 0.1,
+        knockdown : 2000, //Time in milliseconds
     },
 
     tower: {

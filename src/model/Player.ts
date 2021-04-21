@@ -8,6 +8,7 @@ import { Balancing } from './Balancing';
 import { HitEvent } from './HitEvent';
 import { Inventory } from "./Inventory";
 import { UpdateScheduler } from "./UpdateScheduler";
+import { Constants } from "./Constants";
 
 export enum DIRECTION { UP = "up", RIGHT = "right", DOWN = "down", LEFT = "left", STOP = "stop" };
 export interface Hitbox {
@@ -24,6 +25,7 @@ export class Player {
     static SPRITE_SCALE: Point = new Point(1.5, 1.5);
     static HITBOX_TOLERANCE_HORIZONTAL = 10;
     static HITBOX_TOLERANCE_TOP = 10;
+    static damageSound = new Audio(`${Constants.SOUND_PATH}/autsch.mp3`);
 
     playerId: number;
     //A hex value of a color all player's sprites are tinted with
@@ -35,7 +37,7 @@ export class Player {
     vx: number;
     vy: number;
 
-    //Player ignores doStep and onAction Events if stunned
+    //Player ignores doStep, onAction and onHit Events if stunned
     stunned: boolean;
 
     inventory: Inventory;
@@ -219,9 +221,6 @@ export class Player {
                     this.changeDirection(DIRECTION.RIGHT);
                     this.vx = 1 * Balancing.player.speed;
                     break;
-                case this.actionKey:
-                    this.onHit();
-                    break;
                 case this.placeKey:
                     this.onPlace();
                     break;
@@ -350,7 +349,42 @@ export class Player {
         }
     }
 
-    onHit = () => {
+    onHit = async (hitEvent: HitEvent) => {
+        if(!this.stunned){
+            this.stunned = true;
+            Player.damageSound.play();
+            this.wiggle(3);
+            await UpdateScheduler.wait(Balancing.player.knockdown);
+            this.stunned = false;
+        }
+    }
+
+    async wiggle(times) {
+
+        //Prolog
+        const radiant = 0.1;
+        this.sprite.x += this.sprite.width / 2;
+        this.sprite.y += this.sprite.height / 2;
+        this.sprite.anchor.set(0.5);
+
+        //Loop
+        while (times > 0) {
+            this.sprite.rotation += radiant;
+            await UpdateScheduler.wait(30);
+            this.sprite.rotation -= radiant;
+            await UpdateScheduler.wait(30);
+            this.sprite.rotation -= radiant;
+            await UpdateScheduler.wait(30);
+            this.sprite.rotation += radiant;
+            await UpdateScheduler.wait(30);
+
+            times--;
+        }
+
+        //Epilog
+        this.sprite.x -= this.sprite.width / 2;
+        this.sprite.y -= this.sprite.height / 2;
+        this.sprite.anchor.set(0);
 
     }
 
