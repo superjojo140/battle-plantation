@@ -84,7 +84,7 @@ export class TiledMap extends Container {
                         let index = row * tl.width + column;
                         if (tl.data[index] > 0) {
                             let texture = tiledSpritesheet.getTexture(tl.data[index]);
-                            const newTile = new Tile(texture, row, column, map);
+                            const newTile = new Tile(texture, column, row, map);
                             map.addTile(newTile);
                         }
                     }
