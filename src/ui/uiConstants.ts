@@ -1,13 +1,17 @@
 const uiConstants = {
     menuBar: {
-        height: 100,
-        icon:{
-            scale:3,
+        height: 115,
+        icon: {
+            scale: 3,
+        },
+        inventory: {
+            spacing: 3,
+            spriteSize : 16,
         }
     },
     stage: {
-        width: 512,
-        height: 612,
+        width: 1020,
+        height: 500,
     }
 }
 

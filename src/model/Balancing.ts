@@ -28,6 +28,7 @@ const Balancing = {
     tomatoProjectile: {
         speed: 7,
         hitDamage: 0.3,
+        inventoryLimit : 10,
     },
 
     tomatoPlant: {

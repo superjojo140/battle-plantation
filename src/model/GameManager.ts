@@ -30,14 +30,11 @@ export class GameManager {
     constructor() {
         //Create a Pixi Application
         class PixiOptions implements ApplicationOptions {
-            constructor(public width, public height) { }
+            constructor(public width, public height, public view) { }
         }
-        const pixiOptions = new PixiOptions(uiConstants.stage.width, uiConstants.stage.height);
-        
+        const canvas = document.getElementById("canvas1");
+        const pixiOptions = new PixiOptions(uiConstants.stage.width, uiConstants.stage.height, canvas);
         this.pixiApp = new Application(pixiOptions);
-        
-        //Add the canvas that Pixi automatically created for you to the HTML document
-        document.body.appendChild(this.pixiApp.view);
     }
     
     
@@ -47,7 +44,7 @@ export class GameManager {
             {name:'tiledSpritesheetTexture', url:`${Constants.ASSET_PATH}/spritesheet.png`},
             {name:'atlasSpritesheetTexture', url:`${Constants.ASSET_PATH}/spritesmith_spritesheet.png`},
             {name:'atlasSpritesheetData', url:`${Constants.ASSET_PATH}/spritesmith_spritesheet.json`},
-            {name:'mapData', url:`${Constants.MAP_PATH}/map1.json`},
+            {name:'mapData', url:`${Constants.MAP_PATH}/map2.json`},
         ]
         
         loader.add(toLoad).load(this.loaderFinished);
