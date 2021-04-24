@@ -1,4 +1,5 @@
 import * as jsmediatags from "jsmediatags";
+import uiConstants from "../ui/uiConstants";
 
 export default class MusicPlayer {
 
@@ -17,7 +18,11 @@ export default class MusicPlayer {
 
                 #container{
                     position: absolute;
-                    margin: 10px 38px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    left: 0;
+                    right: 0;
+                    top: 80px;
                 }
 
                 .musicPlayer{
@@ -29,6 +34,7 @@ export default class MusicPlayer {
                     font-family: 'VT323', monospace;
                     display: flex;
                     padding: 15px;
+                    margin: 0 auto;
                 }
                 .musicPlayerCover{}
                 .musicPlayerTitle{
@@ -55,13 +61,16 @@ export default class MusicPlayer {
             </div>
         `;
         htmlParent.innerHTML += html;
+
+        document.getElementById('musicOn').onclick = this.nextTrack;
+        document.getElementById('musicOff').onclick = this.pause;
     }
 
     addMusic(path: string) {
         this.playlist.push(path);
     }
 
-    play = () => {
+    play = async () => {
         if (!this.audio) {
             this.loadMusicAt(this.playlistPosition);
         }
@@ -85,14 +94,14 @@ export default class MusicPlayer {
         this.audio.onended = this.nextTrack;
 
         //Load Meta Info
-        let resp = await fetch('http://127.0.0.1:8887/' + path);
+        let resp = await fetch(path);
         let blob = await resp.blob();
 
         jsmediatags.read(blob, {
             onSuccess: (data) => {
-                console.log(data.tags);
+                //console.log(data.tags);
                 document.querySelector('.musicPlayerTitle').innerHTML = data.tags.title;
-                document.querySelector('.musicPlayerArtist').innerHTML =  data.tags.artist;
+                document.querySelector('.musicPlayerArtist').innerHTML = data.tags.artist;
 
                 let image = data.tags.picture;
                 if (image) {
@@ -103,7 +112,9 @@ export default class MusicPlayer {
                     var base64 = "data:" + image.format + ";base64," +
                         window.btoa(base64String);
                     document.querySelector('.musicPlayerCover').setAttribute('src', base64);
-                } 
+                    this.slideDown();
+                    setTimeout(this.slideUp, uiConstants.musicPlayer.displayTime);
+                }
 
             },
             onError: function (error) {
@@ -118,6 +129,65 @@ export default class MusicPlayer {
         }
         this.loadMusicAt(++this.playlistPosition % this.playlist.length);
         this.play();
+    }
+
+    /* SLIDE UP */
+    slideUp(duration = 500) {
+        let target = document.querySelector(".musicPlayer") as HTMLElement;
+        target.style.transitionProperty = 'height, margin, padding';
+        target.style.transitionDuration = duration + 'ms';
+        target.style.boxSizing = 'border-box';
+        target.style.height = target.offsetHeight + 'px';
+        target.offsetHeight;
+        target.style.overflow = 'hidden';
+        target.style.height = "0";
+        target.style.paddingTop = "0";
+        target.style.paddingBottom = "0";
+        target.style.marginTop = "0";
+        target.style.marginBottom = "0";
+        window.setTimeout(() => {
+            target.style.display = 'none';
+            target.style.removeProperty('height');
+            target.style.removeProperty('padding-top');
+            target.style.removeProperty('padding-bottom');
+            target.style.removeProperty('margin-top');
+            target.style.removeProperty('margin-bottom');
+            target.style.removeProperty('overflow');
+            target.style.removeProperty('transition-duration');
+            target.style.removeProperty('transition-property');
+            //alert("!");
+        }, duration);
+    }
+
+    /* SLIDE DOWN */
+    slideDown(duration = 500) {
+        let target = document.querySelector(".musicPlayer") as HTMLElement;
+        target.style.removeProperty('display');
+        let display = window.getComputedStyle(target).display;
+        if (display === 'none') display = 'block';
+        target.style.display = display;
+        let height = target.offsetHeight;
+        target.style.overflow = 'hidden';
+        target.style.height = "0";
+        target.style.paddingTop = "0";
+        target.style.paddingBottom = "0";
+        target.style.marginTop = "0";
+        target.style.marginBottom = "0";
+        target.offsetHeight;
+        target.style.boxSizing = 'border-box';
+        target.style.transitionProperty = "height, margin, padding";
+        target.style.transitionDuration = duration + 'ms';
+        target.style.height = height + 'px';
+        target.style.removeProperty('padding-top');
+        target.style.removeProperty('padding-bottom');
+        target.style.removeProperty('margin-top');
+        target.style.removeProperty('margin-bottom');
+        window.setTimeout(() => {
+            target.style.removeProperty('height');
+            target.style.removeProperty('overflow');
+            target.style.removeProperty('transition-duration');
+            target.style.removeProperty('transition-property');
+        }, duration);
     }
 
 

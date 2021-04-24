@@ -24,8 +24,7 @@
 
 		body {
 			background-color: #3a3d44;
-			padding-top: 50px;
-			padding-left: 70px;
+			padding: 20px;
 			color: beige;
 		}
 
@@ -34,6 +33,10 @@
 			margin-right: auto;
 			display: block;
 			border: 10px solid brown;
+		}
+
+		.controls{
+			text-align: right;
 		}
 	</style>
 
@@ -44,6 +47,7 @@
 <body>
 
 	<div id="container"></div>
+	<div class="controls"><button id="musicOn">Music</button><button id="musicOff">No Music</button></div>
 
 	<div>Player 1 Controls: Move: <kbd>Arrow Keys</kbd> Select: <kbd>b</kbd> Action: <kbd>n</kbd> </div>
 	<div>Player 2 Controls: Move: <kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><kbd>W</kbd> Select: <kbd>y</kbd> Action:

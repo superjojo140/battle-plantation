@@ -12,6 +12,9 @@ const uiConstants = {
     stage: {
         width: 1020,
         height: 500,
+    },
+    musicPlayer:{
+        displayTime : 3000,
     }
 }
 
