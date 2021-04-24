@@ -35,10 +35,10 @@ export class Tower extends TileObject {
                 //Create Tomatos as defense action
                 const tileHeight = this.mother.map.finalTileHeight;
                 const tileWidth = this.mother.map.finalTileWidth;
-                if (this.mother.gridY - 1 >= 0) { new TomatoProjectile(this.x, (this.mother.gridY - 1) * tileHeight, DIRECTION.UP, this.getOwner()); }
-                if (this.mother.gridX - 1 >= 0) { new TomatoProjectile((this.mother.gridX - 1) * tileWidth, this.y, DIRECTION.LEFT, this.getOwner()); }
-                if (this.mother.gridY + 1 >= 0) { new TomatoProjectile(this.x, (this.mother.gridY + 1) * tileHeight, DIRECTION.DOWN, this.getOwner()); }
-                if (this.mother.gridX + 1 >= 0) { new TomatoProjectile((this.mother.gridX + 1) * tileWidth, this.y, DIRECTION.RIGHT, this.getOwner()); }
+                if (this.mother.gridY - 1 >= 0) { new TomatoProjectile(this.x, (this.mother.gridY - 1) * tileHeight, DIRECTION.UP, this, this.getOwner()); }
+                if (this.mother.gridX - 1 >= 0) { new TomatoProjectile((this.mother.gridX - 1) * tileWidth, this.y, DIRECTION.LEFT, this, this.getOwner()); }
+                if (this.mother.gridY + 1 >= 0) { new TomatoProjectile(this.x, (this.mother.gridY + 1) * tileHeight, DIRECTION.DOWN, this, this.getOwner()); }
+                if (this.mother.gridX + 1 >= 0) { new TomatoProjectile((this.mother.gridX + 1) * tileWidth, this.y, DIRECTION.RIGHT, this, this.getOwner()); }
                 this.vulnerable = true;
             }
         }

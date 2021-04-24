@@ -5,6 +5,7 @@ import { Constants } from './Constants';
 import { HitEvent } from './HitEvent';
 import { DIRECTION, Player } from './Player';
 import { Tile } from './Tile';
+import { TileObject } from './TileObject';
 import { UpdateScheduler } from './UpdateScheduler';
 
 export class TomatoProjectile extends Sprite {
@@ -14,24 +15,33 @@ export class TomatoProjectile extends Sprite {
     static smashSound = new Audio(`${Constants.SOUND_PATH}/smash.mp3`);
 
     private id: string;
-    private initiator: Player;
+    private owner: Player;
+    private initiator : Player | TileObject;
     private vx: number = 0;
     private vy: number = 0;
     animations: Texture[] = [];
 
-    explodable: boolean = false; //Tomato is not explodable at initialisation to avoid hitting the creating Player instantly
 
     static getNewId(): string {
         return `tomato_projectile_${TomatoProjectile.idCounter++}`;
     }
 
-    constructor(x: number, y: number, direction: DIRECTION, initiator: Player) {
+    /**
+     * 
+     * @param x x-coordinate to start
+     * @param y y-coordinate to start
+     * @param direction direction to fly
+     * @param initiator the player or object that creates this tomate (this player will be imun to this tomato)
+     * @param owner the player that will be referenced in hitEvent if the tomato hits something
+     */
+    constructor(x: number, y: number, direction: DIRECTION, initiator: Player | TileObject, owner: Player) {
 
         super(gameManager.atlasSpritesheet.getTexture("tomato_projectile_fly"));
 
         this.id = TomatoProjectile.getNewId();
         this.x = x;
         this.y = y;
+        this.owner = owner;
         this.initiator = initiator;
 
         this.scale = new Point(2, 2);
@@ -62,7 +72,7 @@ export class TomatoProjectile extends Sprite {
         let newX = this.x + this.vx * delta;
         let newY = this.y + this.vy * delta;
 
-        //Get all tiles that would be touched by the player
+        //Get all tiles that would be touched when moving the next step
         let xRange = {
             from: Math.floor((newX - this.width / 2) / gameManager.map.finalTileWidth),
             to: Math.floor((newX + this.width / 2) / gameManager.map.finalTileWidth)
@@ -105,20 +115,19 @@ export class TomatoProjectile extends Sprite {
         this.x = newX;
         this.y = newY;
         this.rotation += 0.5 * delta;
-        this.explodable = true;
 
     }
 
 
 
     private async smash(collider: Tile | Player) {
-        if (this.explodable) {
+        if (collider != this.initiator) { //Dont hit the initiator
             gameManager.updateScheduler.unregister(this.id);
             TomatoProjectile.smashSound.play(); //Play Smash sound
 
             //Trigger Hit event on hitten tile or Player
             if (collider) {
-                collider.onHit(new HitEvent(this.initiator, Balancing.tomatoProjectile.hitDamage));
+                collider.onHit(new HitEvent(this.owner, Balancing.tomatoProjectile.hitDamage));
             }
 
             //Play Smash animation

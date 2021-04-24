@@ -337,7 +337,7 @@ export class Player {
 
             //Create Tomato if neccessary
             if (this.placeMode == ITEM.TOMATO_PROJECTILE && this.inventory.getItem(ITEM.TOMATO_PROJECTILE)) {
-                new TomatoProjectile(this.sprite.x, this.sprite.y, this.currentDirection, this);
+                new TomatoProjectile(this.sprite.x, this.sprite.y, this.currentDirection, this, this);
                 return;
             }
 
@@ -350,7 +350,7 @@ export class Player {
     }
 
     onHit = async (hitEvent: HitEvent) => {
-        if(!this.stunned){
+        if (!this.stunned) {
             this.stunned = true;
             Player.damageSound.play();
             this.wiggle(3);
