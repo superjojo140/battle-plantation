@@ -45,7 +45,7 @@ export default class PlayerMenu extends Container {
         this.createInventorySprites(ITEM.TNT_PUMPKIN, yPos += vSpace + spriteSize);
         this.createInventorySprites(ITEM.WALL, yPos += vSpace + spriteSize);
 
-        gameManager.updateScheduler.register("playerMenu" + player.playerId, this.doStep);
+        gameManager.updateScheduler.subscribeToTicker("playerMenu" + player.playerId, this.doStep);
 
     }
 

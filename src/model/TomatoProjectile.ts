@@ -62,7 +62,7 @@ export class TomatoProjectile extends Sprite {
             this.animations.push(texture);
         }
 
-        gameManager.updateScheduler.register(this.id, this.doStep);
+        gameManager.updateScheduler.subscribeToTicker(this.id, this.doStep);
         gameManager.map.extraStuffContainer.addChild(this);
         TomatoProjectile.throwSound.play();
     }
@@ -122,7 +122,7 @@ export class TomatoProjectile extends Sprite {
 
     private async smash(collider: Tile | Player) {
         if (collider != this.initiator) { //Dont hit the initiator
-            gameManager.updateScheduler.unregister(this.id);
+            gameManager.updateScheduler.unsubscribeFromTicker(this.id);
             TomatoProjectile.smashSound.play(); //Play Smash sound
 
             //Trigger Hit event on hitten tile or Player

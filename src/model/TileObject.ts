@@ -28,7 +28,7 @@ export abstract class TileObject extends Sprite {
         //Set timer for solid tiles
         if (solid) {
             this.tint = 0xAAAAAA;
-            gameManager.updateScheduler.register(`wait_to_become_solid_${this.mother.gridX}_${this.mother.gridY}`, this.tryToBecomeSolid);
+            gameManager.updateScheduler.subscribeToTicker(`wait_to_become_solid_${this.mother.gridX}_${this.mother.gridY}`, this.tryToBecomeSolid);
         }
     }
 

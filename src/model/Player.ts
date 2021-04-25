@@ -80,7 +80,7 @@ export class Player {
 
         //register key events
         gameManager.keyboardManager.registerKey(gameManager.keyboardManager.ANY_KEY, this.keyDown, this.keyUp, "player" + playerId);
-        gameManager.updateScheduler.register("player" + playerId, this.doStep);
+        gameManager.updateScheduler.subscribeToTicker("player" + playerId, this.doStep);
 
     }
 

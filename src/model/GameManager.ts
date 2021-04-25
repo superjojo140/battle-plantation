@@ -68,8 +68,8 @@ export class GameManager {
         //Atlas Spritesheet
         this.atlasSpritesheet = new AtlasSpritesheet(PIXI.loader.resources.atlasSpritesheetTexture.texture, PIXI.loader.resources.atlasSpritesheetData.data);
         
-        //Register Update scheduler
-        this.pixiApp.ticker.add(this.updateScheduler.doStep);
+        //Register Ticker at Update scheduler
+        this.pixiApp.ticker.add(this.updateScheduler.tick);
         
         //Load Map
         this.map = TiledMap.loadMap(PIXI.loader.resources.mapData.data);
