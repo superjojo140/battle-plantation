@@ -3,6 +3,7 @@ import { gameManager } from '../index';
 import { Balancing } from './Balancing';
 import { Constants } from './Constants';
 import { HitEvent } from './HitEvent';
+import { ITEM } from './Items';
 import { DIRECTION, Player } from './Player';
 import { Tile } from './Tile';
 import { TileObject } from './TileObject';
@@ -50,10 +51,10 @@ export class TomatoProjectile extends Sprite {
         this.anchor.set(0.5);
 
         switch (direction) {
-            case DIRECTION.UP: this.vy = -1 * Balancing.tomato_projectile.speed; break;
-            case DIRECTION.DOWN: this.vy = 1 * Balancing.tomato_projectile.speed; break;
-            case DIRECTION.LEFT: this.vx = -1 * Balancing.tomato_projectile.speed; break;
-            case DIRECTION.RIGHT: this.vx = 1 * Balancing.tomato_projectile.speed; break;
+            case DIRECTION.UP: this.vy = -1 * Balancing[ITEM.TOMATO_PROJECTILE].speed; break;
+            case DIRECTION.DOWN: this.vy = 1 * Balancing[ITEM.TOMATO_PROJECTILE].speed; break;
+            case DIRECTION.LEFT: this.vx = -1 * Balancing[ITEM.TOMATO_PROJECTILE].speed; break;
+            case DIRECTION.RIGHT: this.vx = 1 * Balancing[ITEM.TOMATO_PROJECTILE].speed; break;
         }
 
         for (let i = 0; i < 6; i++) {
@@ -127,7 +128,7 @@ export class TomatoProjectile extends Sprite {
 
             //Trigger Hit event on hitten tile or Player
             if (collider) {
-                collider.onHit(new HitEvent(this.owner, Balancing.tomato_projectile.hitDamage));
+                collider.onHit(new HitEvent(this.owner, Balancing[ITEM.TOMATO_PROJECTILE].hitDamage));
             }
 
             //Play Smash animation

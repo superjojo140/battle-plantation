@@ -5,8 +5,8 @@ export class Inventory {
 
     tomato_projectile: number = 0;
     tnt_pumpkin: number = 0;
-    tomato_plant: number = Balancing.tomato_plant.startSeeds;
-    pumpkin_plant: number = Balancing.pumpkin_plant.startSeeds;
+    tomato_plant: number = Balancing[ITEM.TOMATO_PLANT].startSeeds;
+    pumpkin_plant: number = Balancing[ITEM.PUMPKIN_PLANT].startSeeds;
     wall: number = 0;
 
     getItem(itemType: ITEM): boolean {

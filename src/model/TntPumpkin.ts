@@ -3,6 +3,7 @@ import { gameManager } from "../index";
 import { Balancing } from "./Balancing";
 import { Constants } from "./Constants";
 import { HitEvent } from "./HitEvent";
+import { ITEM } from "./Items";
 import { Tile } from "./Tile";
 import { TileObject } from "./TileObject";
 import { UpdateScheduler } from "./UpdateScheduler";
@@ -29,7 +30,7 @@ export class TntPumpkin extends TileObject {
             //Trigger TileObjects around
             const tilesAround = this.getTilesAround();
             for(const tile of tilesAround){
-                tile.onHit(new HitEvent(hitEvent.initiator,Balancing.tnt_pumpkin.explosionDamage))
+                tile.onHit(new HitEvent(hitEvent.initiator,Balancing[ITEM.TNT_PUMPKIN].explosionDamage))
             }
             //Explode!!!
             TntPumpkin.explodeSound.play();

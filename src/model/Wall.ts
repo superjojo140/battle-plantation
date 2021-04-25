@@ -4,11 +4,12 @@ import { HitEvent } from "./HitEvent";
 import { Player } from "./Player";
 import { gameManager } from "../index";
 import { Balancing } from "./Balancing";
+import { ITEM } from "./Items";
 
 export class Wall extends TileObject {
 
     statusBar: StatusBar;
-    health: number = Balancing.wall.defaultHealth;
+    health: number = Balancing[ITEM.WALL].defaultHealth;
   
 
     constructor(mother) {
@@ -27,7 +28,7 @@ export class Wall extends TileObject {
             else {
                 this.vulnerable = false;
                 this.statusBar.visible = true;
-                this.statusBar.setProgress(this.health/Balancing.wall.defaultHealth);
+                this.statusBar.setProgress(this.health/Balancing[ITEM.WALL].defaultHealth);
                 Wall.onHitSound.play();
                 await this.wiggle(3);
                 this.vulnerable = true;
