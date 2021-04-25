@@ -5,7 +5,8 @@ const uiConstants = {
             scale: 3,
         },
         inventory: {
-            spacing: 3,
+            horizontalSpacing: 3,
+            verticalSpacing: 5,
             spriteSize : 16,
         }
     },
