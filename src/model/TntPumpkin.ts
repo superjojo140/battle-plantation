@@ -29,7 +29,7 @@ export class TntPumpkin extends TileObject {
             //Trigger TileObjects around
             const tilesAround = this.getTilesAround();
             for(const tile of tilesAround){
-                tile.onHit(new HitEvent(hitEvent.initiator,Balancing.tntPumpkin.explosionDamage))
+                tile.onHit(new HitEvent(hitEvent.initiator,Balancing.tnt_pumpkin.explosionDamage))
             }
             //Explode!!!
             TntPumpkin.explodeSound.play();

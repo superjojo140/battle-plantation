@@ -5,13 +5,18 @@ import { gameManager } from "../index";
 import { Balancing } from "../model/Balancing";
 import { ITEM } from "../model/Items";
 
+interface InventorySprites {
+    item: ITEM;
+    sprites: Sprite[];
+}
+
 export default class PlayerMenu extends Container {
 
     player: Player;
-    actionIcon:Sprite;
-    tomatoProjectileSprites:Sprite[] = [];
+    actionIcon: Sprite;
+    inventorySpritesList: InventorySprites[] = [];
 
-    constructor(player: Player, width: number, x:number) {
+    constructor(player: Player, width: number, x: number) {
         super();
         this.player = player;
 
@@ -31,32 +36,40 @@ export default class PlayerMenu extends Container {
         this.addChild(ai);
         this.actionIcon = ai;
 
-        //Create tomato sprites
-        const offsetX = this.width - ((uiConstants.menuBar.inventory.spacing + uiConstants.menuBar.inventory.spriteSize
-            ) * Balancing.tomatoProjectile.inventoryLimit)
-        for(let i=0; i< Balancing.tomatoProjectile.inventoryLimit;i++){
-            let sprite = new Sprite(gameManager.atlasSpritesheet.getTexture(ITEM.TOMATO_PROJECTILE));
-            sprite.x = (uiConstants.menuBar.inventory.spriteSize + uiConstants.menuBar.inventory.spacing) * i + offsetX;
-            sprite.y = 5;
-            this.tomatoProjectileSprites.push(sprite);
-            this.addChild(sprite);
-        }
+        this.createInventorySprites(ITEM.TOMATO_PROJECTILE,5);
+        this.createInventorySprites(ITEM.TNT_PUMPKIN,20);
+        this.createInventorySprites(ITEM.WALL,35);
 
-        gameManager.updateScheduler.register("playerMenu"+player.playerId,this.doStep);
+
+        gameManager.updateScheduler.register("playerMenu" + player.playerId, this.doStep);
 
     }
 
-    doStep = ()=>{
+    createInventorySprites(item: ITEM, y: number) {
+        const offsetX = this.width - ((uiConstants.menuBar.inventory.spacing + uiConstants.menuBar.inventory.spriteSize
+        ) * Balancing[item].inventoryLimit);
+        const invSprites = { item: item, sprites: [] };
+        for (let i = 0; i < Balancing[item].inventoryLimit; i++) {
+            let sprite = new Sprite(gameManager.atlasSpritesheet.getTexture(item));
+            sprite.x = (uiConstants.menuBar.inventory.spriteSize + uiConstants.menuBar.inventory.spacing) * i + offsetX;
+            sprite.y = y;
+            invSprites.sprites.push(sprite);
+            this.addChild(sprite);
+        }
+        this.inventorySpritesList.push(invSprites);
+    }
+
+    doStep = () => {
         this.actionIcon.texture = gameManager.atlasSpritesheet.getTexture(this.player.placeMode);
         //display tomatoes
-        for(let index = 0; index < this.tomatoProjectileSprites.length; index++){
-            if(index < this.player.inventory.tomato_projectile){
-                this.tomatoProjectileSprites[index].tint = 0xFFFFFF;
-            }
-            else{
-                this.tomatoProjectileSprites[index].tint = 0x222222;
-            }
-        }
+        // for (let index = 0; index < this.tomatoProjectileSprites.length; index++) {
+        //     if (index < this.player.inventory.tomato_projectile) {
+        //         this.tomatoProjectileSprites[index].tint = 0xFFFFFF;
+        //     }
+        //     else {
+        //         this.tomatoProjectileSprites[index].tint = 0x222222;
+        //     }
+        // }
     }
 
 }

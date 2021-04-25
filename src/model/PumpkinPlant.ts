@@ -8,12 +8,12 @@ export class PumpkinPlant extends Plant {
 
     constructor(mother: Tile) {
         super(gameManager.atlasSpritesheet.getTexture("pumpkin_plant_0"), mother);
-        this.crops = Balancing.pumpkinPlant.crops;
+        this.crops = Balancing.pumpkin_plant.crops;
     }
 
     async grow() {
         for (let growStep = 1; growStep < PumpkinPlant.growStates; growStep++) {
-            await UpdateScheduler.wait(Balancing.pumpkinPlant.growStepTime);
+            await UpdateScheduler.wait(Balancing.pumpkin_plant.growStepTime);
             this.texture = gameManager.atlasSpritesheet.getTexture(`pumpkin_plant_${growStep}`)
         }
         this.vulnerable = true;
